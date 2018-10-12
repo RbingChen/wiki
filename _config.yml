@@ -5,4 +5,9 @@ url:
 title: 
 keywords: 
 description: 
-author: 
+author: Cimon
+
+deploy:
+  - type :git
+    remote: origin
+    branch:gh-pages
