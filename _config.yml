@@ -7,7 +7,11 @@ keywords:
 description: 
 author: Cimon
 
-deploy：
+root: /wiki
+
+deploy:
     - type: git
       remote: origin
       branch: gh-pages
+      
+theme: simple2
