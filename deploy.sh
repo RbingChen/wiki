@@ -7,6 +7,7 @@ then
     exit 0
 elif [ "$1" = "" ]
 then
+    sh /Users/bing/Wiki/copy.sh 
     echo deploy [Option]
     echo "       -i 初始化"
     echo "       message  提交到github并发布，提交信息为mesage"
