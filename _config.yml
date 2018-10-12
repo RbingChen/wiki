@@ -6,8 +6,3 @@ title:
 keywords: 
 description: 
 author: Cimon
-
-deploy:
-  - type :git
-    remote: origin
-    branch:gh-pages
