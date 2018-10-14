@@ -16,5 +16,4 @@ $$
 
 # 图片
 
- ![test_pic](./test_pic.jpeg)
-
+ ![test_pic](/Users/bing/Wiki/wiki/content/intro/test_pic.jpeg)
