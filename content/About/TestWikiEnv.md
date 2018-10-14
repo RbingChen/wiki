@@ -6,7 +6,7 @@ date: 2018-10-12 11:21
 
 [TOC]
 
-# 数学公司
+# 数学公式
 
 
 $$
@@ -16,4 +16,4 @@ $$
 
 # 图片
 
-![test_pic](/wiki/themes/simple/static/images/test_pic.jpeg)
+<img src="/wiki/static/images/test_pic.jpeg" alt="模型结构" style="float:left; width:250px;"/>
