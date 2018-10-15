@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>多个SSH 管理 - Knowledge Change Destiny</title>
+        <title>使用simiki 进行wiki搭建 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,47 +52,98 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Tool">Tool</a>&nbsp;»&nbsp;<a href="/wiki/#Tool-git">git</a>&nbsp;»&nbsp;多个SSH 管理</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Tool">Tool</a>&nbsp;»&nbsp;<a href="/wiki/#Tool-wiki">wiki</a>&nbsp;»&nbsp;使用simiki 进行wiki搭建</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">多个SSH 管理</div>
+<div id="title">使用simiki 进行wiki搭建</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 目的</a></li>
-<li><a href="#_2">二 解决</a></li>
+<li><a href="#simiki">一 Simiki</a></li>
+<li><a href="#_1">二 搭建过程</a><ul>
+<li><a href="#1github">1.github上相关仓库的申请</a></li>
+<li><a href="#2-simiki">2. Simiki 安装</a></li>
+<li><a href="#3">3.初始化</a></li>
+<li><a href="#4">4.部署及提交</a></li>
+<li><a href="#5">5 本地预览</a></li>
+</ul>
+</li>
 </ul>
 </div>
-<h2 id="_1">一 目的</h2>
+<h3 id="simiki">一 Simiki</h3>
 <hr />
-<p>​       公司使用的git和github的，对应不同邮箱，并且公开的权限不同，因此需要并存两个的对应ssh公钥，一个用于公司，一个用于github</p>
-<h2 id="_2">二 解决</h2>
-<p>生成两个公钥，并在声明两个公钥分别用于哪个网站的代码提交。</p>
-<div class="hlcode"><pre>ssh-keygen -t rsa -C <span class="s2">&quot;xxxx@126.com&quot;</span>
+<p>​       <a href="http://simiki.org/zh-docs/">simiki</a>是一个简单好用的Wiki框架。使用<a href="https://daringfireball.net/projects/markdown/">Markdown</a>书写Wiki, 生成静态HTML页面。Wiki源文件按<strong>目录分类</strong>存放, 方便管理维护。</p>
+<h3 id="_1">二 搭建过程</h3>
+<h4 id="1github">1.github上相关仓库的申请</h4>
+<div class="hlcode"><pre> <span class="err">申请</span>  <span class="n">username</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span> <span class="err">和</span> <span class="n">wiki</span> <span class="err">仓库</span>
 </pre></div>
 
 
-<p>在<strong>生成的过程中注意，会提示输出公钥的文件名</strong>，一般可以用 id_rsa_xxx 来命名。然后生成第二公钥。</p>
-<div class="hlcode"><pre>配置文件，指定网站对于的公钥。
-1. <span class="nb">cd</span> ~/.ssh
-2. vi config
-3. 在config中输入如下：
-<span class="c"># git </span>
-    Host git.company.com
-        HostName git.company.com  
-        PreferredAuthentications publickey
-        IdentityFile ~/.ssh/id_rsa_company
-        User xxxx
-
-<span class="c"># github</span>
-    Host github.com
-        HostName github.com
-        PreferredAuthentications publickey
-        IdentityFile ~/.ssh/id_rsa_github
-        User xxxx
-4.在对应网站的ssh key填写栏 中把 id_rsa_xxx.pub 中内容复制过去。github的在 settings里面
-5. 使用 ssh -T -v git@github.com  或 ssh -T -v git@git.company.com 来检验是否可访问 
-     如果有问题，-v 会打印相关信息，一般是config配置问题，或者是网络受限。
+<h4 id="2-simiki">2. Simiki 安装</h4>
+<div class="hlcode"><pre>mac下 使用 sudo pip install simiki 安装 simiki
 </pre></div>
+
+
+<h4 id="3">3.初始化</h4>
+<div class="hlcode"><pre>1. 仓库初始化
+    git clone git@github.com:GithubUserName/wiki.git
+    git checkout -b gh-pages
+2. 如果不存在master分支，则切换并新建master分支，否则只需要切换即可
+   切换: git checkout master 
+   切换并创建：git checkout -b master
+</pre></div>
+
+
+<h4 id="4">4.部署及提交</h4>
+<p>这里用下我<a href="https://tracholar.github.io/wiki/web/simiki.html">mentor</a>的脚本。</p>
+<p>在wiki下新建文件 deploy.sh ,内容如下：</p>
+<div class="hlcode"><pre><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;-i&quot;</span> <span class="o">]</span>
+<span class="k">then</span>
+<span class="k">    </span>mkdir output
+    <span class="nb">cd </span>output
+    git clone -b gh-pages git@github.com:tracholar/wiki.git ./
+    <span class="nb">cd</span> ..
+    <span class="nb">exit </span>0
+<span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>
+<span class="k">then</span>
+<span class="k">    </span><span class="nb">echo </span>deploy <span class="o">[</span>Option<span class="o">]</span>
+    <span class="nb">echo</span> <span class="s2">&quot;       -i 初始化&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;       message  提交到github并发布，提交信息为mesage&quot;</span>
+    <span class="nb">exit </span>0
+<span class="k">else</span>
+<span class="k">    </span>git add . --all
+    git commit -am <span class="s2">&quot;$1&quot;</span>
+    git pull origin master
+    git push origin master
+
+    simiki g
+    <span class="nb">cd </span>output
+    mkdir src
+    cp ../src/*.html src/
+    cp ../src/*/*.html src/
+    git add . --all
+    git commit -am <span class="s2">&quot;$1&quot;</span>
+    git pull origin gh-pages
+    git push origin gh-pages
+    <span class="nb">cd</span> ..
+<span class="k">fi</span>
+</pre></div>
+
+
+<p><strong>命令</strong></p>
+<div class="hlcode"><pre>1. 使用 sh deploy.sh -i 初始，只需要初始化一次。
+2. 使用 sh deplot.sh <span class="s2">&quot;message&quot;</span> 提交到github。可以通过username.github.io/wiki 来看效果
+</pre></div>
+
+
+<h4 id="5">5 本地预览</h4>
+<p>因为github对国内不友好，为了方便可以现在本地预览效果。</p>
+<p>使用终端进入wiki目录下，输入如下命令：</p>
+<div class="hlcode"><pre>simiki g
+simiki p 
+</pre></div>
+
+
+<p>此时可以在浏览器 通过 127.0.0.1：8000 来观看效果。</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -112,7 +163,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: '多个SSH 管理',
+  title: '使用simiki 进行wiki搭建',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
