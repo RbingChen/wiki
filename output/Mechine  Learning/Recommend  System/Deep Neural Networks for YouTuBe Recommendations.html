@@ -83,7 +83,7 @@
 <hr />
 <h3 id="_2">二 论文概览</h3>
 <p>结构框架如下：</p>
-<p><img src="/wiki/static/images/DnnYouTubeRsj结构图.png" alt="模型结构" style="width:700px;margin-right:20px;"/></p>
+<p><img src="/wiki/static/images/DnnYouTubeRsj结构图.png" alt="模型结构" style="width: 270px;margin: auto;display: block;float: left;"/></p>
 <h4 id="1-candidate-generation">1. candidate generation</h4>
 <p>​ 使用用户历史数据作为candidate  genertion network(候选集生成网络，CGN)的输入，从海量视频中选择出一些视频作为候选集。GGN使用协同过滤来获得广泛个性化。   </p>
 <h4 id="2-ranking">2. ranking</h4>
@@ -102,7 +102,7 @@
 <p>​       采用浅层的神经网络来模拟Matrix Factorization方法，可以看成是 Factorization techniques 在非线性上的推广。</p>
 <h4 id="1recommendation-as-classification">1.Recommendation  as classification</h4>
 <p>$$<br />
-P(w_t=i|U,C)=\frac{e^v_iu}{\sum_je^{v_ju}}<br />
+P(w_t=i|U,C)=\frac{e^{v_i}u}{\sum_je^{v_ju}}<br />
 $$</p>
 <p>$u$是由Context和用户信息构成的embedding，$v_j$表示候选视频的embedding。可以使用一个函数对用户历史信息和上下文信息进行转换得到embeding向量$u$，在使用softmax时，该向量对于区分视频是很有效的。</p>
 <p><strong>训练数据</strong>，直接数据：使用YouTube反馈机制(点赞、不喜欢、产品问卷等)；间接数据：认为用户看完一个视频，就可以作为正例(个人理解，全部看完的视频，可信度更高，置信度更大，更能代表真正的用户行为，使用没看完的视频可能带来负面效果)</p>

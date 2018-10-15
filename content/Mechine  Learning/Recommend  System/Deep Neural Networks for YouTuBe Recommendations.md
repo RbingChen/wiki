@@ -22,7 +22,13 @@ date: 2018-10-12 15:43
 
   结构框架如下：
 
-<img src="/wiki/static/images/DnnYouTubeRsj结构图.png" alt="模型结构" style="width:700px;margin-right:20px;"/>
+<img src="/wiki/static/images/DnnYouTubeRsj结构图.png" alt="模型结构" style="width: 270px;margin: auto;display: block;float: left;"/>
+
+
+
+
+
+
 
 
 
@@ -59,7 +65,7 @@ date: 2018-10-12 15:43
 #### 1.Recommendation  as classification     
 
 $$
-P(w_t=i|U,C)=\frac{e^v_iu}{\sum_je^{v_ju}}
+P(w_t=i|U,C)=\frac{e^{v_i}u}{\sum_je^{v_ju}}
 $$
 
 $u$是由Context和用户信息构成的embedding，$v_j$表示候选视频的embedding。可以使用一个函数对用户历史信息和上下文信息进行转换得到embeding向量$u$，在使用softmax时，该向量对于区分视频是很有效的。
