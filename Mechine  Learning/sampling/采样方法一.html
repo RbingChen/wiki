@@ -65,6 +65,7 @@
 <li><a href="#_3">二 采样方法</a><ul>
 <li><a href="#1inverse-sampling">1.inverse sampling</a></li>
 <li><a href="#2rejection-sampling">2.Rejection Sampling</a></li>
+<li><a href="#3">3.重要性采样</a></li>
 </ul>
 </li>
 </ul>
@@ -115,7 +116,8 @@ $$<br />
 <h3 id="2rejection-sampling">2.Rejection Sampling</h3>
 <p><strong>难以找到合适的分布。</strong></p>
 <p>选择一个提议分布(proposal distribution)$q(z)$，该分布能够很方便的进行采样，选择一个常数$kq(z)$使得，$kq(z)&gt;=p(z)$处处成立。首先，在$q(z)$上产生一个采样值$z_0$，然后在$[0,kq(z_0)]$均匀分布上采样得到$u_0$，如果$u_0&lt;=p(z_0)$，则接受$u_0$，否则拒绝。</p>
-<p><img src="/wiki/static/images/拒绝性采样.png" alt="模型结构" /></p>
+<p><img src="/wiki/static/images/拒绝性采样.jpeg" alt="笔记" /></p>
+<h3 id="3">3.重要性采样</h3>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
