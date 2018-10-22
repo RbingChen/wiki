@@ -52,7 +52,7 @@ if [ "$1" = "-i" ]
 then
     mkdir output
     cd output
-    git clone -b gh-pages git@github.com:tracholar/wiki.git ./
+    git clone -b gh-pages git@github.com:GithubUserName/wiki.git ./
     cd ..
     exit 0
 elif [ "$1" = "" ]
@@ -89,7 +89,7 @@ fi
 
 #### 5 本地预览
 
-因为github对国内不友好，为了方便可以现在本地预览效果。
+因为国内网络对github不友好，为了方便可以现在本地预览效果。
 
 使用终端进入wiki目录下，输入如下命令：
 
@@ -98,4 +98,4 @@ simiki g
 simiki p 
 ```
 
-此时可以在浏览器 通过 127.0.0.1：8000 来观看效果。
+此时可以在浏览器 通过 127.0.0.1:8000/wiki 来观看效果。

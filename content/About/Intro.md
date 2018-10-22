@@ -12,7 +12,7 @@ date: 2018-10-10 10:00
 
 2018.07-             美团算法工程师
 
-
+联系方式：chenrenbing123@126.com
 
 # About Wiki
 
