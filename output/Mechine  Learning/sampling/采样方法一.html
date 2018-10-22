@@ -97,10 +97,15 @@ $$<br />
   $$<br />
   p(z)=\frac {\hat{p(z)}}{Z_p}<br />
   $$<br />
-  但是$Z_p$很难计算，注意，对于连续分布而言：$Z_p\neq \sum_i p(z_i)$。但是$p(z)$能反应相对大小。</li>
+  但是$Z_p$很难计算，注意，对于连续分布而言：$Z_p\neq \sum_i p(z_i)$。(PRML 528页)。但是$p(z)$能反应相对大小。</li>
 </ul>
-<p>个人理解：连续分布没有概率(只有具体的概率密度)，那么，即使求得$Z_p$，标准化后的意义是什么。例如：</p>
-<p>对于均匀分布</p>
+<blockquote>
+<p>Furthermore suppose, as is often the case, that we are easily able to evaluate$ p(z)$ for any given value of $z$, up to some normalizing constant $Z_p$, so that where $p(z)$ can readily be evaluated, but $Z_p $is unknown</p>
+</blockquote>
+<p><strong>个人理解</strong>：连续分布没有概率(只有具体的概率密度)，那么，即使求得$Z_p$，标准化后的意义是什么?</p>
+<p>例如：</p>
+<p>对于[0,1]均匀分布，采样得到$,x_1,x_2,....,x_N$，那么$p_j=1$</p>
+<p>对于复杂分布，</p>
 <h2 id="_3">二 采样方法</h2>
 <h3 id="1inverse-sampling">1.inverse sampling</h3>
 <p>通过反函数进行概率求解。<strong>反函数难以求解。</strong></p>
