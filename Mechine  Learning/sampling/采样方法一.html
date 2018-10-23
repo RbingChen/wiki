@@ -65,7 +65,7 @@
 <li><a href="#_3">二 采样方法</a><ul>
 <li><a href="#1inverse-sampling">1.inverse sampling</a></li>
 <li><a href="#2rejection-sampling">2.Rejection Sampling</a></li>
-<li><a href="#3">3.重要性采样</a></li>
+<li><a href="#3importance-sampling">3.importance sampling</a></li>
 </ul>
 </li>
 </ul>
@@ -118,11 +118,121 @@ $$<br />
 z=h(y)=\int_{-\infty}^{y}p(y)dy<br />
 $$<br />
 例如：对于指数分布$p(y)=\lambda exp(-\lambda y)$，可以得到$h(y)=1-exp(-\lambda y)$，那么$y=-\lambda^{-1}ln(1-z)$，通过该等式对均匀分布的变量进行计算，能得到指数分布的采样数据。</p>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">InverseSampling_Exp</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">cnt</span><span class="o">=</span><span class="mi">50000</span><span class="p">):</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cnt</span><span class="p">):</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">y</span><span class="o">=-</span><span class="mf">1.0</span><span class="o">/</span><span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">exp_distribution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">alpha</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+
+<span class="n">exp_y</span><span class="o">=</span><span class="n">exp_distribution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">sample_y</span><span class="o">=</span><span class="n">InverseSampling_Exp</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">cnt</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">exp_y</span><span class="p">,</span><span class="s">&#39;r--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sample_y</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="n">density</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img src="/wiki/static/images/inverseSampling.png" alt="采样" /></p>
 <h3 id="2rejection-sampling">2.Rejection Sampling</h3>
 <p><strong>难以找到合适的分布。</strong></p>
-<p>选择一个提议分布(proposal distribution)$q(z)$，该分布能够很方便的进行采样，选择一个常数$kq(z)$使得，$kq(z)&gt;=p(z)$处处成立。首先，在$q(z)$上产生一个采样值$z_0$，然后在$[0,kq(z_0)]$均匀分布上采样得到$u_0$，如果$u_0&lt;=p(z_0)$，则接受$u_0$，否则拒绝。</p>
+<p>选择一个提议分布(proposal distribution)$q(z)$，该分布能够很方便的进行采样，选择一个常数$kq(z)$使得，$kq(z)&gt;=p(z)$处处成立。首先，在$q(z)$上产生一个采样值$z_0$，然后在$[0,kq(z_0)]$均匀分布上采样得到$u_0$，如果$u_0&lt;=p(z_0)$，则接受$z_0$(原文是$u_0$，应该是有错的)，否则拒绝。</p>
 <p><img src="/wiki/static/images/拒绝性采样.jpeg" alt="笔记" /></p>
-<h3 id="3">3.重要性采样</h3>
+<div class="hlcode"><pre><span class="c">#coding=utf-8</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">exp_distribution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">alpha</span><span class="o">=</span><span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    k  only in [0,20],q_z&gt;p_z.</span>
+<span class="sd">    if want get good result ,k must be go positive infinity.</span>
+<span class="sd">    But with k is bigger，program maybe run long time</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">k</span><span class="o">=</span><span class="mi">20</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">proposal distribution : q_z</span>
+
+<span class="sd">sample distribution : p_z </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">q_z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">500000</span><span class="p">)</span><span class="o">*</span><span class="n">k</span>
+<span class="n">p_z</span><span class="o">=</span><span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="n">q_z</span><span class="p">)</span>
+
+
+<span class="n">sample</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q_z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">z0</span><span class="o">=</span><span class="n">q_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     because q_z is uniform distribution ,so [0,k*q_z[i]] will be equal to [0,1]。</span>
+<span class="sd">     so u0~[0,1]~np.random.rand(1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">u0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    rejection </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">u0</span><span class="o">&lt;=</span><span class="n">p_z</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+        <span class="n">sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot; sample end ....  &quot;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+<span class="n">y</span><span class="o">=</span><span class="n">exp_distribution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s">&#39;r--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="n">density</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img src="/wiki/static/images/RejectionSampling.png" alt="笔记" /></p>
+<p>提议分布用的是均匀分布，不满足 $kq(z)$恒大于 $p(z)$，只在区间内成立。实在是难找这个提议分布。</p>
+<h3 id="3importance-sampling">3.importance sampling</h3>
+<p>inverse sampling  依赖于 反函数求解，很多情况下，较难处理。</p>
+<p>rejection sampling 需要有一个很好的提议分布，很难能够得到。</p>
+<p><strong>重要性采样，处理均值求解的情况。</strong><br />
+$$<br />
+E(f)=\int f(x)p(x)dx =\int f(x)\frac{p(x)}{q(x)}q(x)dx<br />
+$$<br />
+由上面的等式可得，可以在$q(x)$分布下采样出$x$，然后计算$f(x)\frac{p(x)}{q(x)}$的均值，即：<br />
+$$<br />
+E(f)=\frac{1}{N}\sum_i^Nf(x_i)\frac{p(x_i)}{q(x_i)}，x_i-q(x)<br />
+$$<br />
+存在一些情况，可能$p(x)、q(x)$不是标准分布（其实可以一个是标准，另一个非标准)，有</p>
+<p>​         <br />
+$$<br />
+p(x)=\hat p(x)/Z_p,q(x)=\hat q(x)/Z_q\\<br />
+E(f)=\frac{1}{N}\frac{Z_q}{Z_p}\sum_i^Nf(x_i)\frac{\hat p(x_i)}{\hat q(x_i)}，x_i-q(x)<br />
+$$<br />
+因此有：<br />
+$$<br />
+\frac{Z_p}{Z_q}=\frac{1}{Z_q}\int \hat p(x)dx=\int \frac{\hat p(x)}{\hat q(x)} q(x)dx\\<br />
+\frac{Z_p}{Z_q}=\frac{1}{L}\sum_j^L\frac{\hat p(x_j)}{\hat q(x_j)},x-q(x)<br />
+$$<br />
+又可以看成一个抽样过程。</p>
+<p>这里，求解可以分成两种方式，一种是：首先采样得到$Z_p/Z_q$，再计算$E(f)$。另一种是采样的样本同时计算两者。如下：<br />
+$$<br />
+E(f)=\frac{1}{N}\frac{Z_q}{Z_p}\sum_i^Nf(x_i)\frac{\hat p(x_i)}{\hat q(x_i)}=\sum_i^N f(x_i) \frac{w_i}{W}\\<br />
+W=\sum_i^N\frac{\hat p(x_i)}{\hat q(x_i)},w_i=\frac{\hat p(x_i)}{\hat q(x_i)}<br />
+$$</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
