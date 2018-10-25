@@ -65,16 +65,33 @@ date: 2018-10-12 15:43
 #### 1.Recommendation  as classification     
 
 $$
-P(w_t=i|U,C)=\frac{e^{v_i}u}{\sum_je^{v_ju}}
+P(w_t=i|U,C)=\frac{e^{v_iu}}{\sum_je^{v_ju}}
 $$
 
 $u$是由Context和用户信息构成的embedding，$v_j$表示候选视频的embedding。可以使用一个函数对用户历史信息和上下文信息进行转换得到embeding向量$u$，在使用softmax时，该向量对于区分视频是很有效的。
 
 **训练数据**，直接数据：使用YouTube反馈机制(点赞、不喜欢、产品问卷等)；间接数据：认为用户看完一个视频，就可以作为正例(个人理解，全部看完的视频，可信度更高，置信度更大，更能代表真正的用户行为，使用没看完的视频可能带来负面效果)
 
-**采样**: 使用重要性采样（看到很多博客说是 negative sample，引文中提到是确实是 importance sample，个人理解为importance sample。sample negative classes  和negative sample 是不同，一个是对负样本采样，一个是负采样）。
+**采样**: 使用重要性采样（看到很多博客说是 negative sample，引文中提到是确实是 importance sample，个人理解为importance sample。sample negative classes  和negative sample 是不同，一个是对负样本采样，一个是负采样）。使用logloss 计算梯度$-y_ilog(p_i)=-log{\frac {e^{- t(x_i)} } {\sum_j^N e^{-t(x_j)}}}=t(x_i)-log({\sum_j^N e^{-t(x_j)}})$：
+$$
+f^{\prime}(\theta)=\nabla_\theta{logloss}\\
+f^{\prime}(\theta)=\nabla_\theta{t(x_i)}-\sum{p(x_j)\nabla_\theta{t(x_j)}}
+$$
+可以在概率$p$分布下采样得到样本，来估计$\sum{p(x_j)\nabla_\theta{t(x_j)}}$，即$\frac{1}{m}\sum_{j=1}^m\nabla_\theta{t(x_j)}$，因为视频数较多，计算概率$p$很耗时。因此考虑使用其他方式来计算。
 
+考虑importance sample。
 
+  
+$$
+E_p[\nabla_\theta(t(x))]=\sum_xp(x)\nabla_\theta(t(x))=\sum_x\frac{p(x)}{q(x}q(x)\nabla_\theta(t(x))=E_q[\frac{p(x)}{q(x}q(x)\nabla_\theta(t(x))]
+$$
+那么在$q(x)$分布下进行采样得到$\frac{1}{m}\sum_{j=1}^{m}\frac{p(y_j)}{q(y_j}\nabla_\theta(t(y_j))$。使用$w(x)=\frac{e^{-t(x)}}{q(x)}$作为新的权重避免$p(x)$的计算，且$W=\sum_x w(x)$。
+
+​       <img src="/wiki/static/images/DnnYouTuBe 采样图.png">
+
+**得分计算**:
+
+​	 采样用最近邻查找。计算$v_ju$ 相当于计算点乘，即$|v_j||u|cos\theta$，那么在 空间上只要两者相近，可以认为近似乘积最大( 如果标准化数据，就是最大，因为模型是1，只有夹角趋向于0就行)。类似于kd树，采用近似的方法进行求解。
 
 #### 2.Model Architecture
 

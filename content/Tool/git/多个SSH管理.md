@@ -44,8 +44,13 @@ ssh-keygen -t rsa -C "xxxx@126.com"
         PreferredAuthentications publickey
         IdentityFile ~/.ssh/id_rsa_github
         User xxxx
-4.在对应网站的ssh key填写栏 中把 id_rsa_xxx.pub 中内容复制过去。github的在 settings里面
-5. 使用 ssh -T -v git@github.com  或 ssh -T -v git@git.company.com 来检验是否可访问 
+        
+4.ssh key list 添加 rsa
+>>ssh-add ~/.ssh/id_rsa_github
+>>ssh-add ~/.ssh/id_rsa
+
+5.在对应网站的ssh key填写栏 中把 id_rsa_xxx.pub 中内容复制过去。github的在 settings里面
+6. 使用 ssh -T -v git@github.com  或 ssh -T -v git@git.company.com 来检验是否可访问 
      如果有问题，-v 会打印相关信息，一般是config配置问题，或者是网络受限。
 ```
 

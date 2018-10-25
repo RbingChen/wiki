@@ -65,7 +65,7 @@
 <li><a href="#_3">二 采样方法</a><ul>
 <li><a href="#1inverse-sampling">1.inverse sampling</a></li>
 <li><a href="#2rejection-sampling">2.Rejection Sampling</a></li>
-<li><a href="#3">3.重要性采样</a></li>
+<li><a href="#3importance-sampling">3.importance sampling</a></li>
 </ul>
 </li>
 </ul>
@@ -204,7 +204,35 @@ $$<br />
 
 
 <p><img src="/wiki/static/images/RejectionSampling.png" alt="笔记" /></p>
-<h3 id="3">3.重要性采样</h3>
+<p>提议分布用的是均匀分布，不满足 $kq(z)$恒大于 $p(z)$，只在区间内成立。实在是难找这个提议分布。</p>
+<h3 id="3importance-sampling">3.importance sampling</h3>
+<p>inverse sampling  依赖于 反函数求解，很多情况下，较难处理。</p>
+<p>rejection sampling 需要有一个很好的提议分布，很难能够得到。</p>
+<p><strong>重要性采样，处理均值求解的情况。</strong><br />
+$$<br />
+E(f)=\int f(x)p(x)dx =\int f(x)\frac{p(x)}{q(x)}q(x)dx<br />
+$$<br />
+由上面的等式可得，可以在$q(x)$分布下采样出$x$，然后计算$f(x)\frac{p(x)}{q(x)}$的均值，即：<br />
+$$<br />
+E(f)=\frac{1}{N}\sum_i^Nf(x_i)\frac{p(x_i)}{q(x_i)}，x_i-q(x)<br />
+$$<br />
+存在一些情况，可能$p(x)、q(x)$不是标准分布（其实可以一个是标准，另一个非标准)，有</p>
+<p>​         <br />
+$$<br />
+p(x)=\hat p(x)/Z_p,q(x)=\hat q(x)/Z_q\\<br />
+E(f)=\frac{1}{N}\frac{Z_q}{Z_p}\sum_i^Nf(x_i)\frac{\hat p(x_i)}{\hat q(x_i)}，x_i-q(x)<br />
+$$<br />
+因此有：<br />
+$$<br />
+\frac{Z_p}{Z_q}=\frac{1}{Z_q}\int \hat p(x)dx=\int \frac{\hat p(x)}{\hat q(x)} q(x)dx\\<br />
+\frac{Z_p}{Z_q}=\frac{1}{L}\sum_j^L\frac{\hat p(x_j)}{\hat q(x_j)},x-q(x)<br />
+$$<br />
+又可以看成一个抽样过程。</p>
+<p>这里，求解可以分成两种方式，一种是：首先采样得到$Z_p/Z_q$，再计算$E(f)$。另一种是采样的样本同时计算两者。如下：<br />
+$$<br />
+E(f)=\frac{1}{N}\frac{Z_q}{Z_p}\sum_i^Nf(x_i)\frac{\hat p(x_i)}{\hat q(x_i)}=\sum_i^N f(x_i) \frac{w_i}{W}\\<br />
+W=\sum_i^N\frac{\hat p(x_i)}{\hat q(x_i)},w_i=\frac{\hat p(x_i)}{\hat q(x_i)}<br />
+$$</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
