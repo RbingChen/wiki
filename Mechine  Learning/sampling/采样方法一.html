@@ -233,6 +233,39 @@ $$<br />
 E(f)=\frac{1}{N}\frac{Z_q}{Z_p}\sum_i^Nf(x_i)\frac{\hat p(x_i)}{\hat q(x_i)}=\sum_i^N f(x_i) \frac{w_i}{W}\\<br />
 W=\sum_i^N\frac{\hat p(x_i)}{\hat q(x_i)},w_i=\frac{\hat p(x_i)}{\hat q(x_i)}<br />
 $$</p>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">gaussion_distribution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="n">sigma</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span><span class="o">*</span><span class="n">sigma</span><span class="p">))</span>
+
+<span class="n">q_z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50000</span><span class="p">)</span>
+<span class="n">p_z</span><span class="o">=</span><span class="n">gaussion_distribution</span><span class="p">(</span><span class="n">q_z</span><span class="p">)</span>
+<span class="n">q_z_pro</span><span class="o">=</span><span class="n">gaussion_distribution</span><span class="p">(</span><span class="n">q_z</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">weight</span><span class="o">=</span><span class="n">p_z</span> <span class="o">/</span> <span class="n">q_z_pro</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">采样 的 p_z 和  q_z 都是标准分布，其实可以不用 标准化。</span>
+<span class="sd">以下 通过采样 得到 均值 和 方差 </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">E_f</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q_z</span><span class="o">*</span><span class="n">weight</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">q_z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">E_var</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q_z</span><span class="o">*</span><span class="n">q_z</span><span class="o">*</span><span class="n">weight</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">q_z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="n">E_f</span><span class="o">*</span><span class="n">E_f</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;mean : &quot;</span><span class="p">,</span><span class="n">E_f</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;var : &quot;</span><span class="p">,</span><span class="n">E_var</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">q_z</span><span class="p">,</span><span class="n">q_z_pro</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">q_z</span><span class="p">,</span><span class="n">p_z</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<ol>
+<li>https://blog.csdn.net/Dark_Scope/article/details/70992266</li>
+<li>http://www.cnblogs.com/ywl925/archive/2013/06/05/3118875.html</li>
+</ol>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
