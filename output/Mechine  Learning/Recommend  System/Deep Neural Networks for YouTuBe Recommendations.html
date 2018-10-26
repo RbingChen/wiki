@@ -102,11 +102,24 @@
 <p>​       采用浅层的神经网络来模拟Matrix Factorization方法，可以看成是 Factorization techniques 在非线性上的推广。</p>
 <h4 id="1recommendation-as-classification">1.Recommendation  as classification</h4>
 <p>$$<br />
-P(w_t=i|U,C)=\frac{e^{v_i}u}{\sum_je^{v_ju}}<br />
+P(w_t=i|U,C)=\frac{e^{v_iu}}{\sum_je^{v_ju}}<br />
 $$</p>
 <p>$u$是由Context和用户信息构成的embedding，$v_j$表示候选视频的embedding。可以使用一个函数对用户历史信息和上下文信息进行转换得到embeding向量$u$，在使用softmax时，该向量对于区分视频是很有效的。</p>
 <p><strong>训练数据</strong>，直接数据：使用YouTube反馈机制(点赞、不喜欢、产品问卷等)；间接数据：认为用户看完一个视频，就可以作为正例(个人理解，全部看完的视频，可信度更高，置信度更大，更能代表真正的用户行为，使用没看完的视频可能带来负面效果)</p>
-<p><strong>采样</strong>: 使用重要性采样（看到很多博客说是 negative sample，引文中提到是确实是 importance sample，个人理解为importance sample。sample negative classes  和negative sample 是不同，一个是对负样本采样，一个是负采样）。</p>
+<p><strong>采样</strong>: 使用重要性采样（看到很多博客说是 negative sample，引文中提到是确实是 importance sample，个人理解为importance sample。sample negative classes  和negative sample 是不同，一个是对负样本采样，一个是负采样）。使用logloss 计算梯度$-y_ilog(p_i)=-log{\frac {e^{- t(x_i)} } {\sum_j^N e^{-t(x_j)}}}=t(x_i)-log({\sum_j^N e^{-t(x_j)}})$：<br />
+$$<br />
+f^{\prime}(\theta)=\nabla_\theta{logloss}\<br />
+f^{\prime}(\theta)=\nabla_\theta{t(x_i)}-\sum{p(x_j)\nabla_\theta{t(x_j)}}<br />
+$$<br />
+可以在概率$p$分布下采样得到样本，来估计$\sum{p(x_j)\nabla_\theta{t(x_j)}}$，即$\frac{1}{m}\sum_{j=1}^m\nabla_\theta{t(x_j)}$，因为视频数较多，计算概率$p$很耗时。因此考虑使用其他方式来计算。</p>
+<p>考虑importance sample。</p>
+<p>$$<br />
+E_p[\nabla_\theta(t(x))]=\sum_xp(x)\nabla_\theta(t(x))=\sum_x\frac{p(x)}{q(x}q(x)\nabla_\theta(t(x))=E_q[\frac{p(x)}{q(x}q(x)\nabla_\theta(t(x))]<br />
+$$<br />
+那么在$q(x)$分布下进行采样得到$\frac{1}{m}\sum_{j=1}^{m}\frac{p(y_j)}{q(y_j}\nabla_\theta(t(y_j))$。使用$w(x)=\frac{e^{-t(x)}}{q(x)}$作为新的权重避免$p(x)$的计算，且$W=\sum_x w(x)$。</p>
+<p>​       <img src="/wiki/static/images/DnnYouTuBe 采样图.png"></p>
+<p><strong>得分计算</strong>:</p>
+<p>​    采样用最近邻查找。计算$v_ju$ 相当于计算点乘，即$|v_j||u|cos\theta$，那么在 空间上只要两者相近，可以认为近似乘积最大( 如果标准化数据，就是最大，因为模型是1，只有夹角趋向于0就行)。类似于kd树，采用近似的方法进行求解。</p>
 <h4 id="2model-architecture">2.Model Architecture</h4>
 <h4 id="3heterogeneous-signals">3.Heterogeneous Signals</h4>
 <h4 id="4label-and-context-selection">4.Label and Context Selection</h4>
