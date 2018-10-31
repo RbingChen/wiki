@@ -8,7 +8,7 @@ date: 2018-10-12 15:43
 
 
 
-### 一 问题
+## 一 问题
 
 1. 规模性。大规模的数据。
 2. 时效性。存在大量的新上传的视频。trade-off exploration/exploitation。
@@ -18,7 +18,7 @@ date: 2018-10-12 15:43
 
 
 
-### 二 论文概览
+## 二 论文概览
 
   结构框架如下：
 
@@ -58,11 +58,11 @@ date: 2018-10-12 15:43
 
 
 
-### 三  Candidate Generation
+## 三  Candidate Generation
 
 ​       采用浅层的神经网络来模拟Matrix Factorization方法，可以看成是 Factorization techniques 在非线性上的推广。
 
-#### 1.Recommendation  as classification     
+### 1.Recommendation  as classification     
 
 $$
 P(w_t=i|U,C)=\frac{e^{v_iu}}{\sum_je^{v_ju}}
@@ -93,23 +93,61 @@ $$
 
 ​	 采样用最近邻查找。计算$v_ju$ 相当于计算点乘，即$|v_j||u|cos\theta$，那么在 空间上只要两者相近，可以认为近似乘积最大( 如果标准化数据，就是最大，因为模型是1，只有夹角趋向于0就行)。类似于kd树，采用近似的方法进行求解。
 
-#### 2.Model Architecture
+### 2.Model Architecture
+
+用户观看历史被映射成了长度相等的向量。
+
+问题：如果一个用户有很多历史观看呢？ 类似于词向量，是不是就是 说 连续三个视频，采用3-gram的话，就是预测 最后一个视频的ID。
+
+### 3.Heterogeneous Signals
+
+DNN作为matrix  factorization 的一般化，能很容易的往模型增加任意的连续或者离散特征。
+
+观看历史：采用unigram 和 bigram 去做embedding
+
+demographic features： 人口统计学特征。个人理解：是人群的特征，比如:学生群体比较容易做什么，可以作为特征。这类特征能够一定程度上解决新用户推荐的问题。
+
+用户的地理信息和设备信息：embedded
+
+用户的普通特征: 年龄、性别等..直接被加入
+
+**“Example Age"**
+
+机器学习系统通过学习历史行为以预测未来。但视频的流行度是高度动态，但是推荐系统提供corpus是多项式分布的，讲反应在训练窗口内几周的平均观看可能性。为了纠正这个问题，把训练样本的age作为一个特征进行训练，但是在线上时，这个特征会被设置为0.
+
+ 偏向预测新视频。新视频天生的容易被观看，因此要解决这个问题，类似搜索排序，排在前面的链接，天然容易被点击。下图表示的某个视频被观看的概率随时间的变化图（不知道empirical 怎么算的，baseline是没有加age特征的情况)：
+
+<img src="/wiki/static/images/DnnYouTuBe视频age问题.png">
 
 
 
-#### 3.Heterogeneous Signals
+### 4.Label and Context Selection
 
+ 如果用户通过其他方式观看视频，立即响应的collaborative filtering。
 
+另一个，对于每一个用户产生一定样本，保证每个用户的数据对loss有贡献，防止高活跃用户主导loss。
 
-#### 4.Label and Context Selection
-
-  "Taylor  Swift" 的例子，重复提供上次用户搜索的内容得到效果较差。
-
-​    这是因为训练，网络学习到了这个规律，所以会偏向预测这case一个很大的规律，但实际上用户想看到新颖的东西，所以需要 Exploration。
+  "Taylor  Swift" 的例子，重复提供上次用户搜索的内容得到效果较差。这是因为训练，网络学习到了这个规律，所以会偏向预测这case一个很大的规律，但实际上用户想看到新颖的东西，所以需要 Exploration。
 
 Exploration-only: 仅探索，机会平均。Exploitation-only： 仅利用，当前最优。
 
+然后扯了一堆样本选择，呵呵了。不能存在信息泄露。**特征生成时间要小于预测时刻。**
 
+
+
+## 四 Ranking
+
+Ranking:对于具体的用户使用impression data 以按某种标准对预测值进行打分。Ranking把不同的来源的候选集统一起来了。
+
+尽管NN减轻了特征工程的负担，原始数据不能够很好的作用于网络
+
+### 1.特征
+
+和Candidate 阶段相比，由于视频数很少，可以有很多特征来描述用户和视频之间的联系或关系。
+
+类别特征：Embedding 
+
+连续特征：标准化。采用分位点的方式标准化（接近哪个分位点这标准化为该分位点，如中位数，则标准化为0.5）。此外，一些数学变化，如：开根号、平方....
 
 
 
