@@ -1,7 +1,7 @@
 ---
-title: "Intro to recreation"
-layout: page
-date: 2018-10-24 10:17
+title : "Intro to recreation"
+layout : page
+date : 2018-10-24 10:17
 ---
 
 

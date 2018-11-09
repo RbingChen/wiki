@@ -1,7 +1,7 @@
 ---
-title: "attention and transformer"
-layout: page
-date: 2018-11-09 15:55
+title : "attention and transformer"
+layout : page
+date : 2018-11-09 15:55
 ---
 
 

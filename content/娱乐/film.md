@@ -1,6 +1,6 @@
 ---
 title : "电影"
-layout: page
+layout : page
 date : 2018-10-28 16:11
 ---
 

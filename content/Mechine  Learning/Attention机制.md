@@ -1,7 +1,7 @@
 ---
-Title: "attention "
-Layout: page
-Date: 2018-11-01 16:04
+title : "attention"
+layout : page
+date : 2018-11-01 16:04
 ---
 
 
