@@ -101,11 +101,14 @@
    2.生成第2个词的时候，我们将当前序列a和c，分别与词表中的所有词进行组合，得到新的6个序列aa ab ac ca cb cc,然后从其中选择2个得分最高的，作为当前序列，假如为aa cb
    3. 后面会不断重复这个过程，直到遇到结束符为止。最终输出2个得分最高的序列</code></p>
 <p>使用Beam Search足够了，全局最优搜索空间太大，且效果并没有很大的提升。</p>
-<p><a href="./搜索近似算法 /Viterbi和BeamSearch.md">viterbi</a>是全局最优。</p>
+<p><a href="./搜索近似算法 /Viterbi和BeamSearch.md">viterbi</a>（wiki中有viterbi和BS的对比)是全局最优。</p>
+<p>其他：attention</p>
+<p><img src="/wiki/static/images/attention.png" alt="attenion图" /></p>
 <h2 id="_4">四 相关资料</h2>
 <p>1.<a href="https://github.com/tensorflow/nmt">Google NMT Tutorial</a></p>
 <p>2.<a href="https://www.zhihu.com/question/54356960">seq2seq中的beam search算法过程</a></p>
 <p>3.<a href="https://www.zhihu.com/question/54356960">Seq2seq中的beam search</a></p>
+<p>4.<a href="https://blog.csdn.net/yc1203968305/article/details/79182494">Google NMT tutorial翻译</a></p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
