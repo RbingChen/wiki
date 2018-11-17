@@ -74,3 +74,5 @@ date : 2018-11-16 16:48
 
 3.[Seq2seq中的beam search](https://www.zhihu.com/question/54356960)
 
+4.[Google NMT tutorial翻译](https://blog.csdn.net/yc1203968305/article/details/79182494)
+
