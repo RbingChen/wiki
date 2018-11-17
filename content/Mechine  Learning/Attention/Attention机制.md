@@ -6,6 +6,18 @@ date : 2018-11-01 16:04
 
 [TOC]
 
+首先给一定典型的attention结构图。
+
+<img src="/wiki/static/images/attention.png" alt="attention图" />
+
+有如下定义：
+
+<img src="/wiki/static/images/attention_equation_0.jpg" alt="attention计算" />
+
+socre 有两种计算方法：
+
+<img src="/wiki/static/images/attention_equation_1.jpg" alt="attention计算" />
+
 
 
 # 一  attention 原理

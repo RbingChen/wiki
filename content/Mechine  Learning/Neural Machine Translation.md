@@ -60,7 +60,11 @@ date : 2018-11-16 16:48
 
    使用Beam Search足够了，全局最优搜索空间太大，且效果并没有很大的提升。
 
-   [viterbi](./搜索近似算法 /Viterbi和BeamSearch.md)是全局最优。
+   [viterbi](./搜索近似算法 /Viterbi和BeamSearch.md)（wiki中有viterbi和BS的对比)是全局最优。
+
+其他：attention
+
+<img src="/wiki/static/images/attention.png" alt="attenion图" />
 
 ## 四 相关资料
 
