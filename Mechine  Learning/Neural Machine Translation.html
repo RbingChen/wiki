@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>Factorization Machines - Knowledge Change Destiny</title>
+        <title>Neural Machine Translation - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,48 +52,41 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-FM">FM</a>&nbsp;»&nbsp;Factorization Machines</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;Neural Machine Translation</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">Factorization Machines</div>
+<div id="title">Neural Machine Translation</div>
 <div id="content">
-  <h2 id="_1">一 原理</h2>
-<p>​    Factorization Machine 提出的目的是解决二阶或者高阶项。</p>
-<p>​    在二分类情况，假设如下：<br />
-$$<br />
-y=\frac{1}{1+exp(-f(x))}<br />
-$$<br />
-   对于大多问题，在给定损失函数的情况下，对$f(x)$的参数进行求解。</p>
-<p>一般地，考虑求解二次项：</p>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">一概念</a></li>
+<li><a href="#_2">二 训练</a></li>
+<li><a href="#_3">三 推断</a></li>
+<li><a href="#_4">四 相关资料</a></li>
+</ul>
+</div>
+<h2 id="_1">一概念</h2>
+<p>使用Seq2Seq方法进行机器翻译：NMT（Neural Machine Translation）。</p>
+<h2 id="_2">二 训练</h2>
+<p><img src="/wiki/static/images/NMT训练图.png" alt="NMT训练图" /></p>
+<p>1.注意图中$|V|$代表语料的大小，也就是训练集中词的多少，中文中是不是字（可能是词）。</p>
+<p>2.encoder和decoder的隐藏层之间不一定要有连接。可以是encoder端输出一组概率值给decoder即可。</p>
+<p>3.<s>表示终止符号。</p>
+<h2 id="_3">三 推断</h2>
+<p><img src="/wiki/static/images/NMT推断图.png" alt="NMT推断图" /></p>
+<ol>
+<li>
+<p>输入待翻译的句子，编码段输出一组值，和训练时并没有区别。</p>
+</li>
+<li>
+<p>注意解码，是按一个一个字进行解码的。解码后字作为下个要解码一个词的输入。</p>
+</li>
+</ol>
 <p>$$<br />
-f(x)=w_0+\sum_iw_ix_i+\sum_i\sum_{j&lt;i}w_{ij}x_ix_j<br />
-$$<br />
-   如果特征维数为$n$时，$f(x)$的参数数量总共为$1+n+\frac{n(n+1)}{2}$。在实际的工业场景，特征维度是很高的，因此会导  致求解速度很慢，而且只有少数的二阶项存在意义。</p>
-<hr />
-<p>FM提出对每一维度的特征存在一个 factor vector。</p>
-<p>​     <br />
-$$<br />
-f(x)=w_0+\sum_iw_ix_i+\sum_i\sum_{j=i+1}<v_i,v_j>x_ix_j<br />
-$$<br />
-  假设factor vector 的维度是k，那么参数数量总共为$1+n+kn$</p>
-<p>$$<br />
-\sum_i\sum_{j=i+1}<v_i,v_j>x_ix_j\<br />
-=0.5(\sum_i\sum_{j=i}<v_i,v_j>x_ix_j-\sum_i<v_i,v_i>x_ix_i)\<br />
-=0.5\sum_{f=1}^{k}[(\sum_{i=1}^nv_{i,f}x_i)^2-\sum_{i=1}^{n}v_{i,f}^2x_i^2]<br />
-$$<br />
- 导数形式为：<br />
-$$<br />
-\frac{\partial f(x)}{\partial \theta}=\begin{cases}1&amp;if\ \  \theta\ \  is\ \ \  w_0\ x_i&amp;if\ \ \theta \ \ is\ \ w_i\x_i\sum_{j=1}^nv_{j,f}x_j-v_{i,f}x_i^2&amp;if\ \ \theta\ \ is \ \ v_{i,f}\end{cases}<br />
-$$</p>
-<hr />
-<p>FFM 在FM上进行优化，指定field，出发点是不是所有的特征都应该存在交互或者交互的field应该不同。</p>
-<h2 id="_2">二 求解</h2>
-<h2 id="_3">三 分析</h2>
-<p>内积有意义，factor vetor 是内积，内积的值取决于模长和夹角。所以导致factor vector 的解不唯一，只要内积不变就行。</p>
-<p>参考资料：</p>
-<p>1.Juan Y, Zhuang Y, Chin W, et al. Field-aware Factorization Machines for CTR Prediction[C]. conference on recommender systems, 2016: 43-50.</p>
-<p>2.S Rendle,Factorization Machines,2010</p>
-<p>https://tracholar.github.io/machine-learning/2017/03/10/factorization-machine.html</p>
+   y_1 = arg max\ \ P(y_1|h_e)<br />
+   $$</p>
+<h2 id="_4">四 相关资料</h2>
+<p>1.<a href="https://github.com/tensorflow/nmt">Google NMT Tutorial</a></p>
+<p>2.</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -105,7 +98,7 @@ $$</p>
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2018-10-23 15:07 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-16 16:48 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -113,7 +106,7 @@ $$</p>
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'Factorization Machines',
+  title: 'Neural Machine Translation',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
