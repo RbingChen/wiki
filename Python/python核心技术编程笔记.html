@@ -91,6 +91,13 @@
 </li>
 <li><a href="#_5">第七章映射和集合</a></li>
 <li><a href="#_6">第八章 循环和条件</a></li>
+<li><a href="#1else-pass">1.else 和 pass</a><ul>
+<li><a href="#2_3">2.迭代器</a></li>
+<li><a href="#3_3">3.列表解析</a></li>
+<li><a href="#4_2">4.生成器</a></li>
+<li><a href="#5-itertools">5 itertools 模块</a></li>
+</ul>
+</li>
 <li><a href="#io">第九章 IO</a></li>
 <li><a href="#_7">第十章 异常</a></li>
 <li><a href="#_8">第十一章 函数式</a></li>
@@ -299,6 +306,106 @@
 <p>和数组很像。</p>
 <h1 id="_5">第七章映射和集合</h1>
 <h1 id="_6">第八章 循环和条件</h1>
+<h1 id="1else-pass">1.else 和 pass</h1>
+<div class="hlcode"><pre><span class="k">pass</span> <span class="err">语句，表示，啥也不干。</span>
+
+<span class="k">if</span> <span class="n">statement</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="k">else</span> <span class="err">在</span><span class="k">while</span><span class="err">和</span><span class="k">for</span><span class="err">中使用。</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="err">：</span>
+    <span class="k">do</span> <span class="p">...</span>
+<span class="nl">else:</span>
+    <span class="k">do</span> <span class="p">..</span>
+</pre></div>
+
+
+<h2 id="2_3">2.迭代器</h2>
+<p>序列：</p>
+<div class="hlcode"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">str1</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;ab&quot;</span><span class="p">,</span><span class="s">&quot;cd&quot;</span><span class="p">,</span><span class="s">&quot;ef&quot;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;ab&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;cd&#39;</span>
+</pre></div>
+
+
+<p>集合：</p>
+<div class="hlcode"><pre><span class="c"># Dict.iterkeys()、Dict.itervalues()、Dict.iteritems()</span>
+<span class="c"># Dict.has_key()=&gt; key in Dict</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;acb&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;ds&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">dic</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+<span class="o">...</span> 
+<span class="p">(</span><span class="s">&#39;acb&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;ds&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;acb&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="p">(</span><span class="s">&#39;acb&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tt</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tt</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;acb&#39;</span>
+</pre></div>
+
+
+<p>文件：</p>
+<div class="hlcode"><pre><span class="err">文件对象的生成会自动调用</span><span class="n">readline</span><span class="p">()</span><span class="err">方法。</span>
+<span class="o">&gt;&gt;</span> <span class="n">fid</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">myFile</span><span class="p">:</span>
+       <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+
+
+<p>如何创建：</p>
+<div class="hlcode"><pre><span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="nb">iter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="n">sentinel</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="3_3">3.列表解析</h2>
+<div class="hlcode"><pre><span class="p">[</span><span class="n">expr</span> <span class="k">for</span> <span class="n">iter_var</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">cond_expr</span><span class="p">]</span>
+<span class="s">&quot;&quot;&quot;</span>
+<span class="s">[ [x for x in range(s)] for s in range(4)]</span>
+<span class="s">[for x in list]</span>
+<span class="s">[(x,y) for x in list1 for y in list2]</span>
+</pre></div>
+
+
+<h2 id="4_2">4.生成器</h2>
+<p>和列表解析很相似，基本语法相同，但是不创建真正的数字列表，返回一个生成器。计算一个条目之后，把该条目yield（产生）出来。生成器表达式使用了延迟计算（lazy evaluation），节省了内存。</p>
+<div class="hlcode"><pre><span class="p">(</span><span class="n">expr</span> <span class="k">for</span> <span class="n">iter_val</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">cond_expr</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"> g = (x * x for x in range(10))</span>
+<span class="sd"> &gt;&gt;next(g)</span>
+<span class="sd"> &gt;&gt;0</span>
+<span class="sd">&quot;&quot;&quot;</span> 
+<span class="n">generator</span><span class="err">保存的是算法，每次调用</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="err">，就计算出</span><span class="n">g</span><span class="err">的下一个元素的值，直到计算到最后一个元素，没有更多的元素时，抛出</span><span class="ne">StopIteration</span><span class="err">的错误。</span>
+ <span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="nb">max</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">b</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="s">&#39;done&#39;</span>
+<span class="err">如果有</span> <span class="k">yield</span> <span class="err">关键字，则构成</span><span class="n">generator</span><span class="err">。</span>
+</pre></div>
+
+
+<h2 id="5-itertools">5 itertools 模块</h2>
 <h1 id="io">第九章 IO</h1>
 <h1 id="_7">第十章 异常</h1>
 <h1 id="_8">第十一章 函数式</h1>
