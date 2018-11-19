@@ -14,6 +14,8 @@ date : 2018-11-01 16:04
 
 <img src="/wiki/static/images/attention_equation_0.jpg" alt="attention计算" />
 
+$h_t$是decode端 hidden state , $\overline{h}_s$是编码端hidden state
+
 socre 有两种计算方法：
 
 <img src="/wiki/static/images/attention_equation_1.jpg" alt="attention计算" />

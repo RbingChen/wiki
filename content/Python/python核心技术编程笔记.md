@@ -270,6 +270,118 @@ list.sort(func=NOne,key=None,reverse=False)
 
 # 第八章 循环和条件
 
+# 1.else 和 pass
+
+```python
+pass 语句，表示，啥也不干。
+
+if statement:
+    pass
+
+def func:
+    pass
+```
+
+
+
+```
+else 在while和for中使用。
+
+for i in range(10)：
+    do ...
+else:
+	do ..
+```
+
+## 2.迭代器
+
+序列：
+
+```python
+>>> str1=["ab","cd","ef"]
+>>> k=iter(str1)
+>>> k.next
+>>> k.next()
+'ab'
+>>> k.next()
+'cd'
+```
+
+集合：
+
+```python
+# Dict.iterkeys()、Dict.itervalues()、Dict.iteritems()
+# Dict.has_key()=> key in Dict
+>>> dic={"acb":1,"ds":2}
+>>> for key in dic:
+...     print(key,dic[key])
+... 
+('acb', 1)
+('ds', 2)
+>>> t=dic.iterkeys()
+>>> t.next()
+'acb'
+>>> t1=dic.itervalues()
+>>> t1.next()
+1
+>>> t1=dic.iteritems()
+>>> t1.next()
+('acb', 1)
+>>> tt=iter(dic)
+>>> tt.next()
+'acb'
+```
+
+文件：
+
+```python
+文件对象的生成会自动调用readline()方法。
+>> fid=open("abc.txt")
+>> for line in myFile:
+       print(line)
+```
+
+如何创建：
+
+```python
+iter(obj)
+iter(func,sentinel)
+```
+
+## 3.列表解析
+
+```python
+[expr for iter_var in iterable if cond_expr]
+"""
+[ [x for x in range(s)] for s in range(4)]
+[for x in list]
+[(x,y) for x in list1 for y in list2]
+```
+
+## 4.生成器
+
+和列表解析很相似，基本语法相同，但是不创建真正的数字列表，返回一个生成器。计算一个条目之后，把该条目yield（产生）出来。生成器表达式使用了延迟计算（lazy evaluation），节省了内存。
+
+```python
+(expr for iter_val in iterable if cond_expr)
+"""
+ g = (x * x for x in range(10))
+ >>next(g)
+ >>0
+""" 
+generator保存的是算法，每次调用next(g)，就计算出g的下一个元素的值，直到计算到最后一个元素，没有更多的元素时，抛出StopIteration的错误。
+ def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+如果有 yield 关键字，则构成generator。
+```
+
+## 5 itertools 模块
+
 
 
 # 第九章 IO
