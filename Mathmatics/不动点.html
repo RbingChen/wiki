@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>viterbi 和Beam Search - Knowledge Change Destiny</title>
+        <title>不动点原理 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,32 +52,23 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-搜索近似算法">搜索近似算法</a>&nbsp;»&nbsp;viterbi 和Beam Search</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mathmatics">Mathmatics</a>&nbsp;»&nbsp;不动点原理</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">viterbi 和Beam Search</div>
+<div id="title">不动点原理</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#viterbi">一 Viterbi算法</a></li>
-<li><a href="#beam-search">二 Beam Search</a></li>
-<li><a href="#_1">三 对比</a></li>
-</ul>
-</div>
-<h1 id="viterbi">一 Viterbi算法</h1>
-<p>viterbi算法其实就是多步骤每步多选择模型的最优选择问题，其在<strong>每一步的所有选择都保存了前续所有步骤到当前步骤当前选择的</strong>最小总代价（或者最大价值）以及当前代价的情况下前继步骤的选择。依次计算完所有步骤后，通过回溯的方法找到最优选择路径。符合这个模型的都可以用viterbi算法解决。</p>
-<p>可以参考：<strong>HMM 的Viterbi解法</strong>、算法导论中 <strong>动态规划 的传送带</strong>的例子。</p>
-<p><strong>和穷举不一样</strong>。假设有$s$层，每一层都有$n$个状态，穷举的话，要计算$n^s$个选择。如果是viterbi的话，只需计算第$j-1$层和第$j$层的计算，计算$n^2$次，总共$s$层，那么计算$sn^2$次。</p>
-<h1 id="beam-search">二 Beam Search</h1>
-<p>Beam Search 总是走前面topN最好的选择。每一层只保存topN最优的分支。Beam Width越大，得到最优解的概率越大，但相应的计算复杂度越大。</p>
-<p><img src="/wiki/static/images/BeamSearch.png" alt="BeamSearch图" /></p>
-<h1 id="_1">三 对比</h1>
-<p>1.Viterbi 能够得到全局最优，BS不一定</p>
-<p>2.Viterbi在解决HMM问题的时候，依赖于齐次性（只和前一个状态相关），如果前x个状态出现了某个值会使得选择当前状态的概率变大时，就不能这么做了（比如：在第k个状态出现值s时，第j个状态必然是值c，显然Viterbi不能生效)。BS的假设要求更低，因此也正是因为如此，BS不一定求得最优解。</p>
-<p>相关链接：</p>
-<ol>
-<li><a href="https://www.zhihu.com/question/20136144">如何通俗地讲解viterbi算法</a></li>
-<li><a href="https://www.zhihu.com/question/54356960">Seq2Seq中的Beam Search</a></li>
-</ol>
+  <h1 id="_1">一定义</h1>
+<p>不动点原理：函数在某种情况下，至少有一个<strong>不动点</strong>存在，即至少存在一个$x=f(x)$</p>
+<h1 id="_2">二 不动点迭代法</h1>
+<h2 id="1">1.原理</h2>
+<p>将非线性方程$f(x)=0$化为一个同解方程$x=\varphi (x)$，并且假设$\varphi(x)$为连续函数。任何一个取值$x_0$，代入可得：</p>
+<p>​                           <br />
+$$<br />
+x_1=\varphi(x_0)\\x_2=\varphi(x_1)\\...\\x_{k+1}=\varphi (x_k)<br />
+$$<br />
+一般的$x_n$会收敛到某个值。对于迭代函数$\varphi (x)$的构造是有要求的。</p>
+<h2 id="2">2.定理</h2>
+<p><img src="/wiki/static/images/不动点原理.jpg" alt="收敛性" /></p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -89,7 +80,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2018-11-17 18:33 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-20 12:57 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -97,7 +88,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'viterbi 和Beam Search',
+  title: '不动点原理',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
