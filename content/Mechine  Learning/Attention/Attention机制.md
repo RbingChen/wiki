@@ -36,26 +36,21 @@ socre 有两种计算方法：
 
 ## 2.1基础的attention结构
 
-1. hard attention 、soft attention
+### 1.hard attention 、soft attention
 
-​    *Show, Attend and Tell: Neural Image Caption Generation with Visual Attention*
+   Show, Attend and Tell: Neural Image Caption Generation with Visual Attention
 
+### 2.global attention 、local attention
 
+   Effective Approaches to Attention-based Neural Machine Translation
 
-2. global attention 、local attention
+   neural machine translation by jointly learning to align and translate
 
-​     *Effective Approaches to Attention-based Neural Machine Translation*
+### 3.self-attention
 
-  
+​    attention is all you need
 
-
-
-3.  *neural machine translation by jointly learning to align and translate*
-4. self-attention
-
-​         *attention is all you need*
-
-​         *weighted transformer network for machine translation*
+​    weighted transformer network for machine translation
 
 
 
