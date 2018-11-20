@@ -18,9 +18,9 @@ date : 2018-11-17 18:33
 
 # 二 Beam Search 
 
-<img src="/wiki/static/images/BeamSearch.png" alt="BeamSearch图" />
-
 Beam Search 总是走前面topN最好的选择。每一层只保存topN最优的分支。Beam Width越大，得到最优解的概率越大，但相应的计算复杂度越大。
+
+<img src="/wiki/static/images/BeamSearch.png" alt="BeamSearch图" />
 
 # 三 对比
 

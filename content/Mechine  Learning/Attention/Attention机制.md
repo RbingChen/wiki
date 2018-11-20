@@ -50,11 +50,8 @@ socre 有两种计算方法：
 
 
 
-3. 
-
-​           *neural machine translation by jointly learning to align and translate*
-
- 4.self-attention
+3.  *neural machine translation by jointly learning to align and translate*
+4. self-attention
 
 ​         *attention is all you need*
 
