@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>exponential family - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-指数族">指数族</a>&nbsp;»&nbsp;exponential family</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">exponential family</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">一定义</a><ul>
+<li><a href="#11">1.1定义</a></li>
+<li><a href="#12interpretation">1.2Interpretation</a></li>
+</ul>
+</li>
+<li><a href="#sufficient-statistic">二 Sufficient Statistic</a><ul>
+<li><a href="#1">1.一般定义</a></li>
+<li><a href="#2">2.数学定义</a></li>
+<li><a href="#3fisherneyman-factorization-theorem">3.Fisher–Neyman factorization theorem</a></li>
+<li><a href="#4">4.指数分布统计量的求解</a></li>
+<li><a href="#5">5.其他</a><ul>
+<li><a href="#bayesian-sufficiency">Bayesian sufficiency</a></li>
+<li><a href="#linear-sufficiency">Linear sufficiency</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_2">三 应用</a><ul>
+<li><a href="#31-classical-estimation-sufficiency">3.1 Classical estimation: sufficiency</a></li>
+<li><a href="#32bayesian-estimation-conjugate-distributions">3.2Bayesian estimation: conjugate distributions</a></li>
+<li><a href="#33-generalized-linear-models">3.3 Generalized linear models</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="_1">一定义</h1>
+<h2 id="11">1.1定义</h2>
+<p>在概率学和统计学上，指数分布通常指的是一种有特定形式、特征规律的概率分布。能够对该种形式的函数使用一般性的定理。指数族提供一个一般化的框架，以自然参数（natural parameter)的形式来选择概率分布的潜在的参数形式，为此定义了该族函数的采样统计量（sample statistics），即自然充分统计量（natural sufficient statistics）。</p>
+<blockquote>
+<p>-The exponential family of distributions provides a general framework for selecting a possible alternative parameterisation of the distribution, in terms of <strong>natural parameters</strong>, and for defining useful sample statistics, called the <strong>natural sufficient statistics</strong> of the family.</p>
+</blockquote>
+<p>常见的一些指数族分布：</p>
+<p>Normal  、 Beta 、  Poisson、 Exponential、  Dirichlet、 Wishart、 Gamma 、Bernoulli、   Inverse-Wishart、chi-squared、categorical、geometric</p>
+<p>注意如下不是：</p>
+<p>Student's t、大多数的mixture distribution、均匀分布（边界不固定时)</p>
+<p>单一参数的指数族的概率分布可以表示成如下形式：<br />
+$$<br />
+f(x|\theta)=h(x)exp(\eta(\theta)T(x)-A(\theta))<br />
+$$<br />
+其中，当函数形式已知的时候，$T(x),h(x),\eta(\theta),A(\theta)$是已知。$\theta$是分布的参数。</p>
+<p>如果$\eta(\theta)=\theta$，此时的分布被称作Canonical form(经典形式)，一般地，总是可以转化指数族分布为Canonical form，这种形式不是唯一的，因为$\eta(\theta)$可以乘以非零常数（该常数可以由$c\cdot T(x)$得到。</p>
+<p><strong>思考</strong>：</p>
+<p><strong>统一的模型为了统一解决一个问题。因此要清楚指数族统一的是什么，然后有什么性质，能解决什么问题。</strong></p>
+<h2 id="12interpretation">1.2Interpretation</h2>
+<p>​    T(x)是分布的充分统计量。$\eta$是自然参数（natural parameter），</p>
+<p><img src="/wiki/static/images/exponentialFamily.png" alt="指数分布参数图" /></p>
+<p><a href="https://en.wikipedia.org/wiki/Exponential_family">https://en.wikipedia.org/wiki/Exponential_family</a></p>
+<h1 id="sufficient-statistic">二 Sufficient Statistic</h1>
+<p><a href="https://en.wikipedia.org/wiki/Sufficient_statistic">https://en.wikipedia.org/wiki/Sufficient_statistic</a></p>
+<h2 id="1">1.一般定义</h2>
+<p><strong>充分统计量</strong>：观察到了未知总体P的一个样本X，统计量T(X)包含了关于X分布的所有信息。也就是说，一旦知道了样本X的充分统计量T(X)，那么X中已经不包含关于未知总体P的任何有用信息了。充分统计量包括了概率分布的一切信息。</p>
+<p>基于某未知参数$\theta$构建了独立同分布的数据集$X$，充分统计量$T(x)$(一个函数)包含了所有估计参数的信息。根据因子分解定理，对于数据的联合分布可以写成如下$P(X)=h(X)g(\theta,T(X))$。通过最大似然法来估计$\theta$，可以发现样本是通过$T(X)$来和参数产生联系。参数统计量可以是简单的函数：如：样本的和。</p>
+<p>更一般化考虑，参数可能存在多个，比如高斯分布，使用最大似然法可以得出，mean和variance 是由两个函数（样本的和，样本的平方和）来决定的。</p>
+<p>ps:</p>
+<p><strong>满足分解定理时，求解可以得到相应的统计量。</strong></p>
+<h2 id="2">2.数学定义</h2>
+<p>给定统计量$t=T(X)$，如果数据$X$的条件概率分布不取决于参数$\theta$，那么称统计量$t=T(X)$对于未知参数$\theta$是充分的。<br />
+$$<br />
+P(x|t,\theta)=p(x|t)<br />
+$$<br />
+或者<br />
+$$<br />
+p(\theta|t,x)=p(\theta|t)\\<br />
+p(\theta,x|t)=p(\theta|t)p(x|t)<br />
+$$<br />
+上面的等式指明，在给定充分统计量$t$时，$\theta$的条件概率不依赖于数据$x$。也就是说，给定充分统计量下的$\theta$和$x$的条件概率是相互独立的。</p>
+<p>正态分布的均值一旦知道了，样本将不会为均值提供任何额外信息。另一方面，如果是中位数被知道了，对于均值来说，是不够充分的，还需要更多样本来提供额外的信息。</p>
+<p>ps：</p>
+<p><strong>需要样本才能估计参数；但参数知道之后，样本不提供任何信息。个人理解，这里知道的参数是指上帝知道的那个参数，而对于估计的参数，样本越多，估计相对越准确。对于高斯分布来说，充分统计量是样本的和 以及样本的平方和，是一种函数形式？？充分统计量是样本的某种表达</strong></p>
+<h2 id="3fisherneyman-factorization-theorem">3.Fisher–Neyman factorization theorem</h2>
+<p>Fisher's 因子理论提供了充分统计量的一般特征。<br />
+$$<br />
+f_{\theta}=h(x)g_{\theta}(T(x))<br />
+$$</p>
+<blockquote>
+<p>the density ƒ can be factored into a product such that one factor, <em>h</em>, does not depend on <em>θ</em> and the other factor, which does depend on <em>θ</em>, depends on <em>x</em> only through <em>T</em>(<em>x</em>).</p>
+</blockquote>
+<p>使用最大似然。</p>
+<h2 id="4">4.指数分布统计量的求解</h2>
+<p>均匀分布：值得一看。</p>
+<h2 id="5">5.其他</h2>
+<h3 id="bayesian-sufficiency">Bayesian sufficiency</h3>
+<p>依赖于每一个样本</p>
+<h3 id="linear-sufficiency">Linear sufficiency</h3>
+<h1 id="_2">三 应用</h1>
+<h2 id="31-classical-estimation-sufficiency">3.1 Classical estimation: sufficiency</h2>
+<h2 id="32bayesian-estimation-conjugate-distributions">3.2Bayesian estimation: conjugate distributions</h2>
+<h2 id="33-generalized-linear-models">3.3 Generalized linear models</h2>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-20 16:43 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'exponential family',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2018 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
