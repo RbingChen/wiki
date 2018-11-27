@@ -89,6 +89,66 @@ $$
 j=\mathop{\arg\max}_\limits{j}P(y_j|h_e)
 $$
 
+```
+j=\mathop{\arg\max}_\limits{j}P(y_j|h_e)
+```
+
+
+
+## 三分段函数
+
+$$
+f(x)=\begin{cases}10&x\le3\\\\2x+4&x>3\end{cases}\\\\
+f(x)=\begin{cases}10&x\le3\\\\2x+4&x>3\end{cases}
+$$
+
+```
+f(x)=\begin{cases}10&x\le3\\\\2x+4&x>3\end{cases}\\\\
+f(x)=\begin{cases}10&x\le3\\\\2x+4&x>3\end{cases}
+```
+
+## 四导数 和偏导数
+
+$$
+\frac{\partial^2 u}{\partial z^2}\\\\
+\frac{\partial^2 u}{\partial z^2}
+$$
+
+```
+\frac{\partial^2 u}{\partial z^2}\\\\
+\frac{\partial^2 u}{\partial z^2}
+```
+
+## 五极限
+
+```
+$\lim_{x \to +\infty}\frac{1}{x}$
+$$\lim_{x \to +\infty}\frac{1}{x}$$
+```
+
+$$
+\lim_{x \to +\infty}\frac{1}{x}\\\\
+\lim_{x \to +\infty}\frac{1}{x}
+$$
+
+## 六积分
+
+```
+$\int_{a}^{\pi} f(x)dx$
+$$\int_{a}^{\pi} f(x)dx$$
+```
+
+
+$$
+\int_{a}^{\pi} f(x)dx\\\\
+\int_{a}^{\pi} f(x)dx
+$$
+<img src="/wiki/static/images/markdown1.png" alt="公式图" />
+
+<img src="/wiki/static/images/markdown2.png" alt="公式图" />
+
+<img src="/wiki/static/images/markdown3.png" alt="公式图" />
+
 
 
 相关链接
