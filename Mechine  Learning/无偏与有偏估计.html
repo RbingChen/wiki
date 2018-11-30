@@ -90,13 +90,36 @@ $$<br />
 $$<br />
 从上面可以看出，均值的估计是无偏的，方差的估计是有偏的。估计得到的方差需要乘以$\frac{n}{n-1}$。</p>
 <h1 id="_3">三 问题</h1>
-<p><strong>有偏无偏能说明什么问题？</strong></p>
+<p>1.<strong>有偏无偏能说明什么问题？</strong></p>
 <p>有偏估计，有偏估计的准确率是有限的。</p>
-<p><strong>有哪些参数估计方法</strong>?</p>
+<p>2.<strong>有哪些参数估计方法</strong>?</p>
 <p>​      矩估计法、顺序统计量法、最大似然法、最小二乘法</p>
-<p><strong>使用最大似然估计参数，是有偏还是无偏的？</strong></p>
-<p><strong>为什么估计出来的方差偏小？</strong></p>
+<p>3.<strong>使用最大似然估计参数，是有偏还是无偏的？</strong></p>
+<p>​    一般情况下，估计均值，例如估计指数分布的均值<br />
+$$<br />
+\lambda^<em>=\mathop{\arg\max}_\limits{j} log \prod_i^n \lambda {e^{-\lambda x_i}}<br />
+$$<br />
+   可得，$\lambda^</em>=\frac{n}{\sum_i^n x_i}$且 $E[x_i]=\frac{1}{\lambda}$。则：</p>
+<p>$$<br />
+E[\lambda^<em 1_lambda="1/\lambda">]=\frac{n}{n</em>}=\lambda<br />
+$$<br />
+如果，$\lambda$是服从某个分布的值。</p>
+<p>4.<strong>为什么估计出来的方差偏小？</strong></p>
 <p>样本均值（即总体均值的估计值）会偏向数据，导致样本方差偏小。</p>
+<p>5.<strong>为什么是等权求均值</strong>？</p>
+<p>考虑非等权重且均值已知的情况下，<br />
+$$<br />
+Var(\frac{\sum_i^na_ix_i}{\sum_i^n{a_i}})=\frac{\sum_i^na_i^2\sigma^2}{(\sum_i^na_i)^2}<br />
+$$<br />
+因为有：<br />
+$$<br />
+a_1^2+a_2^2+...+a_n^2&gt;=\frac{1}{n}(a_1+a_2+....+a_n)^2<br />
+$$<br />
+那么上等式为<br />
+$$<br />
+Var(...)&gt;=\frac{1}{n}\sigma^2<br />
+$$<br />
+大小不可控，无法修正，等权重的时候估计的方差是最小方差。</p>
 <h1 id="biasvariance">四 bias和variance</h1>
 <p>样本均值是随机量。采样引入随机性。</p>
 <p>有偏或者无偏：随机量和常数。一般都是。</p>

@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>General linear model - Knowledge Change Destiny</title>
+        <title>Generaized linear model - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,10 +52,10 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-指数族">指数族</a>&nbsp;»&nbsp;General linear model</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-指数族">指数族</a>&nbsp;»&nbsp;Generaized linear model</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">General linear model</div>
+<div id="title">Generaized linear model</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#_1">一定义</a></li>
@@ -71,7 +71,7 @@
 <p>GLM的三个要素：</p>
 <ol>
 <li>A probability distribution from the exponential family</li>
-<li>a linear predictor $\eta=X\Beta$</li>
+<li>a linear predictor $\eta=X\beta$</li>
 <li>a link function g such that $E(Y)=\mu=g^{-1}(\eta)$</li>
 </ol>
 <p>GLM的前提是分布服从指数族分布。</p>
@@ -96,6 +96,8 @@ $$<br />
 f(x|\theta)=h(x)exp\frac{(\eta T(x)-k(\eta))}{d(\tau)}<br />
 $$<br />
 $d(\tau)$是dispersion parameter。求解连接函数时，可以不需要考虑。</p>
+<p><img src="/wiki/static/images/glm1.jpeg" alt="glm"/></p>
+<p><img src="/wiki/static/images/glm2.jpeg" alt="glm"/></p>
 <h1 id="_3">三求解</h1>
 <p>最大似然。</p>
 <h1 id="_4">四 理解</h1>
@@ -124,7 +126,7 @@ $d(\tau)$是dispersion parameter。求解连接函数时，可以不需要考虑
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'General linear model',
+  title: 'Generaized linear model',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
