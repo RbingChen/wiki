@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>attention - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-Attention">Attention</a>&nbsp;»&nbsp;attention</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">attention</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#attention">一  attention 原理</a></li>
+<li><a href="#attention_1">二 attention分类</a><ul>
+<li><a href="#21attention">2.1基础的attention结构</a><ul>
+<li><a href="#1hard-attention-soft-attention">1.hard attention 、soft attention</a></li>
+<li><a href="#2global-attention-local-attention">2.global attention 、local attention</a></li>
+<li><a href="#3self-attention">3.self-attention</a></li>
+</ul>
+</li>
+<li><a href="#22-attention">2.2 组合的attention结构</a></li>
+</ul>
+</li>
+<li><a href="#_1">三 应用</a></li>
+</ul>
+</div>
+<p>首先给一定典型的attention结构图。</p>
+<p><img src="/wiki/static/images/attention.png" alt="attention图" /></p>
+<p>有如下定义：</p>
+<p><img src="/wiki/static/images/attention_equation_0.jpg" alt="attention计算" /></p>
+<p>$h_t$是decode端 hidden state , $\overline{h}_s$是编码端hidden state</p>
+<p>socre 有两种计算方法：</p>
+<p><img src="/wiki/static/images/attention_equation_1.jpg" alt="attention计算" /></p>
+<h1 id="attention">一  attention 原理</h1>
+<p>attention 是什么？</p>
+<div class="hlcode"><pre><span class="mf">1.</span> <span class="err">局部和全局。考虑全局的事物或变量对局部的影响，但对于全局来说，全局的小部分对局部的影响是不同。</span>
+
+
+
+   <span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;/wiki/static/images/attention_equation_1.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;翻译&quot;</span><span class="o">/&gt;</span>
+
+    <span class="err">不使用</span><span class="n">attention</span><span class="err">时，$</span><span class="n">P</span><span class="p">(</span><span class="n">y_i</span><span class="o">|</span><span class="n">h_i</span><span class="p">,</span><span class="n">h_</span><span class="p">{</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">},...,</span><span class="n">h_1</span><span class="p">)</span><span class="err">$，</span><span class="n">lstm</span><span class="err">模型容易导致</span>
+
+    <span class="err">对</span><span class="n">CNN</span><span class="err">而言，局部感受野。</span>
+
+<span class="mf">2.</span> <span class="err">如何衡量全局对局部的影响？</span>
+
+    <span class="err">首先思考全局的表达是什么？</span><span class="n">CNN</span><span class="err">而言，可以是浅层或深层的特征表达，</span><span class="n">lstm</span><span class="err">，对于时隙变换的集合。</span>
+
+    <span class="err">其次如何衡量，全局不同部分对局部的影响。</span>
+</pre></div>
+
+
+<p>适用于什么问题？</p>
+<p>为什么nlp的解码端使用lstm？</p>
+<ol>
+<li>写字的时候是有顺序的。前面的词的表达对后面的词的表达有影响。</li>
+<li>nmt的时候，搜索算法。</li>
+<li>不用lstm的话，例如cnn，解码的时候，</li>
+<li>attention</li>
+</ol>
+<h1 id="attention_1">二 attention分类</h1>
+<ol>
+<li>neural machine translation by jointly learning to align and translate</li>
+</ol>
+<p>作者认为encoder-decoder的方式，中间形成的是固定长度的向量，限制了翻译机结果的提升。因此提出一种方式能够自动搜索源句中与目标词的相关部分。</p>
+<h2 id="21attention">2.1基础的attention结构</h2>
+<h3 id="1hard-attention-soft-attention">1.hard attention 、soft attention</h3>
+<p>Show, Attend and Tell: Neural Image Caption Generation with Visual Attention</p>
+<h3 id="2global-attention-local-attention">2.global attention 、local attention</h3>
+<p>Effective Approaches to Attention-based Neural Machine Translation</p>
+<p>neural machine translation by jointly learning to align and translate</p>
+<p>​     </p>
+<h3 id="3self-attention">3.self-attention</h3>
+<p>​    attention is all you need</p>
+<p>​    weighted transformer network for machine translation</p>
+<h2 id="22-attention">2.2 组合的attention结构</h2>
+<h1 id="_1">三 应用</h1>
+<p><strong>适用于什么场景？</strong></p>
+<p>图片解释，翻译，知识抽象</p>
+<p>参考：</p>
+<p>https://blog.csdn.net/xiewenbo/article/details/79382785</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-01 16:04 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'attention',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2018 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
