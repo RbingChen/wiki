@@ -54,3 +54,32 @@ ssh-keygen -t rsa -C "xxxx@126.com"
      如果有问题，-v 会打印相关信息，一般是config配置问题，或者是网络受限。
 ```
 
+## 三其他
+
+如果出现如下错误，
+
+```bash
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+
+并且 ssh -T -v git@github.com的结果如下（GitHub does not provide shell access，这个可以忽略)：
+
+```bash
+You've successfully authenticated, but GitHub does not provide shell access.
+debug1: channel 0: free: client-session, nchannels 1
+Transferred: sent 2644, received 1768 bytes, in 0.6 seconds
+```
+
+可以再使用如下命令：
+
+```bash
+>>ssh-add ~/.ssh/id_rsa_github
+>>ssh-add ~/.ssh/id_rsa
+```
+
