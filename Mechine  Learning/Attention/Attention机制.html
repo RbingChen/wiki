@@ -58,8 +58,14 @@
 <div id="title">attention</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#attention">一  attention 原理</a></li>
-<li><a href="#attention_1">二 attention分类</a><ul>
+<li><a href="#attention">一  attention 原理</a><ul>
+<li><a href="#attention_1">attention</a><ul>
+<li><a href="#self-attention">Self-attention</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#attention_2">二 attention分类</a><ul>
 <li><a href="#21attention">2.1基础的attention结构</a><ul>
 <li><a href="#1hard-attention-soft-attention">1.hard attention 、soft attention</a></li>
 <li><a href="#2global-attention-local-attention">2.global attention 、local attention</a></li>
@@ -81,24 +87,23 @@
 <p><img src="/wiki/static/images/attention_equation_1.jpg" alt="attention计算" /></p>
 <h1 id="attention">一  attention 原理</h1>
 <p>attention 是什么？</p>
-<div class="hlcode"><pre><span class="mf">1.</span> <span class="err">局部和全局。考虑全局的事物或变量对局部的影响，但对于全局来说，全局的小部分对局部的影响是不同。</span>
-
-
-
-   <span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;/wiki/static/images/attention_equation_1.jpg&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;翻译&quot;</span><span class="o">/&gt;</span>
-
-    <span class="err">不使用</span><span class="n">attention</span><span class="err">时，$</span><span class="n">P</span><span class="p">(</span><span class="n">y_i</span><span class="o">|</span><span class="n">h_i</span><span class="p">,</span><span class="n">h_</span><span class="p">{</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">},...,</span><span class="n">h_1</span><span class="p">)</span><span class="err">$，</span><span class="n">lstm</span><span class="err">模型容易导致</span>
-
-    <span class="err">对</span><span class="n">CNN</span><span class="err">而言，局部感受野。</span>
-
-<span class="mf">2.</span> <span class="err">如何衡量全局对局部的影响？</span>
-
-    <span class="err">首先思考全局的表达是什么？</span><span class="n">CNN</span><span class="err">而言，可以是浅层或深层的特征表达，</span><span class="n">lstm</span><span class="err">，对于时隙变换的集合。</span>
-
-    <span class="err">其次如何衡量，全局不同部分对局部的影响。</span>
-</pre></div>
-
-
+<p>nlp中给定词，和不同词之间的隐含关系存在差异，cv中视觉中心点在时间上存在变化。</p>
+<p>Image: 大部分动物只关注视野的特定部分以获得准确的响应。</p>
+<ol>
+<li>局部和全局。考虑全局的事物或变量对局部的影响，但对于全局来说，全局的小部分对局部的影响是不同。</li>
+</ol>
+<p>​       </p>
+<p>​    <img src="/wiki/static/images/attention_equation_1.jpg" alt="翻译"/></p>
+<p>​       不使用attention时，$P(y_i|h_i,h_{i-1},...,h_1)$，lstm模型容易导致</p>
+<p>​      对CNN而言，局部感受野。</p>
+<p>或者理解为源和目标的关系。</p>
+<ol>
+<li>
+<p>如何衡量全局对局部的影响？</p>
+<p>首先思考全局的表达是什么？CNN而言，可以是浅层或深层的特征表达，lstm，对于时隙变换的集合。</p>
+<p>其次如何衡量，全局不同部分对局部的影响。</p>
+</li>
+</ol>
 <p>适用于什么问题？</p>
 <p>为什么nlp的解码端使用lstm？</p>
 <ol>
@@ -107,7 +112,97 @@
 <li>不用lstm的话，例如cnn，解码的时候，</li>
 <li>attention</li>
 </ol>
-<h1 id="attention_1">二 attention分类</h1>
+<h2 id="attention_1">attention</h2>
+<p>给定输入源和输出值的表达，使用一个函数来刻画输入源和输出值的关系。</p>
+<p>​                     <br />
+$$<br />
+\alpha_{ts}=\frac{exp(score(h_t,\hat h_s))}{\sum_{\hat s}^Sexp(score(h_t,\hat h_s))}\\<br />
+c_t=\sum_s \alpha_{ts}\hat h_s\\<br />
+a_t=f(c_t,h_t)=tanh(W_c[c_t;h_t])<br />
+$$<br />
+$\alpha_{ts}$:attention weight</p>
+<p>$c_t$:context vector</p>
+<p>$a_t$:attention vector，</p>
+<p>$a_t$用以连接softmax</p>
+<p>$h_t$表示输出值，$\hat h_s$表示输入源</p>
+<p>对于score 函数有如下几种：<br />
+$$<br />
+score(h_t,\hat h_s)=\begin{cases}h_t^T\hat h_s\\h_t^TW_a\hat h_s\\v_a^Ttanh(W_a[h_t;\hat h_s])\end{cases}<br />
+$$<br />
+对应为dot、general、concat形式。</p>
+<p>dot</p>
+<p>general</p>
+<p>concat</p>
+<p>对于输入源的形式可以是：</p>
+<ol>
+<li>cnn 中不同cnn通道的输出作为输入源，也可以是输出矩阵的一列或一行。</li>
+<li>rnn/lstm 中，输入源对应于每个时隙的输出。双向RNN中最后两层输出的concat。</li>
+</ol>
+<p>为什么会work？</p>
+<ol>
+<li>由 attention vector可以知道，相当于增加的了更多的特征。</li>
+<li>引入浅层的信息，浅层更具有区分性，深层信息更有抽象性和一般性。</li>
+</ol>
+<p>attention 分类：</p>
+<ol>
+<li>
+<p>hard - attention</p>
+<p>使用值。相关的则设成1。采用多项式分布。一般不用，不可微。</p>
+</li>
+<li>
+<p>soft -attention</p>
+<p>使用概率值。</p>
+<p>考虑到效率。 global和local之分。</p>
+</li>
+</ol>
+<h3 id="self-attention">Self-attention</h3>
+<p>为啥叫self 呢？</p>
+<p>输入源和输出都是同一个。</p>
+<p><strong>数学上的表达</strong>。</p>
+<p>attention vector ：<br />
+$$<br />
+Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V<br />
+$$<br />
+Q，K，V的维度都是$[t , d_{model}]$,V的维度可以不一样, ，且在transformer中，Q和K是相同的。<br />
+$$<br />
+Q=\begin{bmatrix}q_{1,1}&amp;q_{1,2}&amp;\cdots&amp;q_{1,t}\\q_{2,1}&amp;q_{2,2}&amp;\cdots&amp;q_{2,t}\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\q_{t,1}&amp;q_{t,2}&amp;\cdots&amp;q_{t,t}\end{bmatrix}=\begin{bmatrix}q_1\\q_2\\..\\q_t\end{bmatrix}\ \ \ ,\ K=\begin{bmatrix}k_1\\k_2\\..\\k_t\end{bmatrix}<br />
+$$<br />
+那么：<br />
+$$<br />
+sofmax(\frac{QK^T}{\sqrt{d_k}})=softmax(\begin{bmatrix}q_1k_1&amp;q_1k_2&amp;\cdots&amp;q_1k_t\\q_2k_1&amp;q_2k_2&amp;\cdots&amp;q_2k_t\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\q_tk_1&amp;q_tk_2&amp;\cdots&amp;q_tk_t\end{bmatrix} /\sqrt{d_k})=A<br />
+$$<br />
+经过softmax之后的矩阵$A$,满足$A=A^T,q_ik_j=a_{i,j}$且维度为$[T,T]$，对任意列或者行的值求和等于1。该计算把所有输出的attention weight都计算了。$AV$得到是最后的context matrix。</p>
+<p><strong>关于</strong>：masked的引入，当前时隙无法获得未来时隙的内容。</p>
+<p>例如：计算第1个时隙的attention weight。</p>
+<p>有masked：</p>
+<p>下三角矩阵<br />
+$$<br />
+a_{i,j}=\begin{cases}q_ik_j&amp;i&gt;=j\\-\infin&amp;j&gt;i\end{cases}<br />
+$$</p>
+<div class="hlcode"><pre><span class="n">a_i_j</span><span class="k">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">k</span> <span class="k">&lt;-</span> <span class="mi">0</span> <span class="n">to</span> <span class="n">T</span><span class="k">:</span>
+    <span class="kt">if</span> <span class="kt">k&lt;=i:</span>
+        <span class="n">a_i_j</span><span class="o">+=</span><span class="n">q_i_k</span> <span class="o">*</span> <span class="n">v_j_k</span>
+</pre></div>
+
+
+<p>为什么 transformer取代lstm，cnn？</p>
+<ol>
+<li>
+<p>更容易获得long-range(时间维度上更广) 的依赖。</p>
+<p>一般的lstm，当前时隙只依赖于前面的时隙，而不能依赖于后面的时隙。如果使用双向lstm才有可能。</p>
+</li>
+<li>
+<p>cnn，单一卷积不能把输入和输出的所有位置联系起来。需要多个位置上连续的卷积。</p>
+</li>
+<li>
+<p>总的而言，省了计算量。</p>
+</li>
+</ol>
+<p>反正，结果好，怎么说都是有道理的。</p>
+<p>点对点的不是更好，为什么是计算向量之间的score？</p>
+<p>点对点，相当于1*1 的卷积。 向量是有特殊含义的。</p>
+<h1 id="attention_2">二 attention分类</h1>
 <ol>
 <li>neural machine translation by jointly learning to align and translate</li>
 </ol>
@@ -126,6 +221,45 @@
 <h1 id="_1">三 应用</h1>
 <p><strong>适用于什么场景？</strong></p>
 <p>图片解释，翻译，知识抽象</p>
+<p>$$<br />
+a_1=V(空间和海洋)\cdot  V(space\  and\  oceans）<br />
+$$</p>
+<p>$$<br />
+context= \hat a_1* V(空间和海洋)+....\\<br />
+$$</p>
+<p>$$<br />
+\sigma([context,V(space\  and \ oceans)]) 输出 判断是否该翻译成space\ and \ oceans<br />
+$$</p>
+<p>$$<br />
+score(h_t,\hat h_s)=\begin{cases}V_t H_s\\V_t^TW_a H_s\\Q_t^Ttanh(W_a[V_t;H_s])\end{cases}<br />
+$$</p>
+<p>$$<br />
+\alpha_{ts}=\frac{exp(score(V_t,H_s))}{\sum_{\hat s}^Sexp(score(V_t,H_{\hat s}))}\\V<br />
+$$</p>
+<p>$$<br />
+c_t=\sum_s \alpha_{ts}H_s\\<br />
+$$</p>
+<p>$$<br />
+a_t=f(c_t,h_t)=softmax(tanh(W_c[c_t;h_t]))<br />
+$$</p>
+<p>$$<br />
+\hat a_i=\frac{ a_i}{\sum_{j=1}^N a_j}<br />
+$$</p>
+<p>$$<br />
+position_encoding=\begin{bmatrix}sin(1/10000^{\frac{0}{512}})&amp;cos(1/10000^{\frac{2}{512}})&amp;\cdots &amp;sin(1/10000^{\frac{1024}{512}})\\sin(2/10000^{\frac{0}{512}})&amp;cos(2/10000^{\frac{2}{512}})&amp;\cdots &amp;sin(2/10000^{\frac{1024}{512}})\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\sin(T/10000^{\frac{0}{512}})&amp;cos(T/10000^{\frac{2}{512}})&amp;\cdots &amp;sin(T/10000^{\frac{1024}{512}})\end{bmatrix}<br />
+$$</p>
+<p>$$<br />
+W=\begin{bmatrix}w_{1,1}&amp;w_{1,2}&amp;\cdots&amp;w_{1,t}\\w_{2,1}&amp;w_{2,2}&amp;\cdots&amp;w_{2,t}\\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\w_{t,1}&amp;w_{t,2}&amp;\cdots&amp;w_{t,t}\end{bmatrix}<br />
+$$</p>
+<p>$$<br />
+f=\frac{exp(q_ik_i)}{\sum_j^n exp(q_jk_j)}\\<br />
+\frac{\partial f }{\partial k_i}=\frac{q_i\sum_{j!=i}exp(q_jk_j)}{S^2}<br />
+$$</p>
+<p>Self-attention : 替换 rnn 、cnn？</p>
+<ol>
+<li>解释上。</li>
+<li>结构上。</li>
+</ol>
 <p>参考：</p>
 <p>https://blog.csdn.net/xiewenbo/article/details/79382785</p>
 </div>
