@@ -149,6 +149,8 @@ $$
 
 <img src="/wiki/static/images/markdown3.png" alt="公式图" />
 
+<img src="/wiki/static/images/math1.png" alt="公式图" />
+
 
 
 相关链接

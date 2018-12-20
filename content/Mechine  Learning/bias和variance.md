@@ -54,6 +54,8 @@ Error due to Variance：衡量多个模型预测值的差异程度。描述的�
 
 决策树、神经网络等，训练样本稍加变化就会导致模型有显著变化；线性模型、支持向量机、朴素贝叶斯、k近邻等，对数据样本的扰动不敏感。
 
+
+
 ## 2.图定义
 
    <img   src="/wiki/static/images/bias_variance.png"   alt="bias variance图"
