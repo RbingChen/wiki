@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>descion tree - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-tree model">tree model</a>&nbsp;»&nbsp;descion tree</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">descion tree</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">一 定义</a></li>
+<li><a href="#_2">二 训练</a><ul>
+<li><a href="#1gini-impurity">1.Gini impurity</a></li>
+<li><a href="#2information-gain">2.Information Gain</a></li>
+<li><a href="#3variance-reduction">3.Variance reduction</a></li>
+</ul>
+</li>
+<li><a href="#_3">三 优缺点</a></li>
+</ul>
+</div>
+<h1 id="_1">一 定义</h1>
+<blockquote>
+<p>ESL 中定义：Tree-based methods partition the feature space into a set of rectangles, and then fit a simple model (like a constant) in each one. </p>
+<p>统计学习方法中定义：一种描述对实例进行分类的树形结构。由节点和有向边构成，结构有内部节点(internal node) 和 叶节点(leaf node)构成。内部结点表示一个特征或属性，叶节点表示输出。</p>
+</blockquote>
+<p>个人理解：</p>
+<ol>
+<li>决策树是规则的结构表示，决策树从root 节点到根节点，是一连串if-then 规则构成。可以认为，决策树很好的把规则组织起来了，并且能够通过一定方式去选取规则( 即选取 if-then 的判断条件)。</li>
+</ol>
+<p>​     和人为规则对比，人无法直接去计算复杂的规则，深度10的树，可能包含$2^9=512$ 条规则，人是难以去完成并加以很好的组织这些规则的。</p>
+<ol>
+<li>规则本身上是对空间的划分，而且是在同一属性上进行规则的选取。</li>
+</ol>
+<p>​      例如：gini 系数计算的时候，是分别在每一个特征进行系数计算，同一个特征上的度量(数值含义）是一致的，因此决策树模型的特征不需要归一化。而对于LR模型来说，是通过特征乘以系数再相加来计算结果，训练过程中，特征存在影响，在某种程度上，需要进行归一化。</p>
+<ol>
+<li>可以把决策树看成判别模型，$P(Y|x_1,x_2,x_3,....,x_n)$。给定具体的属性值，得到相应输出。</li>
+</ol>
+<p>问题：</p>
+<ol>
+<li>
+<p>前面几层的节点分错的情况下，对下面几层的影响很大。尤其是离散化的特征。</p>
+</li>
+<li>
+<p>决策树是在已知空间对划分，难以推断到未知空间。</p>
+</li>
+</ol>
+<p>例如： 训练集$y\in [a,b]$,那么，决策树预测的结果只能在这个范围内。线性回归，通过组合特征可以拓展到范围外。。</p>
+<h1 id="_2">二 训练</h1>
+<p>决策树的训练，是规则的选取的过程，即特征选取。</p>
+<p><strong>首先思考什么样的特征是好的？</strong> </p>
+<p>极端情况下，一次性能把类分好。事实上，数据难以一次性被分好，那么，按照这个思想，在当前节点，应该选取一个特征，该特征能够比较清晰的划分数据(通俗来说，就是分完之后，节点上大部分是多数类，极少部分是其他类)，有方差、gini、信息增益等来量化。专业术语impurity 用来表示分类清晰、纯度。</p>
+<h2 id="1gini-impurity">1.Gini impurity</h2>
+<p>$$<br />
+I_G(p)=1-\sum_i^k{p_k}<br />
+$$</p>
+<p>​          基尼系数，本来是用于衡量描述收入贫富差距的指标。趋近于0时越相等，趋近于1时表示极度不相等。财富的基尼系数计算:</p>
+<p>​     <br />
+$$<br />
+G=\frac {\sum_{i=1}^n\sum_{j=1}^n|x_i-x_j|}{2n\sum_{i=1}^nx_i}\<br />
+G=\frac{1}{2a}\int \int p(x)p(y)|x-y|dxdy\<br />
+a=\int xp(x)dx<br />
+$$<br />
+计算Gini系数时候，要大样本且某个值很大时，系数才会趋向于1：<br />
+$$<br />
+x_i\to + \infty,x_i&gt;&gt;x_{j\neq i}\<br />
+G \approx \frac{(2n-2)x_i}{2nx_i}\approx1<br />
+$$<br />
+分类中的Gini系数：<br />
+$$<br />
+I_G(p)=\sum_i p_i\sum_{j\neq i}p_j=\sum_ip_i(1-p_i)=1-\sum{p_i^2}<br />
+$$<br />
+这个系数要等于1 也得是很极端的情况（类别很多时）。</p>
+<h2 id="2information-gain">2.Information Gain</h2>
+<h2 id="3variance-reduction">3.Variance reduction</h2>
+<h1 id="_3">三 优缺点</h1>
+<p><strong>优点：</strong></p>
+<ol>
+<li>Simple to understand and interpret</li>
+</ol>
+<p>​     可理解性可解释性强</p>
+<ol>
+<li>Able to handle both numerical and categorical data</li>
+</ol>
+<p>​     可以同时处理数值和离散数据</p>
+<ol>
+<li>Requires little data preparation</li>
+</ol>
+<p>​    其他技术经常需要数据的标准化</p>
+<ol>
+<li>User a white box model</li>
+</ol>
+<p>​    可以理解可视化，可理解性强~NN难以理解。</p>
+<ol>
+<li>
+<p>Possible to validate a model using statistical tests</p>
+<p>容易验证模型的有效性</p>
+</li>
+<li>
+<p>Non-statistical approach that makes no assumptions of the training data or prediction residuals</p>
+<p>对训练数据或者预测残差，没有做假设性猜想。</p>
+</li>
+<li>
+<p>Performs well with large datasets</p>
+</li>
+<li>
+<p>Mirrors human decision making more closely than other approaches</p>
+</li>
+</ol>
+<p>​    类似人类的行为或者决定</p>
+<ol>
+<li>Robust against co-linearity</li>
+</ol>
+<p>​    能很好地处理共线性</p>
+<ol>
+<li>
+<p>In built feature selection</p>
+<p>​    自带特征选择</p>
+</li>
+<li>
+<p>Decision trees can approximate any Boolean function </p>
+</li>
+</ol>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li>
+<p><strong>决策树十分不鲁棒(non-robust</strong>)。训练集上很小改变可能导致树结构的较大的变化进而影响最后的预测结果。</p>
+<p>RF  弥补这个缺点。</p>
+</li>
+<li>
+<p>特征选择过程是一个NP-C问题。现在构建决策树的方法都是基于启发式的算法，例如：贪心算法，每个节点都是局部最优，不能确保做到全局最优。</p>
+</li>
+<li>
+<p>容易过拟合。剪枝(pruning)。</p>
+</li>
+<li>
+<p>For data including categorical variables with different numbers of levels，information gain in decision trees  is biased in favor of attributes with more levels。</p>
+</li>
+<li>
+<p><strong>缺少典型数据。如果训练数据中没有包含所具有的代表性的数据，导致某一类数据无法很好的匹配。？？</strong></p>
+<p><strong>都有代表性了，学习个毛了？？？</strong></p>
+</li>
+</ol>
+<p><strong>其他：</strong></p>
+<p>​    NN全局最优；GBM 局部贪心最优，层级最优。</p>
+<ol>
+<li>https://en.wikipedia.org/wiki/Decision_tree_learning</li>
+</ol>
+<p>2.https://blog.csdn.net/keepreder/article/details/47168383</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-10-18 10:51 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'descion tree',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2018 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
