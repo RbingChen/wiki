@@ -222,10 +222,10 @@ str() chr()  用 unicode() unichar()代替
 decode()   encode()
 
 open打开文件只能写入str类型,不管字符串是什么编码方式
-codes.open(file,权限,编码类型) #'utf-8' 'gbk'
+codecs.open(file,权限,编码类型) #'utf-8' 'gbk'
 ```
 
-Codes 模块：定义了文本跟二进制的转换方式。
+Codecs 模块：定义了文本跟二进制的转换方式。
 
 ### 2.2字符串的一些库
 

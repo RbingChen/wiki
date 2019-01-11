@@ -11,3 +11,4 @@ $$
 \theta^*=\mathop{arg max}_{\theta}\ \  \prod_i^n\ \ f(x_i,\theta)
 $$
 
+https://www.zhihu.com/question/21871331
