@@ -65,6 +65,13 @@
 <li><a href="#2">2.惰性计算</a></li>
 </ul>
 </li>
+<li><a href="#graph">四 Graph</a><ul>
+<li><a href="#1cpugpu">1.图的一部分指定到特定的cpu或者gpu上运行</a></li>
+<li><a href="#2graph">2.多个Graph</a></li>
+<li><a href="#3grpah">3.Grpah</a></li>
+</ul>
+</li>
+<li><a href="#tensorboard">五 tensorBoard</a></li>
 </ul>
 </div>
 <h1 id="graphs-and-sessions">一 Graphs  and  Sessions</h1>
@@ -132,6 +139,63 @@
 
 <p>正常，认为 c+d 更新了，那么d的值应该会变。但是实际graph 中，节点(nodes)已经存储了c,d( contants)的值，用来做计算。</p>
 <h2 id="2">2.惰性计算</h2>
+<h1 id="graph">四 Graph</h1>
+<h2 id="1cpugpu">1.图的一部分指定到特定的cpu或者gpu上运行</h2>
+<div class="hlcode"><pre><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s">&quot;./gpu:2&quot;</span><span class="p">):</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;a&quot;</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mi">102</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;b&quot;</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="c"># 创建一个会话，并把 log_device_placement 设置为True</span>
+<span class="n">sess</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ConfigProto</span><span class="p">(</span><span class="n">log_device_placement</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</pre></div>
+
+
+<p>问题：GPU怎么命名的？单机上cpu的名字是什么？</p>
+<h2 id="2graph">2.多个Graph</h2>
+<p>如果Graph 为一个时，采用默认的graph。注意以下问题：</p>
+<ul>
+<li>
+<p>需要多个Session来运行多个Graph，并且每个Graph会尽可能使用默认分配的资源</p>
+</li>
+<li>
+<p>不要在图之间的数据传输，否则将不会以并行方式运行</p>
+</li>
+</ul>
+<div class="hlcode"><pre><span class="n">g1</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
+<span class="n">g2</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="c">#默认图</span>
+<span class="k">with</span> <span class="n">g1</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Contant</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="c">#创建的图</span>
+<span class="k">with</span> <span class="n">g2</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Contant</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+
+<p>图的运行：</p>
+<div class="hlcode"><pre><span class="n">g2</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">g2</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Contant</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">sess</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">g2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+</pre></div>
+
+
+<p>需要在Session中指定具体的图。</p>
+<h2 id="3grpah">3.Grpah</h2>
+<p><img src="/wiki/static/images/whyGraph.png" alt="graph图" /></p>
+<p>目前主流的机器学习方法都可以用图来表述。</p>
+<p>其次并行化及可微分。</p>
+<h1 id="tensorboard">五 tensorBoard</h1>
+<div class="hlcode"><pre><span class="n">writer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">())</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+   <span class="c">#writer=tf.summary.FileWriter(&#39;path&#39;,sess.graph())</span>
+</pre></div>
+
+
+<p>对会话的图进行存储；对默认图进行存储。</p>
+<p>在终端下使用，tensorboard --logdir="path"  --port  6006  ，查看图。</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -172,7 +236,7 @@ gitment.render('comments')
         </div>
         <div id="footer">
             <span>
-                Copyright © 2018 Cimon.
+                Copyright © 2019 Cimon.
                 Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
             </span>
         </div>

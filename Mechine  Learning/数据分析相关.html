@@ -80,11 +80,11 @@ $N_x$表示实验组支付人数，$M_z$表示空白组支付人数。那么可�
 <p>如果增量&gt;10 *标准差。那么说明增量的是很有效的。</p>
 <h1 id="_2">二 空白组和实验组人问题</h1>
 <p>现在得到数据，统计可得 空白组人数为$M$，实验组为$N$。</p>
-<p>那么理论空白组人数为$\hat M=\frac{r}{{(1+r)}}(M+N)$</p>
+<p>那么理论空白组人数为$\hat M=\frac{1}{{(1+r)}}(M+N)$</p>
 <p>偏差为：$\Delta_M=|\hat M-M|$</p>
 <p>理论标准差为$std=\sqrt{ \frac{r}{{(1+r)}^2}(M+N)}$</p>
 <p>计算偏差和标准差的比值，可以判断置信度。</p>
-<p>中心极限定理，空白组人数服从$(\hat M,std^2)$的高斯分布。</p>
+<p>中心极限定理，空白组人数服从$(\hat M,std^2)​$的高斯分布。</p>
 <h1 id="_3">三 标记重捕法置信度</h1>
 <p>假设：池塘中N条标记，M条无标记，总共$Z=N+M$。捕捉了n条有标记，m条无标记，一共$z=n+m$条。<br />
 $$<br />
@@ -107,6 +107,7 @@ $$<br />
 |\frac{\Delta\hat Z}{\hat Z}|=|\frac{\Delta n}{n}|=\frac{std(n)}{n}<br />
 $$<br />
 <strong>微分求偏差~简直溜</strong></p>
+<p>https://tracholar.github.io/machine%20learning/2018/11/02/abtest-and-sqrt-rule.html</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -147,7 +148,7 @@ gitment.render('comments')
         </div>
         <div id="footer">
             <span>
-                Copyright © 2018 Cimon.
+                Copyright © 2019 Cimon.
                 Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
             </span>
         </div>

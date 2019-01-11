@@ -78,22 +78,22 @@
 <h1 id="_1">一 投影</h1>
 <p>点到闭凸集的投影：<br />
 $$<br />
-proj_C(x)=\mathop{\arg\min}_\limits{y}\ \ I_C(y)+\frac{1}{2}||x-y||^2<br />
+proj_C(x)=\mathop{\arg\min}<em>\limits{y}\ \ I_C(y)+\frac{1}{2}||x-y||^2<br />
 $$<br />
 其中，$I_C$是闭凸集C的示性函数<br />
 $$<br />
 I_C(x)=\begin{cases}0&amp;x\in C\\ \infty&amp;x\notin C\end{cases}<br />
 $$<br />
-从几何上的解释就是：点到集合上的投影，就是集合上离点最近的点。</p>
-<p>把示性函数替换成一般的凸函数f，推广得到一般的投影算子。<br />
+从几何上的解释就是：点到集合上的投影，就是集合上离点最近的点。<br />
+把示性函数替换成一般的凸函数f，推广得到一般的投影算子。<br />
 $$<br />
-proj_C(x)=\mathop{\arg\min}_\limits{y}\ \ f(y)+\frac{1}{2}||x-y||^2<br />
+proj_C(x)=\mathop{\arg\min}</em>\limits{y}\ \ f(y)+\frac{1}{2}||x-y||^2<br />
 $$<br />
 考虑函数上的点到函数的投影，可以发现最小值点的投影是其本身。几何上来解释就是，在函数最小值等高面上的点的投影是它本身。</p>
 <p>点$x$到投影点的方向向量$x-proj_f(x)$与等高面垂直，因此，投影操作可以看成是梯度下降的推广。</p>
 <p>有：<br />
 $$<br />
-p=proj_f(x)=\mathop{\arg\min}<em _lambda="\lambda" f="f">\limits{y}\ \ \lambda f(y)+\frac{1}{2}||x-y||^2\\<br />
+p=proj_f(x)=\mathop{\arg\min}<em _lambda="\lambda" f="f">\limits{y}\ \ \lambda f(y)+\frac{1}{2}||x-y||^2<br />
 $$<br />
 求导可得：<br />
 $$<br />
@@ -114,12 +114,16 @@ $$<br />
 x_{k+1}\approx x_k-\lambda\partial f(x_{k})<br />
 $$<br />
 形式上，<strong>投影操作是梯度下降的一种推广</strong>。看做一种前向梯度下降，即下降的梯度不是在当前点计算得到的，而是在下降的目标点计算得到的。如果投影操作计算方便（有简单的解析解），那么用投影操作做优化可以取代梯度下降，并且可以应用到梯度不存在的函数优化。</p>
-<p>近似点算法：求函数f的最小值，利用投影算子是压缩算子，且投影算子的不动点是f的最小值点性质可得迭代近似点算法。即在点$x_k$处，求投影点。           <br />
+<p>近似点算法：求函数f的最小值，利用投影算子是压缩算子，且有投影算子的不动点是函数的最小值点的性质，可得迭代近似点算法。即在点$x_k$处，求投影点。          <br />
 $$<br />
 x_{k+1}=proj_f(x_k)<br />
 $$<br />
 投影算子就相当于梯度下降的推广，近似点算法可以看做梯度下降求最小值的推广。</p>
-<p>次梯度：</p>
+<p>注意为什么投影算子的可以进行不动点(不动点满足，$x=f(x)$)求解，当最小值面上时：<br />
+$$<br />
+x^*=\mathop{\arg\min}_\limits{y}\ \ f(y)<br />
+$$<br />
+通过投影算子得到即为其本身，投影算子可以进行不动点求解。</p>
 <h1 id="_2">二 近似梯度法</h1>
 <h2 id="forward-backward-splitting">forward-backward splitting</h2>
 <p>如果目标函数存在不可微分部分，可以将目标函数分解为可微分和不可微部分。<br />
@@ -267,7 +271,7 @@ gitment.render('comments')
         </div>
         <div id="footer">
             <span>
-                Copyright © 2018 Cimon.
+                Copyright © 2019 Cimon.
                 Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
             </span>
         </div>
