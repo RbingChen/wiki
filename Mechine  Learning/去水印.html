@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>使用simiki 进行wiki搭建 - Knowledge Change Destiny</title>
+        <title>去水印 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,98 +52,14 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Tool">Tool</a>&nbsp;»&nbsp;<a href="/wiki/#Tool-wiki">wiki</a>&nbsp;»&nbsp;使用simiki 进行wiki搭建</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;去水印</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">使用simiki 进行wiki搭建</div>
+<div id="title">去水印</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#simiki">一 Simiki</a></li>
-<li><a href="#_1">二 搭建过程</a><ul>
-<li><a href="#1github">1.github上相关仓库的申请</a></li>
-<li><a href="#2-simiki">2. Simiki 安装</a></li>
-<li><a href="#3">3.初始化</a></li>
-<li><a href="#4">4.部署及提交</a></li>
-<li><a href="#5">5 本地预览</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<h3 id="simiki">一 Simiki</h3>
-<hr />
-<p>​       <a href="http://simiki.org/zh-docs/">simiki</a>是一个简单好用的Wiki框架。使用<a href="https://daringfireball.net/projects/markdown/">Markdown</a>书写Wiki, 生成静态HTML页面。Wiki源文件按<strong>目录分类</strong>存放, 方便管理维护。</p>
-<h3 id="_1">二 搭建过程</h3>
-<h4 id="1github">1.github上相关仓库的申请</h4>
-<div class="hlcode"><pre> 申请  username.github.io 和 wiki 仓库
-</pre></div>
-
-
-<h4 id="2-simiki">2. Simiki 安装</h4>
-<div class="hlcode"><pre>mac下 使用 sudo pip install simiki 安装 simiki
-</pre></div>
-
-
-<h4 id="3">3.初始化</h4>
-<div class="hlcode"><pre>1. 仓库初始化
-    git clone git@github.com:GithubUserName/wiki.git
-    git checkout -b gh-pages
-2. 如果不存在master分支，则切换并新建master分支，否则只需要切换即可
-   切换: git checkout master 
-   切换并创建：git checkout -b master
-</pre></div>
-
-
-<h4 id="4">4.部署及提交</h4>
-<p>这里用下我<a href="https://tracholar.github.io/wiki/web/simiki.html">mentor</a>的脚本。</p>
-<p>在wiki下新建文件 deploy.sh ,内容如下：</p>
-<div class="hlcode"><pre><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;-i&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-<span class="k">    </span>mkdir output
-    <span class="nb">cd </span>output
-    git clone -b gh-pages git@github.com:GithubUserName/wiki.git ./
-    <span class="nb">cd</span> ..
-    <span class="nb">exit </span>0
-<span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>
-<span class="k">then</span>
-<span class="k">    </span><span class="nb">echo </span>deploy <span class="o">[</span>Option<span class="o">]</span>
-    <span class="nb">echo</span> <span class="s2">&quot;       -i 初始化&quot;</span>
-    <span class="nb">echo</span> <span class="s2">&quot;       message  提交到github并发布，提交信息为mesage&quot;</span>
-    <span class="nb">exit </span>0
-<span class="k">else</span>
-<span class="k">    </span>git add . --all
-    git commit -am <span class="s2">&quot;$1&quot;</span>
-    git pull origin master
-    git push origin master
-
-    simiki g
-    <span class="nb">cd </span>output
-    mkdir src
-    cp ../src/*.html src/
-    cp ../src/*/*.html src/
-    git add . --all
-    git commit -am <span class="s2">&quot;$1&quot;</span>
-    git pull origin gh-pages
-    git push origin gh-pages
-    <span class="nb">cd</span> ..
-<span class="k">fi</span>
-</pre></div>
-
-
-<p><strong>命令</strong></p>
-<div class="hlcode"><pre>1. 使用 sh deploy.sh -i 初始，只需要初始化一次。
-2. 使用 sh deplot.sh <span class="s2">&quot;message&quot;</span> 提交到github。可以通过username.github.io/wiki 来看效果
-</pre></div>
-
-
-<h4 id="5">5 本地预览</h4>
-<p>因为国内网络对github不友好，为了方便可以现在本地预览效果。</p>
-<p>使用终端进入wiki目录下，输入如下命令：</p>
-<div class="hlcode"><pre>simiki g
-simiki p 
-</pre></div>
-
-
-<p>此时可以在浏览器 通过 127.0.0.1:8000/wiki 来观看效果。</p>
+  <p>https://blog.csdn.net/zhangjunhit/article/details/77680140?locationNum=2&amp;fps=1</p>
+<p>https://github.com/rohitrango/automatic-watermark-detection</p>
+<p>https://github.com/SixQuant/nowatermark</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -155,7 +71,7 @@ simiki p
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2018-10-12 11:21 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-02-07 20:26 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -163,7 +79,7 @@ simiki p
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: '使用simiki 进行wiki搭建',
+  title: '去水印',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
