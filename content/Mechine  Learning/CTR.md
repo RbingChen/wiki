@@ -45,6 +45,12 @@ wide模型，加入一些低维的交叉特征，通过训练学到一些相关�
 
 
 
+# 二 DeepFM
+
+
+
+
+
 [https://zhuanlan.zhihu.com/p/53231955](https://zhuanlan.zhihu.com/p/53231955)
 
 [https://zhuanlan.zhihu.com/p/35465875](https://zhuanlan.zhihu.com/p/35465875)
