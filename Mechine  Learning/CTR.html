@@ -59,6 +59,7 @@
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#widedeep">一 wide&amp;deep</a></li>
+<li><a href="#deepfm">二 DeepFM</a></li>
 </ul>
 </div>
 <p>为什么用embedding？</p>
@@ -80,6 +81,7 @@ Memorization：学习历史数据上隐含于item间、特征间的相关性。�
 <p>deep模型：更少的特征工程，且能学习到不可观测的特征组合。需要wide模型（使用低纬的交叉特征）补充相关性的学习，且可解释性强。deep存在过泛化问题。</p>
 <p>wide模型：通过特征交叉以”记忆“特征间的相关性，有较好的解释性；需要deep模型，学习一些不可观测的潜在的相关性（不可观测的相关性，一般是指人，难以通俗解释的现象）。</p>
 <p>wide模型，加入一些低维的交叉特征，通过训练学到一些相关性(特征之间的，item之间的，user-item之间的），存在不足，相关性是存在于历史中，而没有足够的随时间的变化性(时效性问题，推荐问题，用户不喜欢总是推荐相同的东西)。deep模型，学习用户和item之间存在稀疏且高阶的关系(由于高阶关系的存在，对低阶关系的学习将更难)，但是容易过拟合，带来相应的优势，能够推荐相关性更少的item，丰富推荐。</p>
+<h1 id="deepfm">二 DeepFM</h1>
 <p><a href="https://zhuanlan.zhihu.com/p/53231955">https://zhuanlan.zhihu.com/p/53231955</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/35465875">https://zhuanlan.zhihu.com/p/35465875</a></p>
 </div>
