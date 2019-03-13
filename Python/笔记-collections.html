@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>CTR 模型 - Knowledge Change Destiny</title>
+        <title>python积累-collections - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,49 +52,25 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;CTR 模型</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Python">Python</a>&nbsp;»&nbsp;python积累-collections</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">CTR 模型</div>
+<div id="title">python积累-collections</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#widedeep">一 wide&amp;deep</a></li>
-<li><a href="#fnn">二 FNN</a></li>
-<li><a href="#deepfm">二 DeepFM</a></li>
-<li><a href="#pnn">三 PNN</a></li>
+<li><a href="#_1">一 元组命名</a></li>
 </ul>
 </div>
-<p>为什么用embedding？</p>
-<ol>
-<li>mlp过拟合。</li>
-<li>参数少更容易找个一个优解。</li>
-</ol>
-<p>FFM 是FM 的特例。</p>
-<p>限制了解空间。</p>
-<h1 id="widedeep">一 wide&amp;deep</h1>
-<p><img src="wiki/static/images/widedeep.png"  alt="wide&deep"/></p>
-<p>Joint train:联合训练。<br />
-$$<br />
-P(Y|X)=\sigma(w_{wide}^T[X,\phi(X)]+w_{deep}^Ta^{l_f}+b)<br />
-$$<br />
-Memorization：学习历史数据上隐含于item间、特征间的相关性。依据用户历史行为进行学习，预测得到item和用户过去行为相关性较强。</p>
-<p>generalization：相关度存在传递性，探索及学习历史数据很少或者不出现的组合特征。和memorization相比，更能提供多样化的item。当user-item间的联系是稀少且高阶的，deep模型容易过于泛化（over-generalize)而推荐相关度更小的item。</p>
-<p>Joint training 和ensemble：对于ensemble来说，模型的训练是相互独立进行，单个模型需要足够大（特征够多）以获取很好的性能以保证融合后，总体准确率有提升；Joint training则是互相弥补，对特征要求低。</p>
-<p>deep模型：更少的特征工程，且能学习到不可观测的特征组合。需要wide模型（使用低纬的交叉特征）补充相关性的学习，且可解释性强。deep存在过泛化问题。</p>
-<p>wide模型：通过特征交叉以”记忆“特征间的相关性，有较好的解释性；需要deep模型，学习一些不可观测的潜在的相关性（不可观测的相关性，一般是指人，难以通俗解释的现象）。</p>
-<p>wide模型，加入一些低维的交叉特征，通过训练学到一些相关性(特征之间的，item之间的，user-item之间的），存在不足，相关性是存在于历史中，而没有足够的随时间的变化性(时效性问题，推荐问题，用户不喜欢总是推荐相同的东西)。deep模型，学习用户和item之间存在稀疏且高阶的关系(由于高阶关系的存在，对低阶关系的学习将更难)，但是容易过拟合，带来相应的优势，能够推荐相关性更少的item，丰富推荐。</p>
-<h1 id="fnn">二 FNN</h1>
-<p>论文：Deep Learning over Multi-field Categorical Data </p>
-<p>基于树的方法需要精细的特征处理；浅层网络无法表达更复杂的模式；DNN可以充分探索可能存在特征组合。 </p>
-<p>在第一层使用了FM，后续使用了全连接层。</p>
-<p>对比一般情况下的FM，是对于一个值来说，而这里，是对于一个one-hot后的向量而言。</p>
-<h1 id="deepfm">二 DeepFM</h1>
-<p><img src="wiki/static/images/ctr_deepfm.png"  alt="deepfm"/></p>
-<p>基于w&amp;d 的思想，把FM和DNN 融合起来了，与FNN相比，FNN只考虑了高阶交叉，且使用pre-train</p>
-<h1 id="pnn">三 PNN</h1>
-<p>直接使用DNN，特征数目过大。必须使用embedding层。使用embedding层，相当于对one-hot进行了压缩。</p>
-<p><a href="https://zhuanlan.zhihu.com/p/53231955">https://zhuanlan.zhihu.com/p/53231955</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/35465875">https://zhuanlan.zhihu.com/p/35465875</a></p>
+<h1 id="_1">一 元组命名</h1>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="n">xy</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;xy&#39;</span><span class="p">,[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">co</span><span class="o">=</span><span class="n">xy</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">co</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="n">xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -106,7 +82,7 @@ Memorization：学习历史数据上隐含于item间、特征间的相关性。�
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer"></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-12-28 14:19 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -114,7 +90,7 @@ Memorization：学习历史数据上隐含于item间、特征间的相关性。�
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'CTR 模型',
+  title: 'python积累-collections',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
