@@ -43,11 +43,29 @@ wide模型：通过特征交叉以”记忆“特征间的相关性，有较好�
 
 wide模型，加入一些低维的交叉特征，通过训练学到一些相关性(特征之间的，item之间的，user-item之间的），存在不足，相关性是存在于历史中，而没有足够的随时间的变化性(时效性问题，推荐问题，用户不喜欢总是推荐相同的东西)。deep模型，学习用户和item之间存在稀疏且高阶的关系(由于高阶关系的存在，对低阶关系的学习将更难)，但是容易过拟合，带来相应的优势，能够推荐相关性更少的item，丰富推荐。
 
+# 二 FNN
 
+论文：Deep Learning over Multi-field Categorical Data 
+
+基于树的方法需要精细的特征处理；浅层网络无法表达更复杂的模式；DNN可以充分探索可能存在特征组合。 
+
+在第一层使用了FM，后续使用了全连接层。
+
+对比一般情况下的FM，是对于一个值来说，而这里，是对于一个one-hot后的向量而言。
 
 # 二 DeepFM
 
 
+
+<img src="wiki/static/images/ctr_deepfm.png"  alt="deepfm"/>
+
+基于w&d 的思想，把FM和DNN 融合起来了，与FNN相比，FNN只考虑了高阶交叉，且使用pre-train
+
+
+
+# 三 PNN
+
+直接使用DNN，特征数目过大。必须使用embedding层。使用embedding层，相当于对one-hot进行了压缩。
 
 
 
