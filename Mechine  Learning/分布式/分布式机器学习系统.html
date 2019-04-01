@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>HDFS - Knowledge Change Destiny</title>
+        <title>分布式机器学习系统 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,34 +52,28 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Hadoop">Hadoop</a>&nbsp;»&nbsp;HDFS</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-分布式">分布式</a>&nbsp;»&nbsp;分布式机器学习系统</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">HDFS</div>
+<div id="title">分布式机器学习系统</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 框架</a><ul>
-<li><a href="#file-system-namespace">File system Namespace</a></li>
-<li><a href="#data-replication">Data Replication</a></li>
-</ul>
+  <ol>
+<li>
+<p>IMR</p>
+<p>迭代式mapreduce</p>
 </li>
-</ul>
-</div>
-<h1 id="_1">一 框架</h1>
-<p><img src="/wiki/static/images/hdfs1.png"  width="300" height="300" alt="HDFS框架"/></p>
-<p>HDFS是一种master/slave 结构</p>
-<p><strong>DataNode</strong>：可以有很多，一般一个集群节点只有一个DataNode，DataNode管理它们所在节点的相关存储。文件可能被切分成一个或多个block，将被存储在一系列的DataNode上。DataNode负责文件的读写操作，也执行NameNode的block创建、删除和复制操作指令。</p>
-<p><strong>NameNode：</strong>HDFS集群只要一个NameNode，用于管理文件系统命名空间和客户端文件访问，NameNode可以执行文件操作如：打开、关闭、重命名、新建文件夹等，也决定了block到DataNode的映射。</p>
-<p>HDFS的文件系统的命名对用户是可见的，用户可以存储数据。</p>
-<h2 id="file-system-namespace">File system Namespace</h2>
-<p>和普通的文件系统没啥区别，就是没有绝对路径，文件处于HDFS的命名空间上。</p>
-<h2 id="data-replication">Data Replication</h2>
-<p>大文件有一些列的block构成，block的备份保证了系统的容错性。block的大小可以设置。除了最后一个block其他的 block都是大小一样的。</p>
-<p>备份数可以指定。</p>
-<p>NameNode做任何操作的时候都会考虑到block的备份。其周期性的接收DataNode的HeartBeat、Blockreport。HearBeat表示DataNode的正在良好的运转，后者说明DataNode持有哪些Block。</p>
-<p><img src="/wiki/static/images/hdfs2.png"  width="300" height="300" alt="data"/></p>
-<p><strong>如何进行备份很重要</strong>。</p>
-<p>当处理处理数据是，HDFS将会选择离reader最近（网络传输上时间损耗）的备份。</p>
+</ol>
+<p>sparkMLib</p>
+<p>构建RDD，通过DAGscheduler对DAG进行解析，分成多个可并行DAG。</p>
+<p>https://blog.csdn.net/u013850277/article/details/73648742</p>
+<ol>
+<li>
+<p>参数服务器</p>
+</li>
+<li>
+<p>数据流</p>
+</li>
+</ol>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -91,7 +85,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-03-21 20:18 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-02-15 20:00 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -99,7 +93,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'HDFS',
+  title: '分布式机器学习系统',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {

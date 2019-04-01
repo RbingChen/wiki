@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>HDFS - Knowledge Change Destiny</title>
+        <title>Factorization Machines - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,34 +52,48 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Hadoop">Hadoop</a>&nbsp;»&nbsp;HDFS</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-经典机器学习方法">经典机器学习方法</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-经典机器学习方法-FM">FM</a>&nbsp;»&nbsp;Factorization Machines</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">HDFS</div>
+<div id="title">Factorization Machines</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 框架</a><ul>
-<li><a href="#file-system-namespace">File system Namespace</a></li>
-<li><a href="#data-replication">Data Replication</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<h1 id="_1">一 框架</h1>
-<p><img src="/wiki/static/images/hdfs1.png"  width="300" height="300" alt="HDFS框架"/></p>
-<p>HDFS是一种master/slave 结构</p>
-<p><strong>DataNode</strong>：可以有很多，一般一个集群节点只有一个DataNode，DataNode管理它们所在节点的相关存储。文件可能被切分成一个或多个block，将被存储在一系列的DataNode上。DataNode负责文件的读写操作，也执行NameNode的block创建、删除和复制操作指令。</p>
-<p><strong>NameNode：</strong>HDFS集群只要一个NameNode，用于管理文件系统命名空间和客户端文件访问，NameNode可以执行文件操作如：打开、关闭、重命名、新建文件夹等，也决定了block到DataNode的映射。</p>
-<p>HDFS的文件系统的命名对用户是可见的，用户可以存储数据。</p>
-<h2 id="file-system-namespace">File system Namespace</h2>
-<p>和普通的文件系统没啥区别，就是没有绝对路径，文件处于HDFS的命名空间上。</p>
-<h2 id="data-replication">Data Replication</h2>
-<p>大文件有一些列的block构成，block的备份保证了系统的容错性。block的大小可以设置。除了最后一个block其他的 block都是大小一样的。</p>
-<p>备份数可以指定。</p>
-<p>NameNode做任何操作的时候都会考虑到block的备份。其周期性的接收DataNode的HeartBeat、Blockreport。HearBeat表示DataNode的正在良好的运转，后者说明DataNode持有哪些Block。</p>
-<p><img src="/wiki/static/images/hdfs2.png"  width="300" height="300" alt="data"/></p>
-<p><strong>如何进行备份很重要</strong>。</p>
-<p>当处理处理数据是，HDFS将会选择离reader最近（网络传输上时间损耗）的备份。</p>
+  <h2 id="_1">一 原理</h2>
+<p>​    Factorization Machine 提出的目的是解决二阶或者高阶项。</p>
+<p>​    在二分类情况，假设如下：<br />
+$$<br />
+y=\frac{1}{1+exp(-f(x))}<br />
+$$<br />
+   对于大多问题，在给定损失函数的情况下，对$f(x)$的参数进行求解。</p>
+<p>一般地，考虑求解二次项：</p>
+<p>$$<br />
+f(x)=w_0+\sum_iw_ix_i+\sum_i\sum_{j&lt;i}w_{ij}x_ix_j<br />
+$$<br />
+   如果特征维数为$n$时，$f(x)$的参数数量总共为$1+n+\frac{n(n+1)}{2}$。在实际的工业场景，特征维度是很高的，因此会导  致求解速度很慢，而且只有少数的二阶项存在意义。</p>
+<hr />
+<p>FM提出对每一维度的特征存在一个 factor vector。</p>
+<p>​     <br />
+$$<br />
+f(x)=w_0+\sum_iw_ix_i+\sum_i\sum_{j=i+1}<v_i,v_j>x_ix_j<br />
+$$<br />
+  假设factor vector 的维度是k，那么参数数量总共为$1+n+kn$</p>
+<p>$$<br />
+\sum_i\sum_{j=i+1}<v_i,v_j>x_ix_j\<br />
+=0.5(\sum_i\sum_{j=i}<v_i,v_j>x_ix_j-\sum_i<v_i,v_i>x_ix_i)\<br />
+=0.5\sum_{f=1}^{k}[(\sum_{i=1}^nv_{i,f}x_i)^2-\sum_{i=1}^{n}v_{i,f}^2x_i^2]<br />
+$$<br />
+ 导数形式为：<br />
+$$<br />
+\frac{\partial f(x)}{\partial \theta}=\begin{cases}1&amp;if\ \  \theta\ \  is\ \ \  w_0\ x_i&amp;if\ \ \theta \ \ is\ \ w_i\x_i\sum_{j=1}^nv_{j,f}x_j-v_{i,f}x_i^2&amp;if\ \ \theta\ \ is \ \ v_{i,f}\end{cases}<br />
+$$</p>
+<hr />
+<p>FFM 在FM上进行优化，指定field，出发点是不是所有的特征都应该存在交互或者交互的field应该不同。</p>
+<h2 id="_2">二 求解</h2>
+<h2 id="_3">三 分析</h2>
+<p>内积有意义，factor vetor 是内积，内积的值取决于模长和夹角。所以导致factor vector 的解不唯一，只要内积不变就行。</p>
+<p>参考资料：</p>
+<p>1.Juan Y, Zhuang Y, Chin W, et al. Field-aware Factorization Machines for CTR Prediction[C]. conference on recommender systems, 2016: 43-50.</p>
+<p>2.S Rendle,Factorization Machines,2010</p>
+<p>https://tracholar.github.io/machine-learning/2017/03/10/factorization-machine.html</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -91,7 +105,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-03-21 20:18 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-10-23 15:07 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -99,7 +113,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'HDFS',
+  title: 'Factorization Machines',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {

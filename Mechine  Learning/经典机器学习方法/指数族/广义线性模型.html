@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>HDFS - Knowledge Change Destiny</title>
+        <title>Generaized linear model - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,34 +52,61 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Hadoop">Hadoop</a>&nbsp;»&nbsp;HDFS</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-经典机器学习方法">经典机器学习方法</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-经典机器学习方法-指数族">指数族</a>&nbsp;»&nbsp;Generaized linear model</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">HDFS</div>
+<div id="title">Generaized linear model</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 框架</a><ul>
-<li><a href="#file-system-namespace">File system Namespace</a></li>
-<li><a href="#data-replication">Data Replication</a></li>
+<li><a href="#_1">一定义</a></li>
+<li><a href="#_2">二具体</a><ul>
+<li><a href="#link-function">Link Function</a></li>
 </ul>
 </li>
+<li><a href="#_3">三求解</a></li>
+<li><a href="#_4">四 理解</a></li>
 </ul>
 </div>
-<h1 id="_1">一 框架</h1>
-<p><img src="/wiki/static/images/hdfs1.png"  width="300" height="300" alt="HDFS框架"/></p>
-<p>HDFS是一种master/slave 结构</p>
-<p><strong>DataNode</strong>：可以有很多，一般一个集群节点只有一个DataNode，DataNode管理它们所在节点的相关存储。文件可能被切分成一个或多个block，将被存储在一系列的DataNode上。DataNode负责文件的读写操作，也执行NameNode的block创建、删除和复制操作指令。</p>
-<p><strong>NameNode：</strong>HDFS集群只要一个NameNode，用于管理文件系统命名空间和客户端文件访问，NameNode可以执行文件操作如：打开、关闭、重命名、新建文件夹等，也决定了block到DataNode的映射。</p>
-<p>HDFS的文件系统的命名对用户是可见的，用户可以存储数据。</p>
-<h2 id="file-system-namespace">File system Namespace</h2>
-<p>和普通的文件系统没啥区别，就是没有绝对路径，文件处于HDFS的命名空间上。</p>
-<h2 id="data-replication">Data Replication</h2>
-<p>大文件有一些列的block构成，block的备份保证了系统的容错性。block的大小可以设置。除了最后一个block其他的 block都是大小一样的。</p>
-<p>备份数可以指定。</p>
-<p>NameNode做任何操作的时候都会考虑到block的备份。其周期性的接收DataNode的HeartBeat、Blockreport。HearBeat表示DataNode的正在良好的运转，后者说明DataNode持有哪些Block。</p>
-<p><img src="/wiki/static/images/hdfs2.png"  width="300" height="300" alt="data"/></p>
-<p><strong>如何进行备份很重要</strong>。</p>
-<p>当处理处理数据是，HDFS将会选择离reader最近（网络传输上时间损耗）的备份。</p>
+<h1 id="_1">一定义</h1>
+<p>GLM的三个要素：</p>
+<ol>
+<li>A probability distribution from the exponential family</li>
+<li>a linear predictor $\eta=X\beta$</li>
+<li>a link function g such that $E(Y)=\mu=g^{-1}(\eta)$</li>
+</ol>
+<p>GLM的前提是分布服从指数族分布。</p>
+<p><strong>问题：</strong>什么情况下，能够由指数族分布直接推导得到Link funciton。</p>
+<blockquote>
+<p>The GLM generalizes linear regression by allowing the linear model to be related to the response variable via a <em>link function</em> and by allowing the magnitude of the variance of each measurement to be a function of its predicted value.</p>
+</blockquote>
+<h1 id="_2">二具体</h1>
+<h2 id="link-function">Link Function</h2>
+<p>$$<br />
+f(x|\theta)=h(x)exp(\eta(\theta)T(x)-A(\theta))<br />
+$$</p>
+<p>上面等式是一般的指数族的分布表示，$\eta(\theta)$,用来表示$\eta$和$\theta$的关系。</p>
+<p>连接函数描述线性组合和均值之间的关系。连接函数可以有很多，通常从以下几点来考虑函数的选择：1.一个好的连接函数，是必须由分布的概率密度函数推导得来的。2. 考虑$\eta =b(\theta)=X\beta$，有一个$\eta$的等式替换掉$\eta(\theta)$的关系式，变成一一映射的关系。此时,可以写成:<br />
+$$<br />
+f(x|\theta)=h(x)exp(\eta T(x)-k(\eta))<br />
+$$<br />
+有：$E(Y)=\frac{\partial k(\eta)}{\partial \eta}=mean$，也就是说，此时的连接函数就是 $k(\eta)$的导数。</p>
+<p><strong>思考</strong>：连接函数有很多。目前常用的只是经典情况下的考虑。可以从概率分布中推导出来。。</p>
+<p>考虑：<br />
+$$<br />
+f(x|\theta)=h(x)exp\frac{(\eta T(x)-k(\eta))}{d(\tau)}<br />
+$$<br />
+$d(\tau)$是dispersion parameter。求解连接函数时，可以不需要考虑。</p>
+<p><img src="/wiki/static/images/glm1.jpeg" alt="glm"/></p>
+<p><img src="/wiki/static/images/glm2.jpeg" alt="glm"/></p>
+<h1 id="_3">三求解</h1>
+<p>最大似然。</p>
+<h1 id="_4">四 理解</h1>
+<p><strong>什么线性模型？</strong></p>
+<p>​    <strong>等高面是直线的模型</strong>。即 $f(\mu)=X\beta$。函数$f$只是改变了等高线之间的距离，没有弯曲等高面。</p>
+<p><strong>那么SVM呢？</strong></p>
+<p>支持向量有$y*(wx+b)=1$</p>
+<p>等值面：线性回归。</p>
+<p>决策树：对于一个样本，不同训练集训练函数f。</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -91,7 +118,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-03-21 20:18 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-21 15:12 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -99,7 +126,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'HDFS',
+  title: 'Generaized linear model',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
