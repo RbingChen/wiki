@@ -58,14 +58,21 @@
 <div id="title">PCA</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 原理</a></li>
-<li><a href="#_2">二 实现</a></li>
+<li><a href="#_1">一 原理</a><ul>
+<li><a href="#_2">最大方差</a></li>
+<li><a href="#_3">最小损失</a></li>
+<li><a href="#_4">误差</a></li>
+<li><a href="#_5">思考</a></li>
+</ul>
+</li>
+<li><a href="#_6">二 实现</a></li>
+<li><a href="#_7">三 应用</a></li>
 </ul>
 </div>
 <h1 id="_1">一 原理</h1>
-<p>有$n$维的向量$x_1,x_2,...x_m \in R^n$，使用$k$个$n$维度的向量$v_i,..,v_k \in R^n$来表示$x_m$，即:<br />
+<p>有$n$维的向量$x_1,x_2,...x_M \in R^n$，使用$k$个$n$维度的向量$v_i,..,v_k \in R^n$来表示$x_m$，即:<br />
 $$<br />
-x_m \approx \sum_j^k a_{mj}v_j<br />
+x_m \approx \sum_j^k u_{mj}v_j<br />
 $$<br />
 与<code>线性回归</code>：<br />
 $$<br />
@@ -74,12 +81,118 @@ $$<br />
 以新的基底来表示向量，得到向量的新坐标。</p>
 <ol>
 <li>尽可能让新坐标分开，不重叠。方差大。</li>
-<li>空间距离小。</li>
+<li>空间距离小，损失最小。</li>
 </ol>
-<p>尽可能保留有意义的信息，意义是相对的，则必须有基准，特征向量便是可选的。</p>
+<h2 id="_2">最大方差</h2>
+<p>有均值 $\hat{x} =\frac{1}{M}\sum_{m=1}^M x_m$，假设$u_1^Tu_1=1$，这个条件对结果没有映射，更关注于$u_1$的方向。可得映射后的方差为：<br />
+$$<br />
+\frac{1}{M}\sum_{m=1}^M{u_1^Tx_m-u_1^T\hat{x}}^2=u_1^TSu_1<br />
+$$<br />
+其中协方差$S=\frac{1}{M}\sum_{m=1}^M(x_m-\hat{x})(x_m-\hat{x})^T$。由拉格朗日乘子法有$u_1^TSu_1-\lambda_1(1-u_1^Tu_1)$，得到<br />
+$$<br />
+Su_1=\lambda_1u_1<br />
+$$<br />
+要方差最大，则$\lambda_1$必须是最大的特征值（$u_1^TSu_1=\lambda_1u_1^Tu_1=\lambda_1$）。如果有多个$u$向量(向量之间相互正交)，可得如下表达式：<br />
+$$<br />
+\frac{1}{M}\sum_{m=1}^M(\sum_{i=1}^{k}{u_i^Tx_m-u_i^T\hat{x}})^2<br />
+$$<br />
+如果$x$已经中心化$x_m^{New}=x_m-\hat x$了，有$\hat x^{New}=0$，上等式为$\frac{1}{M}\sum_{m=1}^M(\sum_{i=1}^{k}u_i^Tx_m)^2$，可以看成是单个单个的$u$的求解过程。</p>
+<h2 id="_3">最小损失</h2>
+<p>对于$D$向量，其可以至多$D$个线性无关的$D$维向量表示(满秩)，即$x_m = \sum_{i=1}^Dz_{mi}u_i$，$z_{mi}=u_i^Tx_m$为了达到降维的目的，只使用$k$个向量来表示，那么必须保证损失最小：<br />
+$$<br />
+\frac{1}{M}\sum_{m=1}^M(\sum_{i=1}^Dz_{mi}u_i-\sum_{i=1}^kz_{mi}u_i)^2\\<br />
+=\frac{1}{M}\sum_{m=1}^M(\sum_{i=k+1}^Du_i^Tx_mu_i)^2<br />
+$$<br />
+发现和最大方差的推导结果是一样的。</p>
+<h2 id="_4">误差</h2>
+<p>如果取k个最大特征值，那么损失为$J=\sum_{i=k+1}^D \lambda_i$。</p>
+<h2 id="_5">思考</h2>
 <p><code>为什么是特征向量呢？</code></p>
-<p>能直观的分析，忽略旋转等其他信息，而关注一个矩阵在哪个方向能产生最大的效果。如果使用其他向量，不能很好的选取topK，达到降维的目的。</p>
-<h1 id="_2">二 实现</h1>
+<p>PCA 可以认为是用的新的基底来表示向量，怎么直观地理解最后的基底是特征向量构成的。特征向量方向只有模的大小变化，而且是效果明显的，其他向量方向包含了旋转等。模的大小变化更小。</p>
+<p>忽略旋转等其他信息，而关注一个矩阵在哪个方向能产生最大的效果。</p>
+<h1 id="_6">二 实现</h1>
+<p>看了下sklearn源码，简化了下实现，主要是使用SVD分解进行的:</p>
+<div class="hlcode"><pre><span class="c">#coding:utf-8</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_array</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.extmath</span> <span class="kn">import</span>  <span class="n">svd_flip</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
+
+<span class="k">class</span> <span class="nc">my_pca</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n_components</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+       <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="o">=</span><span class="bp">True</span>
+       <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    <span class="k">def</span> <span class="nf">fit_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">],</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                        <span class="n">copy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span>
+        <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">components_</span> <span class="o">=</span> <span class="n">V</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components_</span> <span class="o">=</span> <span class="n">components_</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;mean_&#39;</span><span class="p">,</span> <span class="s">&#39;components_&#39;</span><span class="p">],</span> <span class="n">all_or_any</span><span class="o">=</span><span class="nb">all</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span>
+        <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">X_transformed</span>
+
+    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span>
+</pre></div>
+
+
+<p>例子：</p>
+<div class="hlcode"><pre><span class="c">#coding:utf-8</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span><span class="p">,</span> <span class="n">IncrementalPCA</span>
+<span class="kn">from</span> <span class="nn">pca_demo</span> <span class="kn">import</span> <span class="n">my_pca</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">iris</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">X</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="n">target_names</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">target_names</span>
+
+<span class="c">#pca=PCA(n_components=2)</span>
+<span class="n">pca</span><span class="o">=</span><span class="n">my_pca</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_r</span><span class="o">=</span><span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;navy&#39;</span><span class="p">,</span> <span class="s">&#39;turquoise&#39;</span><span class="p">,</span> <span class="s">&#39;darkorange&#39;</span><span class="p">]</span>
+<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_r</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">color</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">target_names</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_r</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_r</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">target_name</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;PCA of IRIS dataset&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">X_i</span><span class="o">=</span><span class="n">pca</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">X_r</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot; init : &quot;</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot; inve : &quot;</span><span class="p">,</span><span class="n">X_i</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+</pre></div>
+
+
+<p><img src="/wiki/static/images/pca1.jpeg" alt="pca" /></p>
+<h1 id="_7">三 应用</h1>
+<ol>
+<li>数据可视化</li>
+<li>压缩数据</li>
+<li>去噪声</li>
+</ol>
 <p>https://blog.csdn.net/hjq376247328/article/details/80640544</p>
 <p>https://www.cnblogs.com/jerrylead/archive/2011/04/18/2020209.html</p>
 </div>
