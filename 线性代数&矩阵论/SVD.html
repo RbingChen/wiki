@@ -95,7 +95,7 @@ $$<br />
 $$<br />
 A=QU\Sigma S^T=(QU)\Sigma  S^T<br />
 $$<br />
-因为:$(QU)(QU)^T=I$，所以$QU$是正交矩阵。参考[1，2]。</p>
+因为$(QU)(QU)^T=I$，所以$QU$是正交矩阵。参考[1，2]。</p>
 <h2 id="incremental-svd">Incremental   SVD</h2>
 <p>现在使用的数据是$A=U \Sigma V^T$，有新数据$B$。<br />
 $$<br />
@@ -115,13 +115,14 @@ $$<br />
 <h1 id="pca">五 与PCA的关系</h1>
 <ol>
 <li>SVD 的分解取topK分量就是PCA，$U\Sigma$得到的是新的表征，$V$有点像是聚类中心。</li>
-<li>可以把$V$向量当做背景或者公共特点，然后</li>
+<li>可以把$V$向量当做背景或者公共特点，原始向量减去$V$向量的组合，得到原始向量的不同点。</li>
 </ol>
 <h1 id="_4">参考文献</h1>
 <p>1.Finding structure with randomness: Stochastic algorithms for constructing  approximate matrix decompositions  Halko, et al., 2009 http://arxiv.org/abs/arXiv:0909.4061</p>
 <p>2.A randomized algorithm for the decomposition of matrices  Per-Gunnar Martinsson, Vladimir Rokhlin and Mark Tygert</p>
 <p>3.Incremental Learning for Robust Visual Tracking</p>
 <p>4.http://www.ams.org/publicoutreach/feature-column/fcarc-svd</p>
+<p>5[协同过滤算法的几篇文章PFM/svd/ svd++]http://www.voidcn.com/article/p-pbnedsxn-bbh.html</p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />

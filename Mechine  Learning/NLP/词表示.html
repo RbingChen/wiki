@@ -58,15 +58,57 @@
 <div id="title">word represent</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#word-space-model">一 Word Space Model</a></li>
+<li><a href="#_1">零.前置问题</a><ul>
+<li><a href="#01">0.1什么是语言模型？</a></li>
+<li><a href="#02">0.2什么是词向量？</a></li>
+<li><a href="#03">0.3 词表示的假设</a></li>
+</ul>
+</li>
+<li><a href="#vector-space-model">一.Vector Space Model</a></li>
+<li><a href="#word2vec">二.word2vec</a><ul>
+<li><a href="#_2">核心思想</a></li>
+<li><a href="#_3">结构</a></li>
+<li><a href="#_4">优化</a></li>
+</ul>
+</li>
+<li><a href="#glove">三 Glove</a></li>
+<li><a href="#_5">参考文献</a></li>
 </ul>
 </div>
-<h1 id="word-space-model">一 Word Space Model</h1>
+<h1 id="_1">零.前置问题</h1>
+<h2 id="01">0.1什么是语言模型？</h2>
+<p>给定词$w_1,w_2,...,w_n$，构造成句子$P(w_1,w_2,...,w_n)$的概率就是语言模型。即：用来衡量任意短文本出现概率的模型，叫做<code>语言模型</code>。主要有统计语言模型(n-gram)和神经网络语言模型(NNLM,RNNLM)两种。</p>
+<h2 id="02">0.2什么是词向量？</h2>
+<p>使用固定长度的向量来表示词典中任意词，该向量称为词向量。又叫word embedding，word representation。</p>
+<h2 id="03">0.3 词表示的假设</h2>
+<p>VSM到word2vec到Glove。</p>
+<p><code>Distributional semantics: A word’s meaning is given by the words that frequently appear close-by</code></p>
+<p><strong>词及其相近词的共现频次决定了词的意义；词$w$的不同上下文决定了$w$的表示。</strong></p>
+<h1 id="vector-space-model">一.Vector Space Model</h1>
 <ol>
 <li>新词需要重新训练，word2vec 只需要训练出现的新词的句子。</li>
-<li>训练费内存。</li>
-<li>能很好的构建文档的向量表达。</li>
+<li>很多词和词共现频次低。因此对于高频共现词和低频，需要做处理。</li>
+<li>矩阵构建较难，难以训练。。</li>
+<li>能很好的构建文档的向量表达，充分利用统计信息，全局优化。</li>
 </ol>
+<h1 id="word2vec">二.word2vec</h1>
+<h2 id="_2">核心思想</h2>
+<p>大语料；每一个词在词典中有唯一对应的向量；每个词都有上下文词；使用词及其上下文词的词向量的相似度进行概率计算；调整词向量，使得概率最大。</p>
+<p>skip-gram：<br />
+$$<br />
+\mathop{\arg\max}<em n="-k">\limits{V} \sum_j \sum</em>^{k}logP(c_{j+n}|w_j)<br />
+$$<br />
+其中，$P(c_{j+n}|w_j)=\frac{exp(v_w^Tv_c)}{\sum_{o\in V} exp(v_w^Tv_o)}$，$v$代表词向量。</p>
+<h2 id="_3">结构</h2>
+<p>Skip-grams（预测词围绕中心词），Continuous Bag of Words(CBow，预测词在中间)。</p>
+<p><img src="/wiki/static/images/word2vec1.png" alt="word2vec" /></p>
+<h2 id="_4">优化</h2>
+<ol>
+<li>Negative Sampling</li>
+<li>hierarchical softmax </li>
+</ol>
+<h1 id="glove">三 Glove</h1>
+<h1 id="_5">参考文献</h1>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
