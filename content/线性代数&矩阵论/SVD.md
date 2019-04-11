@@ -39,7 +39,7 @@ $$
 $$
 A=QU\Sigma S^T=(QU)\Sigma  S^T
 $$
-因为:$(QU)(QU)^T=I$，所以$QU$是正交矩阵。参考[1，2]。
+因为$(QU)(QU)^T=I$，所以$QU$是正交矩阵。参考[1，2]。
 
 ## Incremental   SVD
 
@@ -78,7 +78,7 @@ $$
 # 五 与PCA的关系
 
 1. SVD 的分解取topK分量就是PCA，$U\Sigma$得到的是新的表征，$V$有点像是聚类中心。
-2. 可以把$V$向量当做背景或者公共特点，然后
+2. 可以把$V$向量当做背景或者公共特点，原始向量减去$V$向量的组合，得到原始向量的不同点。
 
 # 参考文献
 
@@ -89,3 +89,5 @@ $$
 3.Incremental Learning for Robust Visual Tracking
 
 4.http://www.ams.org/publicoutreach/feature-column/fcarc-svd
+
+5[协同过滤算法的几篇文章PFM/svd/ svd++]http://www.voidcn.com/article/p-pbnedsxn-bbh.html
