@@ -19,7 +19,7 @@ FFM 是FM 的特例。
 
 # 一 wide&deep
 
-<img src="wiki/static/images/widedeep.png"  alt="wide&deep"/>
+<img src="wiki/static/images/widedeep.png"  alt="widedeep"/>
 
 
 

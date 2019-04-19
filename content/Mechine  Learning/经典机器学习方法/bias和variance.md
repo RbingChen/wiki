@@ -14,7 +14,11 @@ date : 2018-12-17 10:14
 
 
 
-[Understanding the Bias-Variance Tradeoff](http://scott.fortmann-roe.com/docs/BiasVariance.html)
+[Understanding the Bias-Variance Tradeoff](http://scott.fortmann-roe.com/docs/BiasVariance.html) 和周志华的书关于bias和variance推导，个人觉得有问题。PRML的推导更严谨。
+
+ 周志华<<机器学习>>p45 页，关于 学习算法的期望预测为 $\overline f(x)=E_D(f(x;D))$；又有$E_D[(y-y_D)^2]=\epsilon^2$。$E_D$ 是`关于什么的期望`，前者是关于多个学习算法对$x$预测的期望，也就是$\overline f(x)=\frac{1}{M}\sum_{m=1}^M f_m(x;D)$。后者明显是$\frac{1}{|D|} \sum_{y\in D} (y-y_D)^2$，对于单一样本来说，$y-y_D$是某个值。
+
+`要么就别认为数据标记和真实标记存在偏差`，这种东西本来就是不可衡量的，可归纳为学习算法的误差。
 
 ## 1.直观定义
 
@@ -58,37 +62,29 @@ Error due to Variance：衡量多个模型预测值的差异程度。描述的�
 
 ## 2.图定义
 
-   <img   src="/wiki/static/images/bias_variance.png"   alt="bias variance图"
+   <img   src="/wiki/static/images/bias_variance.png"   alt="bias variance图" />
 
-
+  
 
 ## 3.数学推导
 
-现有数据$(Y,X)$，猜想有$Y=f(X)+\varepsilon$。其中，$\varepsilon \sim N(0,\sigma_{\varepsilon})$，用算法模型$\hat f(X)$对$f(X)$进行估计，有如下**误差**定义：
+详见PRML p149 。偏向如下解释：
 $$
-Erro(x)=E[(y-\hat f(x))^2]
+\overline f(x)=\overline f(x)=\frac{1}{M}\sum_{m=1}^M f_m(x)=E_f(f(x))
 $$
-可以进行如下分解：
-$$
-Erro=E[y^2-2y\hat f(x)+\hat f^2(x)]\\\\
-=E[y^2]-2E[y]E[\hat f(x)]+E[\hat f^2(x)]
-$$
-对于y而言，给定 x时，$f(x)$是一个定值，此时$y\sim N(f(x),\sigma_{\varepsilon})$。则有：
-$$
-E(y)=f(x)\\\\
-E(y^2)=\sigma_\varepsilon^2+f^2(x)
-$$
-对于上面等式：
-$$
-Erro=f^2(x)-2f(x)E[\hat f(x)]+E[\hat f(x)]^2-E[\hat f(x)]^2+E[\hat f^2(x)]+\sigma_\varepsilon^2
-$$
-最后可得：
-$$
-Erro=[f(x)-E(\hat f(x))]^2-E[(\hat f(x)-E[\hat f(x)])^2]++\sigma_\varepsilon^2
-$$
-可以认为是Bias的平方+Variance+Irreducible Erro。
+则 $bias^2=\frac{1}{N}\sum_{n=1}^N(\overline f(x_n)-y_n)$；$variance=\frac{1}{N}\sum_{n=1}^N\frac{1}{M}\sum_{m=1}^M(\overline f(x_n)-f_m(x_n))$。
 
+关于Irreducible Erro不做考虑，因为实际应用中，也无法获知这个值。
 
+或者如下：
+$$
+E_f[(y-f(x))^2]=y^2-2yE_f(f(x))+\overline f(x)-\overline f(x)+E_f(f(x)^2)=(y-\overline f(x))^2+E_f[(f(x)-\overline f(x))]
+$$
+前面项是bias的平方，后面是variance。两种之和是expected loss(期望误差)。
+
+那有什么用呢？PRML中说了，没什么实际作用，因为样本受限。指导`ensemble model`。
+
+在KNN中的理解，$k$ 相当于是$k$个模型。
 
 ## 4.kNN
 
@@ -139,10 +135,6 @@ Variance大，不同模型之间预测值差别大。
 
 
 ## 7 降低偏差必然提高方差？
-
-
-
-
 
 
 
