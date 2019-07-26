@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>chapter10-变分推断 - Knowledge Change Destiny</title>
+        <title>thrift-Tutorial - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,55 +52,107 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#PRML读书笔记">PRML读书笔记</a>&nbsp;»&nbsp;chapter10-变分推断</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Tool">Tool</a>&nbsp;»&nbsp;thrift-Tutorial</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">chapter10-变分推断</div>
+<div id="title">thrift-Tutorial</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 近似求解</a><ul>
-<li><a href="#1mcmc">1.MCMC</a></li>
-<li><a href="#2variational-inference">2.Variational inference</a></li>
-</ul>
-</li>
-<li><a href="#_2">二 变分推断</a><ul>
-<li><a href="#1mean-field-family">1.Mean-field family</a></li>
-<li><a href="#2coordinate-ascent-variational-inference">2.Coordinate ascent variational inference</a></li>
-<li><a href="#3stochastic-variational-inference">3.Stochastic variational inference</a></li>
+<li><a href="#thrift">一 thrift文件定义</a><ul>
+<li><a href="#tutorial">tutorial文件定义</a></li>
+<li><a href="#shared">shared 文件定义</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1 id="_1">一 近似求解</h1>
-<p>$$<br />
-P(z,x)=p(z)p(x|z)<br />
-$$</p>
-<p>目的：近似求解$p(z|x)$。得到后验分布则能进行推断，类似于MAP。</p>
-<h2 id="1mcmc">1.MCMC</h2>
-<p>基于Markov chain的特性，采样得到样本，使用这样些样本去近似概率。</p>
-<h2 id="2variational-inference">2.Variational inference</h2>
-<p>$$<br />
-q^*(z)= arg\ min_{q(z)}\ \ KL(q(z)||p(z|x))<br />
-$$</p>
-<p>通过优化手段直接近似概率，把推断问题转化成优化问题。优化的方式求解解析解。</p>
-<p>对比：</p>
-<ol>
-<li>VI求解快，适用于大数据下的快速求解；MCMC适用于小数据下，以计算量换精度的求解。MCMC需要更多的计算量以保证更准确的近似概率；VI能充分利用典型的优化方法及分布优化手段，但是不能保证精度。</li>
-</ol>
-<h1 id="_2">二 变分推断</h1>
-<p>为什么？怎么做？如何求解？怎么推断？</p>
-<p>对函数的形式进行限制从而减小求解的复杂度。</p>
-<h2 id="1mean-field-family">1.Mean-field family</h2>
-<h2 id="2coordinate-ascent-variational-inference">2.Coordinate ascent variational inference</h2>
-<h2 id="3stochastic-variational-inference">3.Stochastic variational inference</h2>
-<p>参考文献</p>
-<p>1.<a href="https://www.zhihu.com/question/31032863">知乎-变分推断的解释</a></p>
-<p>2.<a href="https%3A//arxiv.org/abs/1601.00670">Variational Inference: A Review for Statisticians</a></p>
-<p>3.[<a href="https%3A//arxiv.org/abs/1206.7051">1206.7051] Stochastic Variational Inference</a></p>
-<p>$$<br />
-\sum_i \sqrt{(x_i-\hat x_i)}<br />
-$$<br />
-$\hat x_i$ 是有限新集合。</p>
+<h1 id="thrift">一 thrift文件定义</h1>
+<h2 id="tutorial">tutorial文件定义</h2>
+<div class="hlcode"><pre>/**
+ * The first thing to know about are types. The available types in Thrift are:
+ *
+ *  bool        Boolean, one byte
+ *  i8 <span class="o">(</span>byte<span class="o">)</span>   Signed 8-bit integer
+ *  i16         Signed 16-bit integer
+ *  i32         Signed 32-bit integer
+ *  i64         Signed 64-bit integer
+ *  double      64-bit floating point value
+ *  string      String
+ *  binary      Blob <span class="o">(</span>byte array<span class="o">)</span>
+ *  map&lt;t1,t2&gt;  Map from one <span class="nb">type </span>to another
+ *  list&lt;t1&gt;    Ordered list of one <span class="nb">type</span>
+ *  <span class="nb">set</span>&lt;t1&gt;     Set of unique elements of one <span class="nb">type</span>
+ *
+ * Did you also notice that Thrift supports C style comments?
+ */
+
+包含其他文件
+include <span class="s2">&quot;shared.thrift&quot;</span>
+
+打包路径：
+namespace java tutorial
+
+typedef i32 MyInteger
+
+ 可以定义常数、用 Complex types and structs are specified using JSON notation.
+const i32 <span class="nv">INT32CONSTANT</span> <span class="o">=</span> 9853
+const map&lt;string,string&gt; <span class="nv">MAPCONSTANT</span> <span class="o">=</span> <span class="o">{</span><span class="s1">&#39;hello&#39;</span>:<span class="s1">&#39;world&#39;</span>, <span class="s1">&#39;goodnight&#39;</span>:<span class="s1">&#39;moon&#39;</span><span class="o">}</span>
+
+枚举：32bit 的整数，值可选，默认1。
+enum Operation <span class="o">{</span>
+  <span class="nv">ADD</span> <span class="o">=</span> 1,
+  <span class="nv">SUBTRACT</span> <span class="o">=</span> 2,
+  <span class="nv">MULTIPLY</span> <span class="o">=</span> 3,
+  <span class="nv">DIVIDE</span> <span class="o">=</span> 4
+<span class="o">}</span>
+
+ 结构体：可以用来定义复杂结构，每一个域有 整数标识、类型、变量名、可选的默认值。
+struct Work <span class="o">{</span>
+  1: i32 <span class="nv">num1</span> <span class="o">=</span> 0,
+  2: i32 num2,
+  3: Operation op,
+  4: optional string comment,
+<span class="o">}</span>
+
+<span class="c">#Structs can also be exceptions, if they are nasty.</span>
+exception InvalidOperation <span class="o">{</span>
+  1: i32 whatOp,
+  2: string why
+<span class="o">}</span>
+
+/**
+ * Ahh, now onto the cool part, defining a service. Services just need a name
+ * and can optionally inherit from another service using the extends keyword.
+ */
+service Calculator extends shared.SharedService <span class="o">{</span>
+
+  /**
+   * A method definition looks like C code. It has a <span class="k">return </span><span class="nb">type</span>, arguments,
+   * and optionally a list of exceptions that it may throw. Note that argument
+   * lists and exception lists are specified using the exact same syntax as
+   * field lists in struct or exception definitions.
+   */
+
+   void ping<span class="o">()</span>,
+   i32 add<span class="o">(</span>1:i32 num1, 2:i32 num2<span class="o">)</span>,
+
+   i32 calculate<span class="o">(</span>1:i32 logid, 2:Work w<span class="o">)</span> throws <span class="o">(</span>1:InvalidOperation ouch<span class="o">)</span>,
+
+   oneway void zip<span class="o">()</span>
+
+<span class="o">}</span>
+</pre></div>
+
+
+<h2 id="shared">shared 文件定义</h2>
+<div class="hlcode"><pre>namespace java shared
+struct SharedStruct <span class="o">{</span>
+  1: i32 key
+  2: string value
+<span class="o">}</span>
+service SharedService <span class="o">{</span>
+  SharedStruct getStruct<span class="o">(</span>1: i32 key<span class="o">)</span>
+<span class="o">}</span>
+</pre></div>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -112,7 +164,7 @@ $\hat x_i$ 是有限新集合。</p>
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-05-12 10:44 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-06-12 16:20 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -120,7 +172,7 @@ $\hat x_i$ 是有限新集合。</p>
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'chapter10-变分推断',
+  title: 'thrift-Tutorial',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {

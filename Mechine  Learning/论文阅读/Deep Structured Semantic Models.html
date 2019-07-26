@@ -58,12 +58,19 @@
 <div id="title">Deep Structured Semantic Models</div>
 <div id="content">
   <p>information Retrieval：匹配的关键是把query和document映射到同一个语义空间。</p>
-<p>传统方法：TF-IDF、BM25、LSA、PLSA、DAE、BLTM、DPM</p>
-<p>基于深度学习的方法：DSSM</p>
-<h1 id="_1">参考文献</h1>
+<p>出发点：解决query-docment 匹配问题，给定query，从海量doc中选取最可能点击的topK 个docment。<br />
+目标：把query 和doc  映射到同一个语义空间，同空间内使用距离公式等到两者的距离以衡量相似度。</p>
+<p>问题：</p>
+<p>​     1、余弦为什么能衡量相似度？</p>
+<p>​     2. DSSm</p>
+<h1 id="_1">研究现状</h1>
+<p>非监督学习： LSA（SVD）、TF-IDF、LDA、DAE 是，和  information retrieval的target 松耦合，建模点击，但是没有用到建模这个强信号量。</p>
+<p>监督学习:BLTM、DPM。前者使用点击数据，采用最大似然建模，不能体现rank；后者不适合大规模运算。</p>
+<h1 id="_2">参考文献</h1>
 <ol>
 <li><a href="https://www.cnblogs.com/wmx24/p/10157154.html">https://www.cnblogs.com/wmx24/p/10157154.html</a></li>
 </ol>
+<p>2.<a href="http://www.wangqingbaidu.cn/article/dlp1516351259.html">http://www.wangqingbaidu.cn/article/dlp1516351259.html</a></p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />

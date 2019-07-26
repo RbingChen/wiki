@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>chapter10-变分推断 - Knowledge Change Destiny</title>
+        <title>2019上半年CTR论文 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,55 +52,56 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#PRML读书笔记">PRML读书笔记</a>&nbsp;»&nbsp;chapter10-变分推断</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-论文阅读">论文阅读</a>&nbsp;»&nbsp;2019上半年CTR论文</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">chapter10-变分推断</div>
+<div id="title">2019上半年CTR论文</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">一 近似求解</a><ul>
-<li><a href="#1mcmc">1.MCMC</a></li>
-<li><a href="#2variational-inference">2.Variational inference</a></li>
-</ul>
-</li>
-<li><a href="#_2">二 变分推断</a><ul>
-<li><a href="#1mean-field-family">1.Mean-field family</a></li>
-<li><a href="#2coordinate-ascent-variational-inference">2.Coordinate ascent variational inference</a></li>
-<li><a href="#3stochastic-variational-inference">3.Stochastic variational inference</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<h1 id="_1">一 近似求解</h1>
-<p>$$<br />
-P(z,x)=p(z)p(x|z)<br />
-$$</p>
-<p>目的：近似求解$p(z|x)$。得到后验分布则能进行推断，类似于MAP。</p>
-<h2 id="1mcmc">1.MCMC</h2>
-<p>基于Markov chain的特性，采样得到样本，使用这样些样本去近似概率。</p>
-<h2 id="2variational-inference">2.Variational inference</h2>
-<p>$$<br />
-q^*(z)= arg\ min_{q(z)}\ \ KL(q(z)||p(z|x))<br />
-$$</p>
-<p>通过优化手段直接近似概率，把推断问题转化成优化问题。优化的方式求解解析解。</p>
-<p>对比：</p>
+  <p>个性化推荐系统以及CTR模型都向NN模型演进，有两个方面影响NN的结构设计：</p>
 <ol>
-<li>VI求解快，适用于大数据下的快速求解；MCMC适用于小数据下，以计算量换精度的求解。MCMC需要更多的计算量以保证更准确的近似概率；VI能充分利用典型的优化方法及分布优化手段，但是不能保证精度。</li>
+<li>
+<p>推荐系统的角度。</p>
+</li>
+<li>
+<p>预测分析的角度。</p>
+</li>
 </ol>
-<h1 id="_2">二 变分推断</h1>
-<p>为什么？怎么做？如何求解？怎么推断？</p>
-<p>对函数的形式进行限制从而减小求解的复杂度。</p>
-<h2 id="1mean-field-family">1.Mean-field family</h2>
-<h2 id="2coordinate-ascent-variational-inference">2.Coordinate ascent variational inference</h2>
-<h2 id="3stochastic-variational-inference">3.Stochastic variational inference</h2>
-<p>参考文献</p>
-<p>1.<a href="https://www.zhihu.com/question/31032863">知乎-变分推断的解释</a></p>
-<p>2.<a href="https%3A//arxiv.org/abs/1601.00670">Variational Inference: A Review for Statisticians</a></p>
-<p>3.[<a href="https%3A//arxiv.org/abs/1206.7051">1206.7051] Stochastic Variational Inference</a></p>
-<p>$$<br />
-\sum_i \sqrt{(x_i-\hat x_i)}<br />
-$$<br />
-$\hat x_i$ 是有限新集合。</p>
+<h4 id="2019-deep-session-interest-network-for-click-through-rate-prediction">[2019-阿里]Deep Session Interest Network for Click-Through Rate Prediction</h4>
+<ol>
+<li>解决什么？</li>
+</ol>
+<p>从用户的行为序列中，捕获用户的动态和演进的兴趣。</p>
+<ol>
+<li>
+<p>现象与现状。</p>
+<p>用户行为意图在一个session内是高度同质的，不同session行为意图一般是异质的。</p>
+</li>
+<li>
+<p>方法</p>
+<p>提出DSIN网络，利用了用户行为序列中的多个历史session。</p>
+</li>
+</ol>
+<p><img src="/wiki/static/images/deepctr2019half1.png"  alt="DSIN"/></p>
+<ol>
+<li>结构</li>
+</ol>
+<p><code>Session Division Layer</code>: 对Session内的行为做Embedding，构成session矩阵。</p>
+<p><code>Session Interest Extractor Layer</code>:对每一个Session矩阵，做一个Self-Attention。<strong>学到session内行为关系,丰富特征表达，抽取用户每个session内的兴趣点</strong>。</p>
+<p><code>Session Interest Iteractin Layer</code>:每个Session的Self-Attention输出做AVG。输入到Bi-Lstm中，进行训练，最后由每个时隙（Session对应于时隙)前向和后向的隐藏层输出相加构成最后最终的隐层输出。<strong>学习到不同Session的相互关系，学习用户兴趣的改变及session间的相互作用关系</strong>。</p>
+<p><code>Session Interest Activating Layer</code>: 用item矩阵对SIELayer和SIILayer的输出做Attention。构成特征。<strong>学到Item对Session的潜在关系</strong>。</p>
+<p><code>User Field</code>: 对用户的稀疏特征做Embedding。</p>
+<p><code>Item Field</code>:对item的稀疏特征做Embedding。</p>
+<p><code>target</code>: 表示Item是否被点击</p>
+<ol>
+<li>问题与思考？</li>
+</ol>
+<p>self-Attention 是如何捕获兴趣点的？</p>
+<p>为什么用bi-lstm，不再使用一层 session间的 self-attention？</p>
+<ul>
+<li>首先，根据点击时间将用户的行为序列区分成多个sessions，并使用带有bias编码的自注意力模块来抽取用户每个session的兴趣特征。</li>
+<li>使用双向LSTM建模用户在多个sessions间兴趣的演变过程。</li>
+<li>使用local activation单元自适应学习不同session的兴趣对target item的影响。</li>
+</ul>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -112,7 +113,7 @@ $\hat x_i$ 是有限新集合。</p>
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-05-12 10:44 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-07-23 16:02 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -120,7 +121,7 @@ $\hat x_i$ 是有限新集合。</p>
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: 'chapter10-变分推断',
+  title: '2019上半年CTR论文',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
