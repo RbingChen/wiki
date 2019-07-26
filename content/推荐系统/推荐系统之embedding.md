@@ -129,3 +129,23 @@ Graph Embedding有3个方向：
 2. first-order proximity 
 
 #### [2001谱聚类]Laplacian eigenmaps and spectral techniques for embedding and clustering
+
+
+
+#### [2016Node2vec]node2vec: Scalable Feature Learning for Networks 
+
+1. 针对什么场景？研究了什么问题？用了什么方法？得到什么结论？ 
+
+   现有方法没有很好的处理 连接模式的多样性。
+
+   
+
+2. 一些应用？？
+
+ Link prediction： 社交网络中的预测用户对哪些用户感兴趣、蛋白质网络中预测蛋白质的功能（分类标签）
+
+
+
+3. 结构性特点。
+
+   不仅学习近邻关系，也学习角色（结构上都是中心点）的相似性。

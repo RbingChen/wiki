@@ -62,3 +62,7 @@ $$
 
 3.[[1206.7051\] Stochastic Variational Inference](https%3A//arxiv.org/abs/1206.7051)
 
+$$
+\sum_i \sqrt{(x_i-\hat x_i)}
+$$
+$\hat x_i$ 是有限新集合。
