@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>2019上半年CTR论文 - Knowledge Change Destiny</title>
+        <title>图神经网络-GNN - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,57 +52,38 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-论文阅读">论文阅读</a>&nbsp;»&nbsp;2019上半年CTR论文</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-论文阅读">论文阅读</a>&nbsp;»&nbsp;图神经网络-GNN</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">2019上半年CTR论文</div>
+<div id="title">图神经网络-GNN</div>
 <div id="content">
-  <p>个性化推荐系统以及CTR模型都向NN模型演进，有两个方面影响NN的结构设计：</p>
-<ol>
-<li>
-<p>推荐系统的角度。</p>
-</li>
-<li>
-<p>预测分析的角度。</p>
-</li>
-</ol>
-<h4 id="2019-deep-session-interest-network-for-click-through-rate-prediction">[2019-阿里]Deep Session Interest Network for Click-Through Rate Prediction</h4>
-<ol>
-<li>解决什么？</li>
-</ol>
-<p>从用户的行为序列中，捕获用户的动态和演进的兴趣。</p>
-<ol>
-<li>
-<p>现象与现状。</p>
-<p>用户行为意图在一个session内是高度同质的，不同session行为意图一般是异质的。</p>
-</li>
-<li>
-<p>方法</p>
-<p>提出DSIN网络，利用了用户行为序列中的多个历史session。</p>
-</li>
-</ol>
-<p><img src="/wiki/static/images/deepctr2019half1.png"  alt="DSIN"/></p>
-<ol>
-<li>结构</li>
-</ol>
-<p><code>Session Division Layer</code>: 对Session内的行为做Embedding，构成session矩阵。</p>
-<p><code>Session Interest Extractor Layer</code>:对每一个Session矩阵，做一个Self-Attention。<strong>学到session内行为关系,丰富特征表达，抽取用户每个session内的兴趣点</strong>。</p>
-<p><code>Session Interest Iteractin Layer</code>:每个Session的Self-Attention输出做AVG。输入到Bi-Lstm中，进行训练，最后由每个时隙（Session对应于时隙)前向和后向的隐藏层输出相加构成最后最终的隐层输出。<strong>学习到不同Session的相互关系，学习用户兴趣的改变及session间的相互作用关系</strong>。</p>
-<p><code>Session Interest Activating Layer</code>: 用item矩阵对SIELayer和SIILayer的输出做Attention。构成特征。<strong>学到Item对Session的潜在关系</strong>。</p>
-<p><code>User Field</code>: 对用户的稀疏特征做Embedding。</p>
-<p><code>Item Field</code>:对item的稀疏特征做Embedding。</p>
-<p><code>target</code>: 表示Item是否被点击</p>
-<ol>
-<li>问题与思考？</li>
-</ol>
-<p>self-Attention 是如何捕获兴趣点的？</p>
-<p>为什么用bi-lstm，不再使用一层 session间的 self-attention？</p>
-<p>为什么要有session？为什么要研究多个session，能得到什么信息，什么叫用户兴趣的迁移？</p>
-<ul>
-<li>首先，根据点击时间将用户的行为序列区分成多个sessions，并使用带有bias编码的自注意力模块来抽取用户每个session的兴趣特征。</li>
-<li>使用双向LSTM建模用户在多个sessions间兴趣的演变过程。</li>
-<li>使用local activation单元自适应学习不同session的兴趣对target item的影响。</li>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">前置</a></li>
+<li><a href="#graph-convolution-network">Graph Convolution Network</a><ul>
+<li><a href="#spectral-based-gcn">Spectral-based GCN</a></li>
 </ul>
+</li>
+<li><a href="#_2">理解</a></li>
+<li><a href="#_3">有用链接</a></li>
+</ul>
+</div>
+<h1 id="_1">前置</h1>
+<p>Network Embedding： 把网络结点表示成低维向量，是一个非监督学习的过程。主要有 矩阵分解、Random Walk、基于DNN的三种方法。</p>
+<h1 id="graph-convolution-network">Graph Convolution Network</h1>
+<p>两种方法：</p>
+<p><code>spectral-based</code>: 基于谱的方法。从图信号处理的角度定义图卷积。</p>
+<p><code>spatial-based</code>：基于空间的方法。图卷积可以看成从近邻结点聚合特征信息。</p>
+<p>Pool：分解图成为高层子结构。==》认为图是子结构的组合？</p>
+<h2 id="spectral-based-gcn">Spectral-based GCN</h2>
+<p>无向图：使用标准化的图拉普拉斯矩阵来表示。</p>
+<p>why 用图拉普拉斯矩阵？</p>
+<h1 id="_2">理解</h1>
+<p>本质上是message passing，考虑如何aggregate  info。</p>
+<h1 id="_3">有用链接</h1>
+<ol>
+<li>https://github.com/RbingChen/GNNPapers</li>
+</ol>
+<p>2.<a href="https://www.zhihu.com/question/54504471/answer/332657604">如何理解 Graph Convolutional Network（GCN）？</a></p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -114,7 +95,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-07-23 16:02 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-07-30 17:20 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -122,7 +103,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: '2019上半年CTR论文',
+  title: '图神经网络-GNN',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
