@@ -1,5 +1,5 @@
 ---
-title : "图神经网络-GNN"
+title : "图神经网络-综述阅读"
 layout : page
 date : 2019-07-30 17:20
 ---

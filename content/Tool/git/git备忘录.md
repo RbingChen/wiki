@@ -19,3 +19,10 @@ date : 2018-12-04 19:11
 
    
 
+# 二 强制覆盖本地代码，即使修改了
+
+```bash
+git fetch --all
+git reset --hard origin/master
+```
+
