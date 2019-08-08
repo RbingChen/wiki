@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>图神经网络-综述阅读 - Knowledge Change Destiny</title>
+        <title>卷积神经网络-论文阅读之一 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,38 +52,24 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-论文阅读">论文阅读</a>&nbsp;»&nbsp;图神经网络-综述阅读</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-论文阅读">论文阅读</a>&nbsp;»&nbsp;卷积神经网络-论文阅读之一</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">图神经网络-综述阅读</div>
+<div id="title">卷积神经网络-论文阅读之一</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">前置</a></li>
-<li><a href="#graph-convolution-network">Graph Convolution Network</a><ul>
-<li><a href="#spectral-based-gcn">Spectral-based GCN</a></li>
+<li><a href="#cnn">CNN的理解</a><ul>
+<li><a href="#2018why-do-deep-convolutional-networks-generalize-so-poorly-to-small-image-transformations">[2018]Why do deep convolutional networks generalize so poorly to small image transformations</a></li>
 </ul>
 </li>
-<li><a href="#_2">理解</a></li>
-<li><a href="#_3">有用链接</a></li>
+<li><a href="#cnn_1">CNN 的结构</a></li>
 </ul>
 </div>
-<h1 id="_1">前置</h1>
-<p>Network Embedding： 把网络结点表示成低维向量，是一个非监督学习的过程。主要有 矩阵分解、Random Walk、基于DNN的三种方法。</p>
-<h1 id="graph-convolution-network">Graph Convolution Network</h1>
-<p>两种方法：</p>
-<p><code>spectral-based</code>: 基于谱的方法。从图信号处理的角度定义图卷积。</p>
-<p><code>spatial-based</code>：基于空间的方法。图卷积可以看成从近邻结点聚合特征信息。</p>
-<p>Pool：分解图成为高层子结构。==》认为图是子结构的组合？</p>
-<h2 id="spectral-based-gcn">Spectral-based GCN</h2>
-<p>无向图：使用标准化的图拉普拉斯矩阵来表示。</p>
-<p>why 用图拉普拉斯矩阵？</p>
-<h1 id="_2">理解</h1>
-<p>本质上是message passing，考虑如何aggregate  info。</p>
-<h1 id="_3">有用链接</h1>
-<ol>
-<li>https://github.com/RbingChen/GNNPapers</li>
-</ol>
-<p>2.<a href="https://www.zhihu.com/question/54504471/answer/332657604">如何理解 Graph Convolutional Network（GCN）？</a></p>
+<h1 id="cnn">CNN的理解</h1>
+<h2 id="2018why-do-deep-convolutional-networks-generalize-so-poorly-to-small-image-transformations">[2018]Why do deep convolutional networks generalize so poorly to small image transformations</h2>
+<p>CNN网络常被猜想为对小的图片平移（ translation ）和形变（ deformation ）有较好的泛化。但是论文结果表明结果并不理想。</p>
+<p>论文得出结论：下采样操作和数据集的有偏导致 CNN结构缺少不变性。</p>
+<h1 id="cnn_1">CNN 的结构</h1>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -95,7 +81,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2019-07-30 17:20 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-07-18 13:36 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -103,7 +89,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: '图神经网络-综述阅读',
+  title: '卷积神经网络-论文阅读之一',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
