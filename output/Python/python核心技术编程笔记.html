@@ -1,0 +1,477 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>python核心技术编程笔记 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Python">Python</a>&nbsp;»&nbsp;python核心技术编程笔记</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">python核心技术编程笔记</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">第一章</a></li>
+<li><a href="#_2">第二章 快速入门</a></li>
+<li><a href="#python">第三章 Python基础</a><ul>
+<li><a href="#1">1.特殊符号</a></li>
+<li><a href="#2">2.关键字</a></li>
+<li><a href="#3">3.内存管理</a></li>
+</ul>
+</li>
+<li><a href="#python_1">第四章 Python对象</a><ul>
+<li><a href="#1_1">1.基础</a></li>
+<li><a href="#2_1">2.类型</a></li>
+<li><a href="#3_1">3.内建函数</a></li>
+<li><a href="#4">4.类型工厂</a></li>
+<li><a href="#5">5.标准类型的分类</a></li>
+</ul>
+</li>
+<li><a href="#_3">第五章 数字</a></li>
+<li><a href="#_4">第六章序列</a><ul>
+<li><a href="#1_2">1.一些函数</a></li>
+<li><a href="#2_2">2.字符串</a><ul>
+<li><a href="#21">2.1字符串编解码</a></li>
+<li><a href="#22">2.2字符串的一些库</a></li>
+</ul>
+</li>
+<li><a href="#3_2">3 列表</a><ul>
+<li><a href="#31">3.1 列表内建函数</a></li>
+</ul>
+</li>
+<li><a href="#4_1">4.元组</a></li>
+</ul>
+</li>
+<li><a href="#_5">第七章映射和集合</a></li>
+<li><a href="#_6">第八章 循环和条件</a></li>
+<li><a href="#1else-pass">1.else 和 pass</a><ul>
+<li><a href="#2_3">2.迭代器</a></li>
+<li><a href="#3_3">3.列表解析</a></li>
+<li><a href="#4_2">4.生成器</a></li>
+<li><a href="#5-itertools">5 itertools 模块</a></li>
+</ul>
+</li>
+<li><a href="#io">第九章 IO</a></li>
+<li><a href="#_7">第十章 异常</a></li>
+<li><a href="#_8">第十一章 函数式</a></li>
+<li><a href="#_9">第十二章 模块</a></li>
+<li><a href="#_10">第十三章 面向对象编程</a></li>
+<li><a href="#_11">第十四章 执行环境</a></li>
+<li><a href="#_12">第十五章 正则</a></li>
+</ul>
+</div>
+<p>温故而知新。</p>
+<h1 id="_1">第一章</h1>
+<h1 id="_2">第二章 快速入门</h1>
+<h1 id="python">第三章 Python基础</h1>
+<h2 id="1">1.特殊符号</h2>
+<div class="hlcode"><pre><span class="c"># 注释</span>
+\ <span class="err">表示继续上一行</span>
+</pre></div>
+
+
+<h2 id="2">2.关键字</h2>
+<div class="hlcode"><pre><span class="err">几个不熟悉的关键字</span>
+<span class="k">with</span> <span class="k">assert</span> <span class="k">del</span>  <span class="k">exec</span> <span class="k">yield</span> 
+</pre></div>
+
+
+<h2 id="3">3.内存管理</h2>
+<div class="hlcode"><pre><span class="err">引用计数、循环引用垃圾收集器</span><span class="p">(</span><span class="err">处理至少两个对象的互相引用</span><span class="p">)</span>
+<span class="n">del</span> <span class="err">语句</span>
+</pre></div>
+
+
+<h1 id="python_1">第四章 Python对象</h1>
+<h2 id="1_1">1.基础</h2>
+<p>Python 对象三个特性：</p>
+<p>身份：每个对象有唯一的标识的自己的值，可以通过内建函数id()来获得。</p>
+<p>类型：对象的类型决定对象可以保存的类型值。type() 来查看。</p>
+<p>值： 具体的数据项</p>
+<div class="hlcode"><pre><span class="o">&gt;&gt;&gt;</span> <span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="mi">4444827080</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="nb">type</span> <span class="s">&#39;str&#39;</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nb">type</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="c">#所有类型的对象都是type</span>
+<span class="o">&lt;</span><span class="nb">type</span> <span class="s">&#39;type&#39;</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+<span class="s">&#39;str&#39;</span>
+</pre></div>
+
+
+<p>对象的属性：函数和方法。</p>
+<h2 id="2_1">2.类型</h2>
+<div class="hlcode"><pre><span class="s">&quot;&quot;&quot;</span>
+<span class="s">标准类型： Integer、Boolean、Long integer、Float、Complex number、String、Tuple、Dictionary</span>
+<span class="s">其他：type类型、None(Null对象)、文件、集合、函数、模块、类</span>
+<span class="s">内部类型：代码、帧、跟踪记录、切片、省略、Xrange</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="err">判断对象是否相同</span>
+<span class="n">a</span> <span class="ow">is</span> <span class="n">b</span> <span class="err">或者</span> <span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="3_1">3.内建函数</h2>
+<div class="hlcode"><pre><span class="nb">cmp</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span><span class="n">obj2</span><span class="p">)</span> 
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">repr(obj) 、`obj`  、str(obj)  返回字符串.三者大部分情况下没有区别。</span>
+<span class="sd">通常有 repr==eval(repr(obj)),而str不行，str面向输出，repr面向python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="nb">type</span><span class="p">()</span>  <span class="nb">isinstance</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="o">&gt;&gt;</span><span class="nb">dir</span><span class="p">(</span><span class="n">types</span><span class="p">)</span><span class="c">#可以看到所有的类型</span>
+</pre></div>
+
+
+<h2 id="4">4.类型工厂</h2>
+<div class="hlcode"><pre><span class="kt">int</span><span class="p">()</span> <span class="kt">long</span><span class="p">()</span>  <span class="kt">float</span><span class="p">()</span>  <span class="n">complext</span><span class="p">()</span>  <span class="n">str</span><span class="p">()</span>  <span class="n">unicode</span><span class="p">()</span>  <span class="n">basestring</span><span class="p">()</span>
+<span class="n">list</span><span class="p">()</span> <span class="n">tuple</span><span class="p">()</span> <span class="n">type</span><span class="p">()</span>
+<span class="n">dict</span><span class="p">()</span> <span class="kt">bool</span><span class="p">()</span>  <span class="n">set</span><span class="p">()</span> <span class="n">frozenset</span><span class="p">()</span> <span class="n">object</span><span class="p">()</span> <span class="n">classmethod</span><span class="p">()</span>  <span class="n">staticmethod</span><span class="p">()</span>  <span class="n">super</span><span class="p">()</span>
+<span class="n">property</span><span class="p">()</span> <span class="n">file</span><span class="p">()</span>
+</pre></div>
+
+
+<h2 id="5">5.标准类型的分类</h2>
+<div class="hlcode"><pre><span class="s">&quot;&quot;&quot;</span>
+<span class="s">1. 以存储模型为标准的类型分类。 是否能够容纳多个值。</span>
+<span class="s">   标量/原子类型：数值 字符串。 </span>
+<span class="s">   容器类型： 列表、元组、字典</span>
+
+<span class="s">2.以 更新模型为标准。</span>
+<span class="s">   可变类型： 列表、字典</span>
+<span class="s">   不可变类型：数字、字符串、元组</span>
+<span class="s">&gt;&gt;&gt; i=0</span>
+<span class="s">&gt;&gt;&gt; id(i)</span>
+<span class="s">140583729413952</span>
+<span class="s">&gt;&gt;&gt; i=i+1</span>
+<span class="s">&gt;&gt;&gt; id(i)</span>
+<span class="s">140583729413928</span>
+<span class="s">3. 访问类型。</span>
+<span class="s"> 直接访问： 数字</span>
+<span class="s"> 顺序访问：字符串、列表、元组</span>
+<span class="s"> 映射访问：字典</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">对象缓存问题。 认为整数在小于某个值时，进行缓存。而浮点数，用的不多，所以不缓存。</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="o">=</span><span class="mi">10</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">=</span><span class="mi">100</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span><span class="o">=</span><span class="mi">100</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">e</span><span class="o">=</span><span class="mf">10.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">=</span><span class="mf">10.0</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="ow">is</span> <span class="n">d</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">e</span> <span class="ow">is</span> <span class="n">f</span>
+<span class="bp">False</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="o">=</span><span class="mi">11</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="bp">False</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">=</span><span class="mi">101</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">=</span><span class="mi">101</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="ow">is</span> <span class="n">k</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">=</span><span class="mi">11111111</span>  <span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">=</span><span class="mi">11111111</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="ow">is</span> <span class="n">k</span>
+<span class="bp">False</span>
+</pre></div>
+
+
+<h1 id="_3">第五章 数字</h1>
+<div class="hlcode"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">divison</span>
+<span class="o">&gt;&gt;</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+<span class="mf">0.5</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="err">进制转换</span>
+<span class="nb">hex</span><span class="p">()</span> <span class="nb">oct</span><span class="p">()</span> <span class="nb">chr</span><span class="p">()</span> <span class="nb">ord</span><span class="p">()</span> <span class="nb">unichr</span><span class="p">()</span>
+
+<span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="n">ndig</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c">#保存ndig小数点的位数</span>
+</pre></div>
+
+
+<h1 id="_4">第六章序列</h1>
+<p>序列，元组，字符串</p>
+<p>共同：切片。正向切片、反向切片。 元素访问。</p>
+<h2 id="1_2">1.一些函数</h2>
+<div class="hlcode"><pre><span class="nb">enumerate</span><span class="p">()</span> <span class="err">返回</span> <span class="n">index</span> <span class="err">和</span> <span class="n">item</span>
+<span class="nb">reversed</span><span class="p">()</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="nb">zip</span><span class="p">([</span><span class="n">it0</span><span class="p">,</span><span class="n">it1</span><span class="p">,</span><span class="n">it3</span><span class="o">...</span><span class="p">])</span> <span class="c">#一起遍历</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="c">#字符串删除</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">str1</span><span class="o">=</span><span class="s">&quot;abcdefg&quot;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">str1</span><span class="o">=</span><span class="n">str1</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">str1</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">str1</span>
+<span class="s">&#39;acdefg&#39;</span>
+</pre></div>
+
+
+<p><img src="/wiki/static/images/PythonString函数.png" alt="String函数" /></p>
+<p><img src="/wiki/static/images/PythonString函数2.png" alt="String函数" /></p>
+<h2 id="2_2">2.字符串</h2>
+<h3 id="21">2.1字符串编解码</h3>
+<div class="hlcode"><pre><span class="s">&quot;&quot;&quot;</span>
+<span class="s">前缀 u 用来修饰 Unicode</span>
+<span class="s">str() chr()  用 unicode() unichar()代替</span>
+<span class="s">decode()   encode()</span>
+
+<span class="s">open打开文件只能写入str类型,不管字符串是什么编码方式</span>
+<span class="s">codecs.open(file,权限,编码类型) #&#39;utf-8&#39; &#39;gbk&#39;</span>
+</pre></div>
+
+
+<p>Codecs 模块：定义了文本跟二进制的转换方式。</p>
+<h3 id="22">2.2字符串的一些库</h3>
+<div class="hlcode"><pre><span class="n">base64</span>   <span class="n">Base</span> <span class="mi">16</span><span class="err">、</span><span class="mi">32</span><span class="err">、</span><span class="mi">64</span> <span class="err">编解码库</span>
+<span class="n">codes</span>    <span class="err">解码器注册和基类</span>
+<span class="n">hashlib</span>  <span class="err">多种不同安全哈希算法和信息摘要算法的</span><span class="n">APi</span>
+<span class="n">StringIO</span> <span class="err">字符串缓冲对象</span>
+</pre></div>
+
+
+<h2 id="3_2">3 列表</h2>
+<h3 id="31">3.1 列表内建函数</h3>
+<div class="hlcode"><pre><span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">Seq</span><span class="p">)</span><span class="c"># 把序列内容加入Seq中去</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span><span class="n">obj</span><span class="p">)</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="c">#默认最后一个</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> 
+<span class="nb">list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="nb">list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">NOne</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="4_1">4.元组</h2>
+<p>元组是不可变对象。如果更新，则需要改变值。</p>
+<p>和数组很像。</p>
+<h1 id="_5">第七章映射和集合</h1>
+<h1 id="_6">第八章 循环和条件</h1>
+<h1 id="1else-pass">1.else 和 pass</h1>
+<div class="hlcode"><pre><span class="k">pass</span> <span class="err">语句，表示，啥也不干。</span>
+
+<span class="k">if</span> <span class="n">statement</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="k">else</span> <span class="err">在</span><span class="n">while</span><span class="err">和</span><span class="n">for</span><span class="err">中使用。</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="err">：</span>
+    <span class="k">do</span> <span class="p">...</span>
+<span class="nl">else:</span>
+    <span class="k">do</span> <span class="p">..</span>
+</pre></div>
+
+
+<h2 id="2_3">2.迭代器</h2>
+<p>序列：</p>
+<div class="hlcode"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">str1</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;ab&quot;</span><span class="p">,</span><span class="s">&quot;cd&quot;</span><span class="p">,</span><span class="s">&quot;ef&quot;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;ab&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">k</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;cd&#39;</span>
+</pre></div>
+
+
+<p>集合：</p>
+<div class="hlcode"><pre><span class="c"># Dict.iterkeys()、Dict.itervalues()、Dict.iteritems()</span>
+<span class="c"># Dict.has_key()=&gt; key in Dict</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dic</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;acb&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;ds&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">dic</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+<span class="o">...</span> 
+<span class="p">(</span><span class="s">&#39;acb&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="s">&#39;ds&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;acb&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">=</span><span class="n">dic</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">t1</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="p">(</span><span class="s">&#39;acb&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tt</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tt</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="s">&#39;acb&#39;</span>
+</pre></div>
+
+
+<p>文件：</p>
+<div class="hlcode"><pre><span class="err">文件对象的生成会自动调用</span><span class="n">readline</span><span class="p">()</span><span class="err">方法。</span>
+<span class="o">&gt;&gt;</span> <span class="n">fid</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">myFile</span><span class="p">:</span>
+       <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+
+
+<p>如何创建：</p>
+<div class="hlcode"><pre><span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="nb">iter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="n">sentinel</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="3_3">3.列表解析</h2>
+<div class="hlcode"><pre><span class="p">[</span><span class="n">expr</span> <span class="k">for</span> <span class="n">iter_var</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">cond_expr</span><span class="p">]</span>
+<span class="s">&quot;&quot;&quot;</span>
+<span class="s">[ [x for x in range(s)] for s in range(4)]</span>
+<span class="s">[for x in list]</span>
+<span class="s">[(x,y) for x in list1 for y in list2]</span>
+</pre></div>
+
+
+<h2 id="4_2">4.生成器</h2>
+<p>和列表解析很相似，基本语法相同，但是不创建真正的数字列表，返回一个生成器。计算一个条目之后，把该条目yield（产生）出来。生成器表达式使用了延迟计算（lazy evaluation），节省了内存。</p>
+<div class="hlcode"><pre><span class="p">(</span><span class="n">expr</span> <span class="k">for</span> <span class="n">iter_val</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">cond_expr</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"> g = (x * x for x in range(10))</span>
+<span class="sd"> &gt;&gt;next(g)</span>
+<span class="sd"> &gt;&gt;0</span>
+<span class="sd">&quot;&quot;&quot;</span> 
+<span class="n">generator</span><span class="err">保存的是算法，每次调用</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="err">，就计算出</span><span class="n">g</span><span class="err">的下一个元素的值，直到计算到最后一个元素，没有更多的元素时，抛出</span><span class="n">StopIteration</span><span class="err">的错误。</span>
+ <span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="nb">max</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">b</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="s">&#39;done&#39;</span>
+<span class="err">如果有</span> <span class="k">yield</span> <span class="err">关键字，则构成</span><span class="n">generator</span><span class="err">。</span>
+</pre></div>
+
+
+<h2 id="5-itertools">5 itertools 模块</h2>
+<h1 id="io">第九章 IO</h1>
+<h1 id="_7">第十章 异常</h1>
+<h1 id="_8">第十一章 函数式</h1>
+<h1 id="_9">第十二章 模块</h1>
+<h1 id="_10">第十三章 面向对象编程</h1>
+<h1 id="_11">第十四章 执行环境</h1>
+<h1 id="_12">第十五章 正则</h1>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-14 11:19 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'python核心技术编程笔记',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2020 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

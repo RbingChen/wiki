@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>chapter2 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#PRML读书笔记">PRML读书笔记</a>&nbsp;»&nbsp;chapter2</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">chapter2</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">零.前置</a></li>
+<li><a href="#_2">一.二变量</a><ul>
+<li><a href="#11">1.1 伯努利分布</a></li>
+<li><a href="#12">1.2二项式分布</a></li>
+<li><a href="#13">1.3与二分类问题比较</a></li>
+</ul>
+</li>
+<li><a href="#_3">二.多变量</a></li>
+<li><a href="#_4">三.高斯分布</a></li>
+<li><a href="#_5">四.指数族</a></li>
+<li><a href="#_6">五.非信息先验</a></li>
+</ul>
+</div>
+<h1 id="_1">零.前置</h1>
+<p><code>Density Estimation</code>(密度估计)：给定数据集，估计任一单样本$x$出现的概率。</p>
+<p><code>共轭先验</code>：保证<code>后验概率</code>分布和先验概率分布有<code>相同的函数式</code>。=&gt;&gt;被频率学派吐槽点，先验选择完全为了计算方便。</p>
+<h1 id="_2">一.二变量</h1>
+<h2 id="11">1.1 伯努利分布</h2>
+<p>概率分布：$p(x)=\mu^x(1-\mu)^{1-x}$</p>
+<p>似然函数：$p(D|\mu)=\prod_{i=1}^n \mu^{x_i}(1-\mu)^{1-x_i}=\mu^{\sum_{i=1}^n x_i}(1-\mu)^{n-\sum_{i=1}^n x_i}$</p>
+<h2 id="12">1.2二项式分布</h2>
+<p>如果一个随机变量$x$服从伯努利分布，则实验组$n$次，有$m$次成功的概率服从分布：</p>
+<p>$p(m,n)=C(m,n)\mu^m (1-\mu)^{n-m}$ </p>
+<p>上式可以看成是似然函数，与伯努利分布的似然函数式是<strong>等价</strong>的。</p>
+<p><code>先验分布</code>使用<code>Beta分布</code>:$Beta(\mu|a,b)=\frac{\Gamma (a+b)}{\Gamma (a)+\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}$</p>
+<p><code>后验分布</code>:$p(u|a,b,m,n)=\frac{\Gamma (a+b)}{\Gamma (a)+\Gamma(b)}\mu^{m+a-1}(1-\mu)^{n-m+b-1}$</p>
+<p>如何理解后验分布？</p>
+<p>​       可以把a和b看成是已知的实验结果，并在这个结果继续用于后续的实验。或者说，用先有的知识校正似然函数。进一步，对于批处理数据，可以认为之前的数据是先验知识，用以校正当前数据对参数的概率预测。</p>
+<p>​       <code>Sequential approach</code></p>
+<p>推断：$p(x=1|D)=\int  p(x=1|\mu)  p(\mu|D) d\mu=\frac{m+a}{n+a+b}$，当数据了很大时，和MLE的估计值是相近的。</p>
+<h2 id="13">1.3与二分类问题比较</h2>
+<p>可以看成是概率是离散值的二分类问题。sigmoid是把概率映射到[0,1]的连续空间。</p>
+<h1 id="_3">二.多变量</h1>
+<h1 id="_4">三.高斯分布</h1>
+<p>实质上是在找一个方法把   $(x-\mu)^T\sum ^{-1}(x-\mu)$变成$y^Ty$的形式。</p>
+<p>$g_i、h_i$ 表示误差(错误率等）相关关的函数，$i$表示不同的样本，$I_L$表示左边的节点（树的左子树），$I_L$，表示右边的节点（树的右子树），$\lambda 、\gamma$表示平滑因子，为了让模型更稳定。给定一个特征值，对所有样本计算出$g_i、h_i$这两个值，再计算出$L_{split}$值，选择$L_{split}$最大特征值作为划分特征；然后依次再对左子树和右子树做同样的操作，直到算法收敛。</p>
+<h1 id="_5">四.指数族</h1>
+<h1 id="_6">五.非信息先验</h1>
+<p>先验分布会把先验信息（知识）传递到概率推断过程。但是如果我们把变量的出现某些值的先验概率置成0，那将会导致这些后验概率也会是0，这将会导致怎么<code>推断过程和观测数据无关</code>，是不科学的。因此，我们要找一种分布，对后验分布有极小的影响，这种分布叫做非信息先验(<code>noninformative priors</code>)</p>
+<p>个人看来：<code>这有点强制先验的赶脚。换句话说，当我们不需要先验知识的时候，不能认为先验概率是0，因为这样会导致，变量的值的后验概率为0，因此需要找一个先验分布，对所有的变量的所有值一视同仁。提出这么一个分布，是为了保证推断的过程符合beysian框架的一般性</code></p>
+<p>直观的做法，使用均匀分布，但是均匀分布，在做变量变化是会改变这个特性。$p_\lambda(\lambda)=a,\lambda=\eta^2$，那么得到如下：<br />
+$$<br />
+p_\eta(\eta)=p_\lambda(\lambda)|\frac{d \lambda}{d\eta}|=p_\lambda(\eta^2)2\eta\propto\eta<br />
+$$<br />
+提取两种noninformative prior，</p>
+<p>一种是<code>平移不变性</code>（translation invariance)，满足如下条件：</p>
+<p>$p(x|\mu)=f(x-\mu),\hat x=x+c,p(\hat x|\hat\mu)=f(\hat x-\hat\mu)$。其中，有$\hat \mu=\mu+c$。</p>
+<p>另一种是<code>缩放不变性( scale  invariance)</code>，满足如下条件：</p>
+<p>$p(x|\sigma)=\frac{1}{\sigma}f(\frac{x}{\sigma}),\hat x=cx,p(\hat x|\hat\sigma)=\frac{1}{\hat \sigma}f(\frac{\hat x}{\hat \sigma})$。 其中，有$\hat \sigma=c\sigma$。</p>
+<p><strong>有什么用？</strong></p>
+<p>呃，个人觉得没什么用，只是为了保证计算满足整个beysian的框架。</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-04-16 16:44 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'chapter2',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2020 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

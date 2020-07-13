@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>MapReduce framework - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Hadoop">Hadoop</a>&nbsp;»&nbsp;MapReduce framework</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">MapReduce framework</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#overview">一 Overview</a></li>
+<li><a href="#mapper">二 Mapper</a><ul>
+<li><a href="#mapper_1">Mapper 的数量？</a></li>
+</ul>
+</li>
+<li><a href="#reducer">三 Reducer</a><ul>
+<li><a href="#shuffle">shuffle</a></li>
+<li><a href="#sort">Sort</a></li>
+<li><a href="#secondary-sort">Secondary Sort</a></li>
+<li><a href="#reduce">Reduce</a></li>
+<li><a href="#reducer_1">Reducer个数？</a></li>
+<li><a href="#partitioner">Partitioner</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="overview">一 Overview</h1>
+<p>Hadoop Mapreduce 是一个软件框架，能在大集群上，以并行地方式高可靠、高容错的读写数据以及对大数据进行处理。</p>
+<p>MapReduce job通常把输入数据切分成多个块以保证能够被map task并行处理。framework对map的输出进行排序，然后输入到reduce task上。一般地，任务的输入输出数据都存储在文件系统上。框架着重关注任务调度、任务监管以及重启失败任务。</p>
+<p>典型场景下，计算节点和存储节点是相同。这能保证MapReduce 框架和 HDFS在同一个节点集上运行，这样的配置允许框架有效地在数据节点上调度任务，保证集群有较高的可用带宽。</p>
+<p>MapReduce框架由一个 <code>RM(ResourceManager)</code>、每一个集群节点包含的一个<code>slave NM(NodeManager)</code>、每个应用的<code>MRAPPMaste</code>r构成。</p>
+<p><code>Hadoop job client</code> 向RM提交job ( jar或者其他的可执行文件 ) 和配置信息，RM主要的功能有：分发配置信息及程序给slave节点、调度并监管任务、给job-client提供状态及诊断信息。</p>
+<h1 id="mapper">二 Mapper</h1>
+<p>mapper把输入的key/value对转换成中间key/value对( 可以有0或者多对)。依据Job的InputFormat将输入切分成单个的InputSplit，每一个InputSplit对应一个map任务。Job通过<code>Job.setMapperClass(class)</code>运行mapper任务，框架调用<code>map（WrittableComparableWritable,Context)</code>方法对InputSplit中的kv对进行处理。此外，可以重载<code>cleanup(Context)</code>方法做一些清除操作。</p>
+<p>程序可以使用<code>Counter</code>来反馈统计信息。</p>
+<p>在给点输出值的可key时，所有的中间kv对会做聚合操作（由框架触发），然后再传递给<code>Reducer</code>做处理得到最终输出。可以使用<code>Job. setGroupingComparatorCalass(Class)</code>获取自定义<code>Comparator</code>以控制聚合操作。</p>
+<p><code>Mapper</code>的输出讲被排序并切分给每一个<code>Reducer</code>，每一个分区对应一个reduce 任务。通过使用继承<code>Partitioner</code>接口可以实现自定义的分区方式来控制哪些keys值由哪一个<code>reducer</code>处理。</p>
+<p>程序通过<code>Job.setCombinerClass(Class)</code>方法指定<code>Combiner</code> 以对中间输出做局部聚合操作，从而缩减传递到<code>Reducer</code>的数据量。排序后的输出会简单的存储为<code>(key-len,key,vlaue-len,value)</code>的格式，也可以通过配置使用<code>CompressionCodec</code>模块来压缩中间输出值。</p>
+<h2 id="mapper_1">Mapper 的数量？</h2>
+<p>注意Mapper的启动需要时间，因此合适的Mapper数量应该保证处理数据的时间应该大于启动的时间。一般地，有多少个Block，则将会有多少个Map（10TB的数据，128MB的块大小，那么将会有82k个map）。也可以使用<code>Configuration.set(MPJobConfig.NUM_MAPS,int)</code>来配置。</p>
+<h1 id="reducer">三 Reducer</h1>
+<p>进一步缩减kv对数。可以通过<code>Job.setNumReduceTasks(int)</code>来设置reduce的数量。</p>
+<p>使用方法<code>Job.setReducerClass(Class)</code>来指定<code>Reducer</code>的执行程序。Reducer可以分为shuffle、sort、redcue三个阶段。</p>
+<h2 id="shuffle">shuffle</h2>
+<p>框架通过HTTP协议，从Mapper输出的相关分区中取数据给Reducer。因此，输入给Reducer的是排序后的Mapper输出。</p>
+<h2 id="sort">Sort</h2>
+<p>框架对Reducer的输入做聚合有相同key的kv对操作，shuffle和sort同时执行，也就是取数据的时候也做合并操作。</p>
+<h2 id="secondary-sort">Secondary Sort</h2>
+<p>略</p>
+<h2 id="reduce">Reduce</h2>
+<p>在这个阶段，调用 <code>reduce(WritableComparable,Iterable&lt;Writable&gt;,Context)</code>方法处理聚合后的输入对<code>&lt;key,(list of values)&gt;</code>。最后将输出直接存储到文件系统上，可以通过<code>FileOutputFormat.setOutputPath (Job,Path)</code>来设置存储路径，框架不会对reduce的输出做排序。</p>
+<h2 id="reducer_1">Reducer个数？</h2>
+<p>0.95 或者 1.75 乘以 节点数或者每个节点最大container数。</p>
+<p>增加reduce格式会带来格外的消耗，但是能够是提高负载均衡，降低失败任务带来的损失。</p>
+<h2 id="partitioner">Partitioner</h2>
+<p>切分key值空间，和Reducer一一对应。默认使用<code>HashPartitioner</code>。 这个地方是发生数据倾斜的本质原因，<strong>部分key对应的value值过多</strong>。</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-03-20 17:36 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'MapReduce framework',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2020 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

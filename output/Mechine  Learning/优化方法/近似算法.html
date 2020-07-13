@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>近似算法 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#-优化方法">优化方法</a>&nbsp;»&nbsp;近似算法</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">近似算法</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">一 投影</a></li>
+<li><a href="#_2">二 近似梯度法</a><ul>
+<li><a href="#forward-backward-splitting">forward-backward splitting</a></li>
+<li><a href="#backward-backward-splitting">Backward-backward splitting</a></li>
+<li><a href="#_3">投影梯度法</a></li>
+</ul>
+</li>
+<li><a href="#l1">三 L1范数</a></li>
+<li><a href="#relu">四 ReLU</a></li>
+<li><a href="#_4">五 问题</a><ul>
+<li><a href="#1l1l2">1.L1范数为什么能稀疏化？L2为什么不能</a></li>
+<li><a href="#2">2.次梯度</a></li>
+</ul>
+</li>
+<li><a href="#3l1">3.为什么对L1范数要进行处理？</a></li>
+</ul>
+</div>
+<h1 id="_1">一 投影</h1>
+<p>点到闭凸集的投影：<br />
+$$<br />
+proj_C(x)=\mathop{\arg\min}<em>\limits{y}\ \ I_C(y)+\frac{1}{2}||x-y||^2<br />
+$$<br />
+其中，$I_C$是闭凸集C的示性函数<br />
+$$<br />
+I_C(x)=\begin{cases}0&amp;x\in C\\ \infty&amp;x\notin C\end{cases}<br />
+$$<br />
+从几何上的解释就是：点到集合上的投影，就是集合上离点最近的点。<br />
+把示性函数替换成一般的凸函数f，推广得到一般的投影算子。<br />
+$$<br />
+proj_C(x)=\mathop{\arg\min}</em>\limits{y}\ \ f(y)+\frac{1}{2}||x-y||^2<br />
+$$<br />
+考虑函数上的点到函数的投影，可以发现最小值点的投影是其本身。几何上来解释就是，在函数最小值等高面上的点的投影是它本身。</p>
+<p>点$x$到投影点的方向向量$x-proj_f(x)$与等高面垂直，因此，投影操作可以看成是梯度下降的推广。</p>
+<p>有：<br />
+$$<br />
+p=proj_f(x)=\mathop{\arg\min}<em _lambda="\lambda" f="f">\limits{y}\ \ \lambda f(y)+\frac{1}{2}||x-y||^2<br />
+$$<br />
+求导可得：<br />
+$$<br />
+0=p-x+\lambda \partial f(p)\\<br />
+x=(I+\lambda \partial f)(p)\\<br />
+p=(I+\lambda \partial f)^{-1}(x)<br />
+$$<br />
+次梯度的逆有唯一的像！所以投影算子与次梯度关系为<br />
+$$<br />
+proj</em>=(I+\lambda \partial f)^{-1}<br />
+$$<br />
+另$p=x_{k+1},x=x_k$，推导得到投影操作，$x_{k+1}=proj_f(x_k)$是投影点，<br />
+$$<br />
+x_{k+1}=x_k-\lambda\partial f(x_{k+1})<br />
+$$<br />
+如果$\lambda$很小且函数存在常规梯度(正常值)，则近似有：<br />
+$$<br />
+x_{k+1}\approx x_k-\lambda\partial f(x_{k})<br />
+$$<br />
+形式上，<strong>投影操作是梯度下降的一种推广</strong>。看做一种前向梯度下降，即下降的梯度不是在当前点计算得到的，而是在下降的目标点计算得到的。如果投影操作计算方便（有简单的解析解），那么用投影操作做优化可以取代梯度下降，并且可以应用到梯度不存在的函数优化。</p>
+<p>近似点算法：求函数f的最小值，利用投影算子是压缩算子，且有投影算子的不动点是函数的最小值点的性质，可得迭代近似点算法。即在点$x_k$处，求投影点。          <br />
+$$<br />
+x_{k+1}=proj_f(x_k)<br />
+$$<br />
+投影算子就相当于梯度下降的推广，近似点算法可以看做梯度下降求最小值的推广。</p>
+<p>注意为什么投影算子的可以进行不动点(不动点满足，$x=f(x)$)求解，当最小值面上时：<br />
+$$<br />
+x^*=\mathop{\arg\min}_\limits{y}\ \ f(y)<br />
+$$<br />
+通过投影算子得到即为其本身，投影算子可以进行不动点求解。</p>
+<h1 id="_2">二 近似梯度法</h1>
+<h2 id="forward-backward-splitting">forward-backward splitting</h2>
+<p>如果目标函数存在不可微分部分，可以将目标函数分解为可微分和不可微部分。<br />
+$$<br />
+\mathop{\arg\min}<em _lambda="\lambda" g="g">\limits{x}\ \  f(x)+g(x)<br />
+$$<br />
+假设f可微，g是不可微部分，若p是最优解，则有:<br />
+$$<br />
+\lambda \partial f(p)+\lambda  \partial g(p)=0\\<br />
+\lambda \partial f(p)-p+p+\lambda  \partial g(p)=0\\<br />
+(I-\lambda \partial f)(p)=(I+\lambda \partial g)(p)\\<br />
+p=(I+\lambda \partial g)^{-1}(p-\lambda \partial f(p))<br />
+$$<br />
+注意次梯度和投影的关系可得：<br />
+$$<br />
+p=proj</em>(p-\lambda \partial f(p))<br />
+$$<br />
+不动点方程给出了优化迭代步骤，<strong>先按着可微函数梯度下降，然后对不可微函数做投影下降</strong>。</p>
+<h2 id="backward-backward-splitting">Backward-backward splitting</h2>
+<p>都采用投影来做。<br />
+$$<br />
+p=proj_g(proj_f{p})<br />
+$$</p>
+<h2 id="_3">投影梯度法</h2>
+<p>无约束优化：梯度下降法和牛顿法(DFP、BFGS等)，对于L2正则较好处理，但L1正则需要特殊处理。</p>
+<p>不等式约束凸优化：1、传统的不等式约束优化算法内点法等；2、投影梯度(次梯度)下降（约束优化表示下），直观含义是每步迭代后，迭代结果可能位于约束集合之外，然后取该迭代结果在约束凸集合上的投影作为新的迭代结果。</p>
+<p><img src="/wiki/static/images/project.png" alt="投影图" /></p>
+<p>范数：$(w_1^2+w_2^2+...+w_n^2)^{\frac{1}{2}}$，$(w_1^2+w_2^2+...+w_n^2)$，$|w_1+w_2+...+w_n|$</p>
+<p>l1范数在0点处处不可导，l2 范数在$w_i$全为0的时候不可导。</p>
+<h1 id="l1">三 L1范数</h1>
+<p>$$<br />
+\mathop{\min}_\limits{x}\ \ |x|_1<br />
+$$</p>
+<p>等效问题为<br />
+$$<br />
+x^{*}=\mathop{\arg\min}<em k_1="k+1">\limits{y}\ \ \ \lambda|y|_1+\frac{1}{2}||x-y||^2\\<br />
+$$<br />
+$x_k$的投影点就是新的值$x</em>$每次的迭代为：<br />
+$$<br />
+x_{k+1}=x_k-\lambda \partial (|x_{k+1}|)<br />
+$$<br />
+<strong>投影的过程就是迭代的过程</strong>，$|x|$ 在0点的次梯度为[-1,1]。假设$\lambda&gt;0$</p>
+<p>第一种情况：$x_k&gt;\lambda,x_{k+1}=x_k-\lambda$</p>
+<p>第二种情况:  $0&lt;x_k&lt;\lambda$</p>
+<ol>
+<li>假设 $x_{k+1}&gt;0$，那么$x_{k+1}=x_k-\lambda &lt;0$，矛盾。</li>
+<li>假设 $x_{k+1}&lt;0$，那么$x_{k+1}=x_k+\lambda &gt;0$，矛盾。</li>
+<li>假设 $x_{k+1}=0$，那么$x_{k+1}=x_k-\lambda *a=0$，存在次梯度$a=\frac{x_k}{\lambda}&lt;1$。</li>
+</ol>
+<p>第三情况：略。</p>
+<p>得到：<br />
+$$<br />
+x_{k+1}=\begin{cases}x_k-\lambda&amp;x_k&gt;\lambda\\0&amp;-\lambda\le x_k\le\lambda\\ x_k+\lambda&amp;x_k&lt;-\lambda\\   \end{cases}<br />
+$$</p>
+<h1 id="relu">四 ReLU</h1>
+<p>$$<br />
+f(x)=\begin{cases}x&amp;x&gt;0\\0&amp;x\le0\end{cases}<br />
+$$</p>
+<p>子梯度为[0,1]。<br />
+$$<br />
+x_{k+1}=x_k-\lambda \partial (|x_{k+1}|)<br />
+$$<br />
+第一种情况：$x_k&gt;\lambda=&gt;x_{k+1}=x_k-\lambda$</p>
+<p>第二种情况:  $0<x_k<\lambda=>x_{k+1}=0$</p>
+<ol>
+<li>假设 $x_{k+1}&gt;0$，那么$x_{k+1}=x_k-\lambda &lt;0$，矛盾。</li>
+<li>假设 $x_{k+1}&lt;0$，那么$x_{k+1}=x_k+\lambda &gt;0$，矛盾。</li>
+<li>假设 $x_{k+1}=0$，那么$x_{k+1}=x_k-\lambda *a=0$，存在次梯度$a=\frac{x_k}{\lambda}&lt;1$。</li>
+</ol>
+<p>第三种情况：$x_k&lt;0=&gt;x_{k+1}=x_k$。</p>
+<ol>
+<li>假设 $x_{k+1}&gt;0$，那么$x_{k+1}=x_k-\lambda &lt;0$，矛盾。</li>
+<li>假设 $x_{k+1}&lt;0$，那么$x_{k+1}=x_k+0 &gt;0$，满足。</li>
+<li>假设 $x_{k+1}=0$，那么$x_{k+1}=x_k-\lambda *a&lt;0$,矛盾</li>
+</ol>
+<p>那么：<br />
+$$<br />
+x_{k+1}=\begin{cases}x_k-\lambda&amp;x_k&gt;\lambda\\0&amp;-\lambda\le x_k\le\lambda\\ x_k&amp;x_k&lt;-\lambda\\   \end{cases}<br />
+$$</p>
+<h1 id="_4">五 问题</h1>
+<h2 id="1l1l2">1.L1范数为什么能稀疏化？L2为什么不能</h2>
+<ol>
+<li>软阈值。2.考虑$ ||w||_2=\sqrt{(w_1^2+w_2^2+...+w_n^2)}$只有在任意$w_i=0$的时候不可微，但是，这种情况很难出现，而L1范数，只有任一个为0便不可微。</li>
+</ol>
+<p><img src="/wiki/static/images/L1L2.png" alt="范数对比" /></p>
+<h2 id="2">2.次梯度</h2>
+<p><strong>凸函数的次梯度一定存在，如果函数f在点x处可微，那么g=∇f(x)，为函数在该点的梯度，且唯一；如果不可微，则次梯度不一定唯一。但是对于非凸函数，次梯度则不一定存在，也不一定唯一</strong></p>
+<p>凸函数定义：如果函数$f$可微，那么当且仅当$dom(f)$为凸集，且任意$x,y\in dom(f)$，有<br />
+$$<br />
+f(y)\ge f(x)+\partial f(x)(y-x)<br />
+$$<br />
+则函数$f$是凸函数。次梯度是指在函数$f$上的点$x$满足一下条件$g\in R^n$：<br />
+$$<br />
+f(y)\ge f(x)+g^T (y-x)<br />
+$$<br />
+对于L1范数的0点来说：</p>
+<p>第一种情况：$x&gt;0$，那么$x&gt;=g*x$，得到$g&lt;=1$</p>
+<p>第二种情况:$x&lt;0$，那么$-x&gt;=g*x$，得到$g&gt;=-1$</p>
+<p>综上，$-1\le g \le 1$。</p>
+<p>其实就下方区域。</p>
+<p>光滑的凸函数而言，可以直接采用梯度下降算法求解函数的极值，但是当函数不处处光滑，处处可微的时候，梯度下降就不适合应用了。因此，我们需要计算函数的次梯度。对于次梯度而言，其没有要求函数是否光滑，是否是凸函数，限定条件很少，适用范围更广</p>
+<p>次梯度，也可以用以sgd的迭代,比梯度下降收敛[3]更慢。</p>
+<h1 id="3l1">3.为什么对L1范数要进行处理？</h1>
+<p>假设学习率是 $\lambda =0.3，x_0=0.1$，使用梯度下降$x_1=0.1-0.3=-0.2，x_2=-0.2+0.3=0.1...$，会导致震荡不收敛，因此需要进行处理。</p>
+<p>1.<a href="https://www.cnblogs.com/EE-NovRain/p/3810737.html">https://www.cnblogs.com/EE-NovRain/p/3810737.html</a></p>
+<p>2.<a href="https://tracholar.github.io/wiki/machine-learning/optimization/proximal-algorithm.html">https://tracholar.github.io/wiki/machine-learning/optimization/proximal-algorithm.html</a></p>
+<p>3.<a href="http://www.hanlongfei.com/convex/2015/10/02/cmu-10725-subgradidient/">http://www.hanlongfei.com/convex/2015/10/02/cmu-10725-subgradidient/</a></p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-11-24 10:31 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: '近似算法',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2020 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

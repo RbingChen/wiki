@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>数组操作 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#TensorFlow">TensorFlow</a>&nbsp;»&nbsp;数组操作</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">数组操作</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#tfexpend_dims">tf.expend_dims</a></li>
+<li><a href="#tfgather">tf.gather</a></li>
+<li><a href="#tftile">tf.tile</a></li>
+<li><a href="#tfsplit">tf.split</a></li>
+<li><a href="#tfstack">tf.stack</a></li>
+<li><a href="#tfsequence_mask">tf.sequence_mask</a></li>
+</ul>
+</div>
+<h1 id="tfexpend_dims">tf.expend_dims</h1>
+<div class="hlcode"><pre><span class="c"># &#39;t&#39; is a tensor of shape [2]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c"># [1, 2]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c"># [2, 1]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c"># [2, 1]</span>
+
+<span class="c"># &#39;t2&#39; is a tensor of shape [2, 3, 5]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c"># [1, 2, 3, 5]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c"># [2, 3, 1, 5]</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c"># [2, 3, 5, 1]</span>
+</pre></div>
+
+
+<p>维度扩充。</p>
+<p>类似于： x=x[:np.newaxis]</p>
+<h1 id="tfgather">tf.gather</h1>
+<div class="hlcode"><pre><span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">indices</span><span class="p">,</span>
+    <span class="n">validate_indices</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</pre></div>
+
+
+<p>依据索引选取具体的值。</p>
+<p>tf.gather_nd 。</p>
+<h1 id="tftile">tf.tile</h1>
+<div class="hlcode"><pre><span class="n">tf</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span>
+    <span class="nb">input</span><span class="p">,</span>
+    <span class="n">multiples</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="bp">None</span>
+<span class="p">)</span>
+<span class="c">#输出维度 input.dims(i)*multiples[i]。multiples 元素个数和input的维度个数一致。</span>
+</pre></div>
+
+
+<h1 id="tfsplit">tf.split</h1>
+<div class="hlcode"><pre><span class="n">tf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+    <span class="n">value</span><span class="p">,</span>
+    <span class="n">num_or_size_splits</span><span class="p">,</span>
+    <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">&#39;split&#39;</span>
+<span class="p">)</span>
+</pre></div>
+
+
+<p>按维度切割tensor。</p>
+<h1 id="tfstack">tf.stack</h1>
+<div class="hlcode"><pre><span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">,</span>
+    <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">&#39;stack&#39;</span>
+<span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>  <span class="c"># [[1, 4], [2, 5], [3, 6]] (Pack along first dim.)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># [[1, 2, 3], [4, 5, 6]]</span>
+</pre></div>
+
+
+<h1 id="tfsequence_mask">tf.sequence_mask</h1>
+<div class="hlcode"><pre><span class="n">tf</span><span class="o">.</span><span class="n">sequence_mask</span><span class="p">(</span>
+    <span class="n">lengths</span><span class="p">,</span><span class="c"># 一般是一个list</span>
+    <span class="n">maxlen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="c">#最大的长度</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span><span class="c">#指定生成的类型</span>
+    <span class="n">name</span><span class="o">=</span><span class="bp">None</span>
+<span class="p">)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">sequence_mask</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>  <span class="c"># [[True, False, False, False, False],</span>
+                                <span class="c">#  [True, True, True, False, False],</span>
+                                <span class="c">#  [True, True, False, False, False]]</span>
+
+<span class="n">tf</span><span class="o">.</span><span class="n">sequence_mask</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>  <span class="c"># [[[True, False, False],</span>
+                                  <span class="c">#   [True, True, True]],</span>
+                                  <span class="c">#  [[True, True, False],</span>
+                                  <span class="c">#   [False, False, False]]]</span>
+</pre></div>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-12-26 16：28 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: '数组操作',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2020 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
