@@ -1,5 +1,5 @@
 ---
-title : "chapter2"
+title : "chapter2-概率分布"
 layout : page
 date : 2019-04-16 16:44
 ---
