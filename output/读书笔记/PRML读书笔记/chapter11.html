@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
         <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-        <title>机器学习-周志华 - Knowledge Change Destiny</title>
+        <title>chapter11-采样方法 - Knowledge Change Destiny</title>
         <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
         <meta name="description" content="More Reading , More Possibilities"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -52,16 +52,30 @@
         <div id="container">
             
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#-书阅读">书阅读</a>&nbsp;»&nbsp;机器学习-周志华</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#读书笔记">读书笔记</a>&nbsp;»&nbsp;<a href="/wiki/#-PRML读书笔记">PRML读书笔记</a>&nbsp;»&nbsp;chapter11-采样方法</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">机器学习-周志华</div>
+<div id="title">chapter11-采样方法</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">第一章</a></li>
-</ul>
-</div>
-<h1 id="_1">第一章</h1>
+  <p>基于马尔科夫的采样：</p>
+<p>对于任意分布通过多次转移会得到稳定分布：$xP^n=\pi$。也就是当分布稳定时有：<br />
+$$<br />
+x P_n=\pi<br />
+$$<br />
+那么：如果用通过马尔科夫来采样，那么必须保证稳定分布式我们想要的分布。</p>
+<p>步骤：假设矩阵$P$是关于稳定分布$\pi$的转移矩阵。</p>
+<ol>
+<li>对于初始值$x_0$，通过$n_1$轮迭代，得到稳定值。</li>
+<li>再经过$n_2$迭代，得到采样样本$x_{n_1+1}.....x_{n_1+n_2}$。</li>
+</ol>
+<p>问题是：$x$是连续值。问题的关键在于如何构造转移矩阵$P$。</p>
+<p>使用正态分布来构建连续空间的概率转移矩阵。用值表示状态：<br />
+$$<br />
+Q(x_i,x_j)\propto e^{(-\frac{(x_i-x_j)^2}{\sigma^2})},Q(x_j,x_i)\propto e^{(-\frac{(x_j-x_i)^2}{\sigma^2})}<br />
+$$<br />
+保证了$Q(x_i,x_j)=Q(x_j,x_i)$。</p>
+<h1 id="_1">参考文献</h1>
+<p>1.<a href="http://www.cnblogs.com/pinard/p/6638955.html">http://www.cnblogs.com/pinard/p/6638955.html</a></p>
 </div>
 <div id="income">
     <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
@@ -73,7 +87,7 @@
      data-ad-client="ca-pub-6300557868920774"
      data-ad-slot="6882414849"></ins>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2018-11-14 09:42 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2019-04-16 16:44 </span></div>
 
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
@@ -81,7 +95,7 @@
 <script type="text/javascript">
 const gitment = new Gitment({
   id: location.pathname,
-  title: '机器学习-周志华',
+  title: 'chapter11-采样方法',
   owner: 'RbingChen',
   repo: 'wiki',
   oauth: {
