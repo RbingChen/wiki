@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>thrift-Tutorial - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Tool">Tool</a>&nbsp;»&nbsp;thrift-Tutorial</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">thrift-Tutorial</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#thrift">一 thrift文件定义</a><ul>
+<li><a href="#tutorial">tutorial文件定义</a></li>
+<li><a href="#shared">shared 文件定义</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="thrift">一 thrift文件定义</h1>
+<h2 id="tutorial">tutorial文件定义</h2>
+<div class="hlcode"><pre>/**
+ * The first thing to know about are types. The available types in Thrift are:
+ *
+ *  bool        Boolean, one byte
+ *  i8 <span class="o">(</span>byte<span class="o">)</span>   Signed 8-bit integer
+ *  i16         Signed 16-bit integer
+ *  i32         Signed 32-bit integer
+ *  i64         Signed 64-bit integer
+ *  double      64-bit floating point value
+ *  string      String
+ *  binary      Blob <span class="o">(</span>byte array<span class="o">)</span>
+ *  map&lt;t1,t2&gt;  Map from one <span class="nb">type </span>to another
+ *  list&lt;t1&gt;    Ordered list of one <span class="nb">type</span>
+ *  <span class="nb">set</span>&lt;t1&gt;     Set of unique elements of one <span class="nb">type</span>
+ *
+ * Did you also notice that Thrift supports C style comments?
+ */
+
+包含其他文件
+include <span class="s2">&quot;shared.thrift&quot;</span>
+
+打包路径：
+namespace java tutorial
+
+typedef i32 MyInteger
+
+ 可以定义常数、用 Complex types and structs are specified using JSON notation.
+const i32 <span class="nv">INT32CONSTANT</span> <span class="o">=</span> 9853
+const map&lt;string,string&gt; <span class="nv">MAPCONSTANT</span> <span class="o">=</span> <span class="o">{</span><span class="s1">&#39;hello&#39;</span>:<span class="s1">&#39;world&#39;</span>, <span class="s1">&#39;goodnight&#39;</span>:<span class="s1">&#39;moon&#39;</span><span class="o">}</span>
+
+枚举：32bit 的整数，值可选，默认1。
+enum Operation <span class="o">{</span>
+  <span class="nv">ADD</span> <span class="o">=</span> 1,
+  <span class="nv">SUBTRACT</span> <span class="o">=</span> 2,
+  <span class="nv">MULTIPLY</span> <span class="o">=</span> 3,
+  <span class="nv">DIVIDE</span> <span class="o">=</span> 4
+<span class="o">}</span>
+
+ 结构体：可以用来定义复杂结构，每一个域有 整数标识、类型、变量名、可选的默认值。
+struct Work <span class="o">{</span>
+  1: i32 <span class="nv">num1</span> <span class="o">=</span> 0,
+  2: i32 num2,
+  3: Operation op,
+  4: optional string comment,
+<span class="o">}</span>
+
+<span class="c">#Structs can also be exceptions, if they are nasty.</span>
+exception InvalidOperation <span class="o">{</span>
+  1: i32 whatOp,
+  2: string why
+<span class="o">}</span>
+
+/**
+ * Ahh, now onto the cool part, defining a service. Services just need a name
+ * and can optionally inherit from another service using the extends keyword.
+ */
+service Calculator extends shared.SharedService <span class="o">{</span>
+
+  /**
+   * A method definition looks like C code. It has a <span class="k">return </span><span class="nb">type</span>, arguments,
+   * and optionally a list of exceptions that it may throw. Note that argument
+   * lists and exception lists are specified using the exact same syntax as
+   * field lists in struct or exception definitions.
+   */
+
+   void ping<span class="o">()</span>,
+   i32 add<span class="o">(</span>1:i32 num1, 2:i32 num2<span class="o">)</span>,
+
+   i32 calculate<span class="o">(</span>1:i32 logid, 2:Work w<span class="o">)</span> throws <span class="o">(</span>1:InvalidOperation ouch<span class="o">)</span>,
+
+   oneway void zip<span class="o">()</span>
+
+<span class="o">}</span>
+</pre></div>
+
+
+<h2 id="shared">shared 文件定义</h2>
+<div class="hlcode"><pre>namespace java shared
+struct SharedStruct <span class="o">{</span>
+  1: i32 key
+  2: string value
+<span class="o">}</span>
+service SharedService <span class="o">{</span>
+  SharedStruct getStruct<span class="o">(</span>1: i32 key<span class="o">)</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-06-12 16:20 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'thrift-Tutorial',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

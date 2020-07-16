@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>梯度下降 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-优化方法">优化方法</a>&nbsp;»&nbsp;梯度下降</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">梯度下降</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#gradient-descent">一 Gradient Descent 为什么能求最小值？</a><ul>
+<li><a href="#1">1.普通的梯度下降</a></li>
+<li><a href="#2">2.二阶的梯度下降</a></li>
+</ul>
+</li>
+<li><a href="#sgd-bgd">二 SGD 和 BGD</a><ul>
+<li><a href="#batch-gradient-descent">batch gradient descent</a></li>
+<li><a href="#stochastic-gradient-descent">stochastic gradient descent</a></li>
+<li><a href="#mini-batch-gradient-descent">Mini-batch gradient descent</a></li>
+</ul>
+</li>
+<li><a href="#_1">三 梯度优化方法的改进</a><ul>
+<li><a href="#momentum">Momentum</a></li>
+<li><a href="#nag">NAG</a></li>
+<li><a href="#adagrad">Adagrad</a></li>
+<li><a href="#rmsprop">RMSprop</a></li>
+<li><a href="#adadelta">Adadelta</a></li>
+</ul>
+</li>
+<li><a href="#adam">Adam</a><ul>
+<li><a href="#adamax">AdaMax</a></li>
+<li><a href="#nadam">Nadam</a></li>
+</ul>
+</li>
+<li><a href="#-">四 二阶梯度下降-牛顿法</a><ul>
+<li><a href="#_2">阻尼牛顿法</a></li>
+<li><a href="#_3">拟牛顿条件</a></li>
+<li><a href="#dfp">DFP</a></li>
+<li><a href="#bfgs">BFGS</a></li>
+<li><a href="#l-bfgs">L-BFGS</a></li>
+</ul>
+</li>
+<li><a href="#_4">五 并行化</a></li>
+<li><a href="#_5">参考文献</a></li>
+</ul>
+</div>
+<h1 id="gradient-descent">一 Gradient Descent 为什么能求最小值？</h1>
+<h2 id="1">1.普通的梯度下降</h2>
+<p>首先考虑泰勒展开：<br />
+$$<br />
+f(x)=f(x_0)+f^{'}(x_0)(x-x_0)+\frac{f^{''}(x_0)}{2}(x-x_0)^2+......<br />
+$$<br />
+当$x,x_0$ 很接近的时候，近似等于：<br />
+$$<br />
+f(x)\approx f(x_0)+f^{'}(x_0)(x-x_0)<br />
+$$<br />
+这是一个一元二次函数，要函数减小，则可以有：<br />
+$$<br />
+1. f^{'}(x_0)&gt;0\ \ \ \ =&gt;\ \ \ \ x<x_0\\\\
+2.f^{'}(x_0)<0\ \ \ \ =>\ \ \ \ x&gt;x_0<br />
+$$<br />
+可以表示为：<br />
+$$<br />
+x-x_0=-\alpha*f^{'}(x_0)<br />
+$$</p>
+<h2 id="2">2.二阶的梯度下降</h2>
+<p>牛顿法，直接考虑二阶，这个时候是一个二次函数，二次函数的最小值：<br />
+$$<br />
+x=x_0-\frac{f^{'}(x_0)}{f^{''}(x_0)}<br />
+$$<br />
+对于多元函数，$f^{''}(x_0)$ 是一个矩阵，Hessian矩阵$H$。<br />
+$$<br />
+x=x_0-H^{-1}f^{'}(x_0)<br />
+$$<br />
+当变量较多的时候，$H^{-1}$ 的求解，很复杂。因此，延伸出拟牛顿法，目的是用近似的方法来计算Hessian矩阵的逆。</p>
+<p>关于学习率的解释：泰勒展开是在$x_0$的很小的邻域内，如果$x$超过这个邻域，会导致推导不成立，函数值不会减小。</p>
+<h1 id="sgd-bgd">二 SGD 和 BGD</h1>
+<h2 id="batch-gradient-descent">batch gradient descent</h2>
+<p>考虑整体样本。求解慢且计算所有样本耗内存多；因为要使用到所有样本导致无法在线更新模型。能够确保收敛一个全局最优或者局部最优。</p>
+<h2 id="stochastic-gradient-descent">stochastic gradient descent</h2>
+<p>考虑单个样本。更新快，可在线跟新；目标函数值波动大，使得函数可能跳过潜在的局部最小值，但也会可能跳过全局最优值，导致最终很难收敛。通过降低学习率，sgd能和bgd一样收敛。</p>
+<h2 id="mini-batch-gradient-descent">Mini-batch gradient descent</h2>
+<p>考虑部分样本。综合了sgd和bgd，折中。降低参数波动，提高更新速度。</p>
+<p><strong>学习率的设置很关键</strong></p>
+<p>几个问题：</p>
+<ol>
+<li>合适的学习率的选择较难。</li>
+<li>训练过程中的学习率更新策略。</li>
+<li>所有参数是否使用同一个学习率。稀疏数据中，部分特征数据较少。</li>
+<li>避免陷入局部最优。DNN等。</li>
+</ol>
+<h1 id="_1">三 梯度优化方法的改进</h1>
+<h2 id="momentum">Momentum</h2>
+<p>减小震荡，避免更新方向和原来的方向相差过大。<br />
+$$<br />
+v_t=\gamma v_{t-1}+\eta \triangledown _\theta J(\theta)\\<br />
+\theta =\theta -v_t<br />
+$$<br />
+如同，从把一个球推到山低，球在滚落的过程中动量在增加，越来越快。在更新模型参数时，对于那些当前的梯度方向与上一次梯度方向相同的参数，那么进行加强，即这些方向上更快了；对于那些当前的梯度方向与上一次梯度方向不同的参数，那么进行削减，即这些方向上减慢了。因此可以获得更快的收敛速度与减少振荡。</p>
+<h2 id="nag">NAG</h2>
+<p>Nesterov accelerated gradient<br />
+$$<br />
+v_t=\gamma v_{t-1}+\eta \triangledown <em t-1="t-1">\theta J(\theta-\gamma v</em>)\\<br />
+\theta =\theta -v_t<br />
+$$<br />
+向前看了一步。</p>
+<h2 id="adagrad">Adagrad</h2>
+<p>是一种基于梯度的优化算法，它能够对每个参数自适应不同的学习速率，对稀疏特征，得到大的学习更新，对非稀疏特征，得到较小的学习更新，因此该优化算法适合处理稀疏特征数据。</p>
+<p>对于每一个模型参数$\theta_i$使用不同的学习率$\eta_i$，假设第t次更新中，参数$\theta_i$的梯度为$g_{t,i}$，即：<br />
+$$<br />
+g_{t,i}=\triangledown <em t_1_i="t+1,i">\theta J(\theta_i)<br />
+$$<br />
+那么有：<br />
+$$<br />
+\theta</em>=\theta_{t,i}-\eta_i\cdot g_{t,i}<br />
+$$</p>
+<p>$$<br />
+\eta_i=\frac{\eta}{\sqrt{G_{t,ii+\epsilon}}}<br />
+$$</p>
+<p>其中，$G_t\in R^{d*d}$的对角矩阵，每个元素是过去当当前第$i$个参数$\theta_i$的梯度的平方和。$\epsilon$是一个平滑参数，为了使得分母不为0(一般$\epsilon=10e-8$)。Adagrad主要优势在于它能够为每个参数自适应不同的学习速率，而一般的人工都是设定为0.01。同时其缺点在于需要计算参数梯度序列平方和，并且学习速率趋势是不断衰减最终达到一个非常小的值。</p>
+<h2 id="rmsprop">RMSprop</h2>
+<p>$$<br />
+E[g^2]<em t-1="t-1">t=\gamma E[g^2]</em>+(1-\gamma)g^2_t\\<br />
+\theta_{t+1}=\theta_t-\frac{\eta}{\sqrt{E[g^2]_t+\epsilon}}g_t<br />
+$$</p>
+<p>Hinton建议$\gamma=0.9,\eta=0.001$。$\gamma$相当于动量参数，也相当于指数衰减。</p>
+<h2 id="adadelta">Adadelta</h2>
+<p>和Adagrad相比。一是使用了窗口w；二是对于参数梯度历史窗口序列(不包括当前)不再使用平方和，而是使用均值代替；三是最终的均值是历史窗口序列均值与当前梯度的时间衰减加权平均</p>
+<p><strong>本质上，使用了一种方式去估计学习率</strong>。              <br />
+$$<br />
+\theta_{t+1}=\theta_t-\eta\cdot g_{t,i}\\<br />
+\Delta\theta=-\eta\cdot g_{t,i}=-\frac{\eta}{\sqrt{E[g^2]<em t-1="t-1">t+\epsilon}}<br />
+$$<br />
+另外有：<br />
+$$<br />
+E[\Delta\theta^2]_t=\gamma E[\Delta\theta^2]</em>+(1-\gamma)\Delta\theta^2_t<br />
+$$<br />
+使得：<br />
+$$<br />
+\eta=-\frac{\sqrt{E[\Delta\theta^2]_{t-1}+\epsilon}}{\sqrt{E[g^2]_t+\epsilon}}<br />
+$$<br />
+注意了$\Delta\theta​$ 只能获得上个时间上的。</p>
+<h1 id="adam">Adam</h1>
+<p>Adaptive Moment Estimation(Adam)</p>
+<p>$m_t,v_t$分别用来计算指数衰减的梯度和平方梯度均值。<br />
+$$<br />
+m_t=\beta_1m_{t-1}+(1-\beta_1)g_t\\<br />
+v_t=\beta_2v_{t-1}+(1-\beta_2)g_t^2<br />
+$$<br />
+Adam的作者发现，上面的两个值容易偏向于0，尤其是衰减参数趋向于1时，做校正：<br />
+$$<br />
+\hat m_t=\frac{m_t}{1-\beta_1^t}\\<br />
+\hat v_t=\frac{v_t}{1-\beta_2^t}<br />
+$$<br />
+更新如下：<br />
+$$<br />
+\theta_{t+1}=\theta_t-\frac{\eta}{\sqrt{\hat v_t}+\epsilon}\cdot \hat m_{t}<br />
+$$<br />
+一般,$\beta_1=0.9,\beta_2=0.999$</p>
+<h2 id="adamax">AdaMax</h2>
+<p>之前的考虑的是L2 范数的梯度，现在推广到p范数：<br />
+$$<br />
+v_t=\beta^p_2v_{t-1}+(1-\beta^p_2)|g_t|^p<br />
+$$<br />
+无穷范数时：<br />
+$$<br />
+u_t=\beta^\infty_2v_{t-1}+(1-\beta^\infty_2)|g_t|^\infty\\<br />
+=max(\beta_2\cdot v_{t-1},|g_t|)<br />
+$$</p>
+<h2 id="nadam">Nadam</h2>
+<p>Nesterov-accelerated Adaptive Moment</p>
+<p>​    多了一个向前看一步。</p>
+<p><strong>Adam 目前是性能最好的。</strong></p>
+<h1 id="-">四 二阶梯度下降-牛顿法</h1>
+<h2 id="_2">阻尼牛顿法</h2>
+<p>$$<br />
+\lambda_k=\mathop{arg min} f(x_k+\lambda d_k)<br />
+$$</p>
+<p>其中，$d_k=-H_k^{-1}\cdot g_k$。搜索最优步长。</p>
+<p>牛顿法要求函数有连续的一、二阶导数，海森矩阵必须可逆。此外，计算相当复杂，二阶导数偏导矩阵和逆的求解，并且需要很大的内存存储。</p>
+<h2 id="_3">拟牛顿条件</h2>
+<p>不使用二阶偏导数而构造出可以近似海森矩阵(或海森矩阵的逆)的正定对称矩阵，在拟牛顿条件下优化目标。</p>
+<p>$B$表示对海森矩阵$H$的近似，$D$用来近似其逆。<br />
+$$<br />
+f(x)=f(x_k)+f^{'}(x_k)(x-x_k)+\frac{f^{''}(x_k)}{2}(x-x_k)^2+......<br />
+$$<br />
+考虑二阶：<br />
+$$<br />
+\triangledown f(x)\approx f^{'}(x_{k+1})+f^{''}(x_{k+1})(x-x_{k+1})<br />
+$$<br />
+使用$x=x_{k+1}$<br />
+$$<br />
+\triangledown f(x_{k})\approx f^{'}(x_{k+1})+f^{''}(x_{k+1})(x_{k}-x_{k+1})\\<br />
+f^{'}(x_{k+1})-f^{'}(x_k)\approx f^{''}(x_{k+1})(x_{k+1}-x_k)\\<br />
+g(x_{k+1})-g(x_{k})\approx H(x_{k+1})(x_{k+1}-x_{k})<br />
+$$<br />
+令$s_{k}=x_{k+1}-x_{k},y_{k}=g(x_{k+1})-g(x_{k})$<br />
+$$<br />
+y_{k} \approx H_{k+1}\cdot s_{k}\\<br />
+s_{k} \approx H^{-1}<em k="k">{k+1}\cdot y</em><br />
+$$<br />
+拟牛顿条件就是采用上面的等式对$H_{k+1}$ 进行约束，采用算法近似海森矩阵或者其逆。</p>
+<h2 id="dfp">DFP</h2>
+<p>估计海森矩阵的逆。<br />
+$$<br />
+D_{k+1}=D_{k}+\Delta D_k<br />
+$$<br />
+一般初始化$D_0$为单位矩阵，因此关注$\Delta D_k$如何求解。使用待定法进行求解。假设$\Delta D_k$符合某种形式。<br />
+$$<br />
+\Delta D_k=\alpha uu^T+\beta vv^T<br />
+$$<br />
+其中，$\alpha,\beta$是待定系数，上式满足对称。<br />
+$$<br />
+s_k=D_ky_k+\alpha uu^Ty_k+\beta vv^Ty_k\\<br />
+=D_ky_k+(\alpha u^Ty_k)u+(\beta v^Ty_k)v<br />
+$$<br />
+令$(\alpha u^Ty_k)=1,(\beta v^Ty_k)=-1$，可得$(\alpha )=\frac{1}{u^Ty_k},(\beta )=-\frac{1}{v^Ty_k}$，则：<br />
+$$<br />
+s_k-D_ky_k=u-v<br />
+$$<br />
+令$u=s_k,v=D_ky_k$，那么$(\alpha )=\frac{1}{s_k^Ty_k},(\beta )=-\frac{1}{y_k^TD_ky_k}$，可得：<br />
+$$<br />
+\Delta D_k=\frac{s_ks_k^T}{s_k^Ty_k}--\frac{D_ky_ky_k^TD_k}{y_k^TD_ky_k}<br />
+$$<br />
+<img src="/wiki/static/images/dfp.png" alt="dfp" /></p>
+<h2 id="bfgs">BFGS</h2>
+<p>估计海森矩阵的本身。</p>
+<p>有：<br />
+$$<br />
+B_{k+1}=B_k+\Delta B_k<br />
+$$<br />
+令：<br />
+$$<br />
+\Delta B_k=\alpha uu^T+\beta vv^T<br />
+$$<br />
+推导同上：<br />
+$$<br />
+u=y_k,v=B_ks_k\\<br />
+(\alpha )=\frac{1}{y_k^Ts_k},(\beta )=-\frac{1}{y_k^TB_ky_k}\\<br />
+\Delta B_k==\frac{y_ky_k^T}{y_k^Ts_k}--\frac{B_ks_ks_k^TB_k}{s_k^TB_ks_k}<br />
+$$<br />
+<img src="/wiki/static/images/bfgs.png" alt="bfgs" /></p>
+<h2 id="l-bfgs">L-BFGS</h2>
+<p>只存储$y_k,s_k$，因为$B_k$过大；可以进一步优化，选择性的存储最近几步的$y_k,s_k$</p>
+<h1 id="_4">五 并行化</h1>
+<h1 id="_5">参考文献</h1>
+<ol>
+<li>Sebastian Ruder ,An overview of gradient descent optimization algorithms </li>
+<li><a href="https://blog.csdn.net/heyongluoyao8/article/details/52478715">https://blog.csdn.net/heyongluoyao8/article/details/52478715</a></li>
+<li><a href="http://cs231n.github.io/neural-networks-3/">http://cs231n.github.io/neural-networks-3/</a></li>
+<li><a href="https://blog.csdn.net/itplus/article/details/21896453">https://blog.csdn.net/itplus/article/details/21896453</a></li>
+</ol>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-12-18 23:41 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: '梯度下降',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

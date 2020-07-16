@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>Hive配置 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Hadoop">Hadoop</a>&nbsp;»&nbsp;Hive配置</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">Hive配置</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#map">一 map参数</a></li>
+<li><a href="#reduce">二 reduce 参数</a></li>
+<li><a href="#_1">三 其他</a><ul>
+<li><a href="#31">3.1并行</a></li>
+<li><a href="#32map">3.2map数控制</a></li>
+<li><a href="#33">3.3 动态分区</a></li>
+<li><a href="#34-mapreduce">3.4 map到reduce参数</a></li>
+<li><a href="#35">3.5优化参数</a></li>
+<li><a href="#36-mapjoin">3.6 MapJoin</a></li>
+</ul>
+</li>
+<li><a href="#_2">四 参数设置避免数据倾斜</a></li>
+</ul>
+</div>
+<p>在实际编程过程中，一般是面向Hive 进行编程，很少直接基于mapreduce框架去写代码。</p>
+<h1 id="map">一 map参数</h1>
+<div class="hlcode"><pre>mapreduce.map.memory.mb<span class="o">=</span>4096# 设置map端内存
+
+<span class="c">#任务数</span>
+mapred.map.tasks  <span class="o">=</span>    <span class="c"># map任务个数，一般不起作用</span>
+mapred.job.map.capacity   <span class="c"># 最多同时运行map任务数</span>
+
+<span class="c">#压缩</span>
+mapred.compress.map.output#map的输出是否压缩
+mapred.map.output.compression.codec#map的输出压缩方式
+</pre></div>
+
+
+<h1 id="reduce">二 reduce 参数</h1>
+<div class="hlcode"><pre><span class="c">#任务数#</span>
+mapred.reduce.tasks<span class="o">=</span>  <span class="c"># reduce个数</span>
+mapred.job.reduce.capacity   <span class="c"># 最多同时运行reduce任务数</span>
+hive.exec.reducers.max<span class="o">=</span>  <span class="c">#最大的reduce个数</span>
+
+<span class="c">#内存相关#</span>
+hive.exec.reducers.bytes.per.reducer<span class="o">=</span>  <span class="c">#每个reduce处理数据大小</span>
+mapreduce.reduce.memory.mb<span class="o">=</span>2304 <span class="c"># 设置reduce端内存</span>
+
+<span class="c">#压缩</span>
+mapred.output.compress#reduce的输出是否压缩
+mapred.output.compression.codec <span class="c">#reduce的输出压缩方式</span>
+</pre></div>
+
+
+<h1 id="_1">三 其他</h1>
+<h2 id="31">3.1并行</h2>
+<div class="hlcode"><pre>hive.exec.parallel<span class="o">=</span><span class="nb">true</span><span class="c"># 是否开启并行执行，默认false</span>
+hive.exec.parallel.thread.number<span class="o">=</span>8#并行运算开启时，允许多少作业同时计算，默认是8
+hive.exec.max.created.files<span class="o">=</span>100000#一个mapreduce作业能创建的HDFS文件最大数，默认是100000；
+</pre></div>
+
+
+<h2 id="32map">3.2map数控制</h2>
+<div class="hlcode"><pre><span class="nb">set </span>mapred.max.split.size<span class="o">=</span>1024000000;#  -- 决定每个map处理的最大的文件大小，单位为B
+<span class="nb">set </span>mapred.min.split.size.per.node<span class="o">=</span>1024000000;#-- 节点中可以处理的最小的文件大小
+<span class="nb">set </span>mapred.min.split.size.per.rack<span class="o">=</span>1024000000;#-- 机架中可以处理的最小的文件大小
+<span class="c"># 大小关系</span>
+mapred.max.split.size &lt;<span class="o">=</span> mapred.min.split.size.per.node &lt;<span class="o">=</span> mapred.min.split.size.per.rack
+</pre></div>
+
+
+<h2 id="33">3.3 动态分区</h2>
+<div class="hlcode"><pre><span class="c">#是否打开动态分区。默认值：false   </span>
+hive.exec.dynamic.partition  
+
+<span class="c">#打开动态分区后，动态分区的模式，有 strict 和 nonstrict 两个值可选，strict 要求至少包含一个静态分区列，nonstrict 则无此要求。默认值：strict </span>
+hive.exec.dynamic.partition.mode  
+    
+<span class="c">#所允许的最大的动态分区的个数默认值：1000   </span>
+hive.exec.max.dynamic.partitions  
+  
+<span class="c">#单个 reduce 结点所允许的最大的动态分区的个数。默认值：100     </span>
+hive.exec.max.dynamic.partitions.pernode
+
+<span class="c">#默认的动态分区的名称，当动态分区列为&#39;&#39;或者null时，使用此名称。&#39;&#39;    &#39;__HIVE_DEFAULT_PARTITION__&#39;  </span>
+hive.exec.default.partition.name    
+</pre></div>
+
+
+<h2 id="34-mapreduce">3.4 map到reduce参数</h2>
+<div class="hlcode"><pre><span class="c">#每个任务合并后文件的大小，根据此大小确定 reducer 的个数，默认 256 M。默认值：256000000   </span>
+hive.merge.size.per.task  
+<span class="c">#是否合并Map输出文件：默认值为真</span>
+hive.merge.mapfiles<span class="o">=</span><span class="nb">true</span>
+<span class="c">#是否合并Reduce 端输出文件：默认值为假</span>
+hive.merge.mapredfiles<span class="o">=</span><span class="nb">false</span>
+</pre></div>
+
+
+<h2 id="35">3.5优化参数</h2>
+<div class="hlcode"><pre><span class="c">#是否优化数据倾斜的 Join，对于倾斜的 Join 会开启新的 Map/Reduce Job 处理。   默认值：false </span>
+hive.optimize.skewjoin  
+
+<span class="c"># 倾斜键数目阈值，超过此值则判定为一个倾斜的 Join 查询。   默认值： 1000000     </span>
+hive.skewjoin.key  
+<span class="c">#处理数据倾斜的 Map Join 的 Map 数上限。   默认值： 10000     </span>
+hive.skewjoin.mapjoin.map.tasks  
+
+<span class="c">#处理数据倾斜的 Map Join 的最小数据切分大小，以字节为单位，默认为32M。默认值：33554432 </span>
+hive.skewjoin.mapjoin.min.split  
+
+<span class="c">#是否优化列剪枝。   默认值：true     </span>
+hive.optimize.cp   
+
+<span class="c">#是否优化谓词下推。   默认值：true     </span>
+hive.optimize.ppd   
+
+<span class="c">#是否优化 group by。   默认值：true     </span>
+hive.optimize.groupby  
+
+<span class="c">#是否优化 bucket map join。   默认值：false  </span>
+hive.optimize.bucketmapjoin  
+
+<span class="c">#是否在优化 bucket map join 时尝试使用强制 sorted merge bucketmap join。   默认值：false     </span>
+hive.optimize.bucketmapjoin.sortedmerge  
+
+<span class="c">#是否优化 reduce 冗余。   默认值：true  </span>
+hive.optimize.reducededuplication  
+  
+</pre></div>
+
+
+<h2 id="36-mapjoin">3.6 MapJoin</h2>
+<div class="hlcode"><pre><span class="nb">set </span>hive.auto.convert.join<span class="o">=</span><span class="nb">true</span>;
+<span class="nb">set </span>hive.mapjoin.smalltable.filesize<span class="o">=</span>25000000 <span class="c">#表文件的大小作为开启和关闭MapJoin的阈值。即25M</span>
+
+<span class="c">#Map Join 所处理的最大的行数。超过此行数，Map Join进程会异常退出。默认值：1000000  </span>
+hive.mapjoin.maxsize  
+
+<span class="c">#MapJoinOperator后面跟随GroupByOperator时，内存的最大使用比例   默认值：0.55</span>
+hive.mapjoin.followby.gby.localtask.max.memory.usage  
+  
+<span class="c">#Map Join 的本地任务使用堆内存的最大比例  默认值：0.9  </span>
+hive.mapjoin.localtask.max.memory.usage  
+   
+<span class="c">#设置每多少行检测一次内存的大小，如果超过hive.mapjoin.localtask.max.memory.usage 则会异常退出，Map Join 失败。   默认值：100000   </span>
+hive.mapjoin.check.memory.rows 
+</pre></div>
+
+
+<h1 id="_2">四 参数设置避免数据倾斜</h1>
+<p>主要是空值reduce处理数据的大小或者个数。</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-04-16 16:44 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'Hive配置',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

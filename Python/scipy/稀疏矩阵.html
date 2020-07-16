@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>sparse matrix - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Python">Python</a>&nbsp;»&nbsp;<a href="/wiki/#Python-scipy">scipy</a>&nbsp;»&nbsp;sparse matrix</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">sparse matrix</div>
+<div id="content">
+  <p>稀疏矩阵：以特殊的index存储构造举证以节省空间。</p>
+<p>如何理解存储方式很重要，也就是说理解  把index 映射成具体的 坐标位置是至关重要的。</p>
+<p>觉得有点像二维的哈希映射。</p>
+<h2 id="bsr_matrix">一 bsr_matrix</h2>
+<p>Block Sparse Row matrix</p>
+<div class="hlcode"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">bsr</span><span class="o">=</span><span class="n">bsr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="o">&gt;&gt;</span><span class="n">bsr</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span> 
+<span class="o">&gt;&gt;&gt;</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">bsr</span><span class="o">.</span><span class="n">nnz</span> <span class="o">=&gt;&gt;</span>  <span class="mi">6</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">bsr</span><span class="o">.</span><span class="n">indptr</span>  <span class="o">=&gt;&gt;</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">bsr</span><span class="o">.</span><span class="n">indices</span> <span class="o">=&gt;&gt;</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">bsr</span><span class="o">.</span><span class="n">data</span>  <span class="c"># 分块矩阵的形式。</span>
+<span class="n">array</span><span class="p">([[[</span><span class="mi">1</span><span class="p">]],</span>
+       <span class="p">[[</span><span class="mi">2</span><span class="p">]],</span>
+       <span class="p">[[</span><span class="mi">3</span><span class="p">]],</span>
+       <span class="p">[[</span><span class="mi">4</span><span class="p">]],</span>
+       <span class="p">[[</span><span class="mi">5</span><span class="p">]],</span>
+       <span class="p">[[</span><span class="mi">0</span><span class="p">]]])</span>
+<span class="c">#构造方式</span>
+<span class="n">bsr_matrix</span><span class="p">(</span><span class="n">S</span><span class="p">,[</span><span class="n">blocksize</span><span class="o">=</span><span class="p">(</span><span class="n">Row</span><span class="p">,</span><span class="n">Col</span><span class="p">)])</span><span class="c"># S 为稀疏矩阵，矩阵大小(Row,Col)可选</span>
+<span class="n">bsr_matrix</span><span class="p">(</span><span class="n">D</span><span class="p">,[</span><span class="n">blocksize</span><span class="o">=</span><span class="p">(</span><span class="n">Row</span><span class="p">,</span><span class="n">Col</span><span class="p">)])</span><span class="c"># S 为Dense矩阵，矩阵大小(Row,Col)可选</span>
+
+<span class="c">#一些重要的属性：</span>
+<span class="n">nnz</span>  <span class="err">元素个数，包括显示指明的</span><span class="mf">0.</span>
+<span class="n">shape</span> <span class="err">数组维度</span>
+<span class="n">ndim</span> <span class="err">维度数，一般是</span><span class="mi">2</span>     
+<span class="n">indices</span> <span class="err">元素的</span><span class="n">index</span>
+<span class="n">indptr</span> <span class="err">指针数组。</span>
+<span class="n">data</span>
+
+<span class="c">#几个重要的方法.支持大部分的数学函数，包括不仅限于mean、sum、正余弦......</span>
+<span class="n">bsr_matrix</span><span class="o">.</span><span class="n">tocsr</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">bsr_matrix</span><span class="o">.</span><span class="n">tocsc</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">bsr_matrix</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="n">bsr_matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+</pre></div>
+
+
+<h2 id="coo_matrix">二 coo_matrix</h2>
+<p>Coordinate format 。就是普通坐标形式。</p>
+<div class="hlcode"><pre><span class="c">#构造函数</span>
+<span class="n">coo_matrix</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>   <span class="n">dense</span> <span class="n">matrix</span>
+<span class="n">coo_matrix</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>   <span class="err">由另一稀疏构造。</span>
+<span class="n">coo_matrix</span><span class="p">((</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>  <span class="err">空矩阵</span>
+<span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)),[</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">)])</span>  <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">j</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<span class="c">#属性</span>
+<span class="n">nnz</span>
+<span class="n">dtype</span>
+<span class="n">ndim</span>
+<span class="n">data</span> <span class="p">:</span> <span class="n">coo</span> <span class="n">fromat</span> <span class="n">data</span> <span class="n">array</span> <span class="n">of</span> <span class="n">the</span> <span class="n">matrix</span>
+<span class="n">row</span>  <span class="p">:</span> <span class="n">coo</span> <span class="n">format</span> <span class="n">row</span> <span class="n">index</span> <span class="n">array</span> <span class="n">of</span> <span class="n">the</span> <span class="n">matrix</span>
+<span class="n">col</span>  <span class="p">:</span> <span class="n">coo</span> <span class="n">format</span> <span class="n">col</span> <span class="n">index</span> <span class="n">array</span> <span class="n">of</span> <span class="n">the</span> <span class="n">matrix</span> 
+</pre></div>
+
+
+<h2 id="csr_matrix-csc_matrix">三 csr_matrix    csc_matrix</h2>
+<p>按照行对矩阵进行压缩      按照列进行压缩</p>
+<div class="hlcode"><pre><span class="c">#和 bsr_matrix 的构造函数基本相同</span>
+<span class="n">nnz</span>  <span class="err">元素个数，包括显示指明的</span><span class="mf">0.</span>
+<span class="n">shape</span> <span class="err">数组维度</span>
+<span class="n">ndim</span> <span class="err">维度数，一般是</span><span class="mi">2</span>     
+<span class="n">indices</span> <span class="err">元素的</span><span class="n">index</span>
+<span class="n">indptr</span> <span class="err">指针数组。</span>
+<span class="n">data</span> <span class="c"># 和 bsr_matrix  的有所不同。打印出来的不是矩阵块</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="err">压缩矩阵的理解。</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">indptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="c">#  数本身没有意义。 数之间的差值有意义。</span>
+<span class="c">#indptr_=[2-0,3-2,6-3]=[2,1,3]  #indptr[i+1]-indptr[i]</span>
+<span class="c"># 可以知道，行数是3。 indptr[i] 表示对应第几行的元素个数是多少。</span>
+<span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">indices</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="c">#是累加值</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">csc_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">indice</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">indptr</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">value</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">indptr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">c_</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">array</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">indice</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">c_</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">indptr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indptr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">c_</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">indptr</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">indice</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="n">sp_array</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">value</span><span class="p">,</span><span class="n">indice</span><span class="p">,</span><span class="n">indptr</span><span class="p">))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sp_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-10-26 17:39 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'sparse matrix',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
