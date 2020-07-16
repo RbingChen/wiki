@@ -1,0 +1,333 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>模型保存和导入 - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#TensorFlow">TensorFlow</a>&nbsp;»&nbsp;模型保存和导入</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">模型保存和导入</div>
+<div id="content">
+  <p>关注的问题</p>
+<p>怎么保存，保存的形式是什么？</p>
+<p>怎么导入，导入的网络怎么重建，怎么再训练？</p>
+<p>如何使用导入的预先训练的模型进行微调和修改</p>
+<h1 id="_1">一  模型的保存</h1>
+<div class="hlcode"><pre> <span class="n">saver</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+ <span class="c"># 有如下几个比较重要的参数，var_list: 存储变量的集合，选择性存储。max_to_keep:保存最近几次的模型</span>
+ <span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">global_step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="n">save</span><span class="p">(</span>  <span class="c"># save()的重要参数</span>
+    <span class="n">sess</span><span class="p">,</span>  <span class="c"># A Session to use to save the variables.</span>
+    <span class="n">save_path</span><span class="p">,</span>  <span class="c"># 文件名前缀</span>
+    <span class="n">global_step</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>  <span class="c"># 每`global_step`个迭代新建checkpoint filenames保存当前变量。参数值可以是tensor, tensor name或整型数</span>
+    <span class="n">write_meta_graph</span><span class="o">=</span><span class="bp">True</span>  <span class="c"># 是否保存模型数据</span>
+<span class="p">)</span>
+</pre></div>
+
+
+<p>.meta文件保存了当前图结构</p>
+<p>.index文件保存了当前参数名</p>
+<p>.data文件保存了当前参数值</p>
+<h1 id="_2">二 模型的导入</h1>
+<div class="hlcode"><pre><span class="n">new_saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">()</span><span class="c">#加载模型</span>
+<span class="n">new_saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span><span class="c">#加载变量和数据</span>
+<span class="c"># 一般如下使用方法</span>
+<span class="n">new_saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">(</span><span class="s">&#39;my_test_model-1000.meta&#39;</span><span class="p">)</span>
+<span class="n">new_saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">latest_checkpoint</span><span class="p">(</span><span class="s">&#39;./&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<p>有可能保存多个，使用get_checkponi_state得到最新的模型文件</p>
+<div class="hlcode"><pre><span class="n">ckpt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">get_checkpoint_state</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span><span class="c"># 得到最新的模型名字   </span>
+<span class="n">saver</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">ckpt_name</span><span class="o">+</span><span class="s">&#39;.meta&#39;</span><span class="p">))</span>
+<span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">ckpt_name</span><span class="p">))</span>
+</pre></div>
+
+
+<p>导入后的模型，相当于新构建的图。在图的基础在进行相应的操作。</p>
+<p>对于输入需要进行如下处理：</p>
+<div class="hlcode"><pre><span class="n">graph</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;w1:0&quot;</span><span class="p">)</span><span class="c"># 为什么0 ，不太清楚，反正都是0</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;w2:0&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<h1 id="_3">三 模型的修改</h1>
+<h2 id="31-saverload">3.1 在对象内部使用saver和load</h2>
+<p>这个时候，不要使用get_tensor_by_name来进行相应的tensor的获取。</p>
+<div class="hlcode"><pre><span class="c">#coding:utf-8</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;2&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">xlrd</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s">&#39;data/fire_theft.xls&#39;</span>
+
+<span class="c"># Step 1: read in data from the .xls file</span>
+<span class="n">book</span> <span class="o">=</span> <span class="n">xlrd</span><span class="o">.</span><span class="n">open_workbook</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">,</span> <span class="n">encoding_override</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="n">sheet</span> <span class="o">=</span> <span class="n">book</span><span class="o">.</span><span class="n">sheet_by_index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">sheet</span><span class="o">.</span><span class="n">row_values</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sheet</span><span class="o">.</span><span class="n">nrows</span><span class="p">)])</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="k">class</span> <span class="nc">SimpleLr</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;X&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Y&#39;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;weights&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;bias&#39;</span><span class="p">)</span>
+        <span class="n">Y_predicted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">-</span> <span class="n">Y_predicted</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;loss&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saver</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sess</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+
+        <span class="n">flag</span><span class="p">,</span><span class="n">counter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;******************************&quot;</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">),</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span> <span class="c"># train the model 100 epochs</span>
+            <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="c"># Session runs train_op and fetch values of loss</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">:</span><span class="n">y</span><span class="p">})</span>
+                <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">l</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Epoch {0}: {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_loss</span><span class="o">/</span><span class="n">n_samples</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;******************************&quot;</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">),</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sess</span><span class="p">):</span>
+        <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s">&quot;./model_dir/&quot;</span>
+        <span class="n">ckpt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">get_checkpoint_state</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ckpt</span> <span class="ow">and</span> <span class="n">ckpt</span><span class="o">.</span><span class="n">model_checkpoint_path</span><span class="p">:</span>
+            <span class="n">ckpt_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">ckpt</span><span class="o">.</span><span class="n">model_checkpoint_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">ckpt_name</span><span class="p">))</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s">&quot;(\d+)(?!.*\d)&quot;</span><span class="p">,</span><span class="n">ckpt_name</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot; [*] Success to read {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ckpt_name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">counter</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot; [*] Failed to find a checkpoint&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mi">0</span>
+
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sess</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s">&quot;./model_dir/&quot;</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="s">&quot;simple_model&quot;</span>
+
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">model_name</span><span class="p">),</span>
+                        <span class="n">global_step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+<span class="n">model</span><span class="o">=</span><span class="n">SimpleLr</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="c"># Step 7: initialize the necessary variables, in this case, w and b</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">())</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+
+<h1 id="32">3.2 一般情况下</h1>
+<p>这个时候需要使用get_tensor_by_name。注意optimizer貌似使用name来进行获取。</p>
+<div class="hlcode"><pre><span class="c">#coding:utf-8</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;2&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">xlrd</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s">&#39;data/fire_theft.xls&#39;</span>
+
+<span class="c"># Step 1: read in data from the .xls file</span>
+<span class="n">book</span> <span class="o">=</span> <span class="n">xlrd</span><span class="o">.</span><span class="n">open_workbook</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">,</span> <span class="n">encoding_override</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="n">sheet</span> <span class="o">=</span> <span class="n">book</span><span class="o">.</span><span class="n">sheet_by_index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">sheet</span><span class="o">.</span><span class="n">row_values</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">sheet</span><span class="o">.</span><span class="n">nrows</span><span class="p">)])</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">sess</span><span class="p">):</span>
+    <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s">&quot;./model_dir/&quot;</span>
+    <span class="n">ckpt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">get_checkpoint_state</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ckpt</span><span class="o">.</span><span class="n">model_checkpoint_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ckpt</span> <span class="ow">and</span> <span class="n">ckpt</span><span class="o">.</span><span class="n">model_checkpoint_path</span><span class="p">:</span>
+        <span class="n">ckpt_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">ckpt</span><span class="o">.</span><span class="n">model_checkpoint_path</span><span class="p">)</span>
+
+        <span class="c"># 一定要定义一个saver 进行 变量导入</span>
+        <span class="n">saver</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">ckpt_name</span><span class="o">+</span><span class="s">&#39;.meta&#39;</span><span class="p">))</span>
+        <span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">ckpt_name</span><span class="p">))</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s">&quot;(\d+)(?!.*\d)&quot;</span><span class="p">,</span><span class="n">ckpt_name</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot; [*] Success to read {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ckpt_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">counter</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot; [*] Failed to find a checkpoint&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">checkpoint_dir</span><span class="o">=</span><span class="s">&quot;./model_dir/&quot;</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="s">&quot;simple_model&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+
+    <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">model_name</span><span class="p">),</span>
+                    <span class="n">global_step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+
+    <span class="n">flag</span><span class="p">,</span><span class="n">counter</span><span class="o">=</span><span class="n">load</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">=</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;weights:0&quot;</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;bias:0&quot;</span><span class="p">)</span>
+
+    <span class="n">loss</span><span class="o">=</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;loss:0&quot;</span><span class="p">)</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;X:0&quot;</span><span class="p">)</span>
+    <span class="n">Y</span><span class="o">=</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;Y:0&quot;</span><span class="p">)</span>
+
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;******************************&quot;</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">w</span><span class="p">),</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span> <span class="c"># train the model 100 epochs</span>
+        <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="c"># Session runs train_op and fetch values of loss</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">optimizer</span><span class="p">,</span><span class="n">loss</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span><span class="n">y</span><span class="p">})</span>
+            <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">l</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Epoch {0}: {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_loss</span><span class="o">/</span><span class="n">n_samples</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;******************************&quot;</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">w</span><span class="p">),</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">())</span>
+    <span class="n">fit</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+
+<h1 id="saved_model">四 saved_model模块</h1>
+<p>模块主要用于<a href="https://tensorflow.github.io/serving/architecture_overview">TensorFlow Serving</a></p>
+<p>参考：</p>
+<p>1.https://blog.csdn.net/tan_handsome/article/details/79303269</p>
+<p>2.https://cv-tricks.com/tensorflow-tutorial/save-restore-tensorflow-models-quick-complete-tutorial/</p>
+<p>3.https://blog.csdn.net/thriving_fcl/article/details/75213361</p>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-02-22 16:01 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: '模型保存和导入',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+        <link rel="Stylesheet" type="text/css" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/normalize.css">
+        <link rel="stylesheet" href="/wiki/static/plugin/tipuesearch/css/tipuesearch.css">
+        <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+        <title>word represent - Knowledge Change Destiny</title>
+        <meta name="keywords" content="Mechine Learning , Economics , Mathematics"/>
+        <meta name="description" content="More Reading , More Possibilities"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width" />
+
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$(',')$'], ['\\(','\\)'], ['$', '$']]}
+        });
+        </script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+        <!-- Google Adsense -->
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-78529611-1', 'auto');
+          ga('send', 'pageview');
+
+
+            // Google Adsense Auto AD
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            /*
+             (adsbygoogle = window.adsbygoogle || []).push({
+                  google_ad_client: "ca-pub-6300557868920774",
+                  enable_page_level_ads: true
+             });
+             */
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning">Mechine  Learning</a>&nbsp;»&nbsp;<a href="/wiki/#Mechine  Learning-NLP">NLP</a>&nbsp;»&nbsp;word represent</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">word represent</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">零.前置问题</a><ul>
+<li><a href="#01">0.1什么是语言模型？</a></li>
+<li><a href="#02">0.2什么是词向量？</a></li>
+<li><a href="#03">0.3 词表示的假设</a></li>
+</ul>
+</li>
+<li><a href="#vector-space-model">一.Vector Space Model</a></li>
+<li><a href="#word2vec">二.word2vec</a><ul>
+<li><a href="#_2">核心思想</a></li>
+<li><a href="#_3">结构</a></li>
+<li><a href="#_4">优化</a><ul>
+<li><a href="#negative-sampling">Negative Sampling</a></li>
+<li><a href="#hierarchical-softmax">hierarchical softmax</a></li>
+</ul>
+</li>
+<li><a href="#_5">优缺点</a></li>
+</ul>
+</li>
+<li><a href="#glove">三 Glove</a></li>
+<li><a href="#_6">参考文献</a></li>
+</ul>
+</div>
+<h1 id="_1">零.前置问题</h1>
+<h2 id="01">0.1什么是语言模型？</h2>
+<p>给定词$w_1,w_2,...,w_n$，构造成句子$P(w_1,w_2,...,w_n)$的概率就是语言模型。即：用来衡量任意短文本出现概率的模型，叫做<code>语言模型</code>。主要有统计语言模型(n-gram)和神经网络语言模型(NNLM,RNNLM)两种。</p>
+<h2 id="02">0.2什么是词向量？</h2>
+<p>使用固定长度的向量来表示词典中任意词，该向量称为词向量。又叫word embedding，word representation。</p>
+<p>一词多义问题；引入先验知识；词向量可解释性。</p>
+<h2 id="03">0.3 词表示的假设</h2>
+<p>VSM到word2vec到Glove。</p>
+<p><code>Distributional semantics: A word’s meaning is given by the words that frequently appear close-by</code></p>
+<p><strong>词及其相近词的共现频次决定了词的意义；词$w$的不同上下文决定了$w$的表示。</strong></p>
+<h1 id="vector-space-model">一.Vector Space Model</h1>
+<ol>
+<li>新词需要重新训练，word2vec 只需要训练出现的新词的句子。</li>
+<li>很多词和词共现频次低。因此对于高频共现词和低频，需要做处理。</li>
+<li>矩阵构建较难，难以训练。。</li>
+<li>能很好的构建文档的向量表达，充分利用统计信息，全局优化。</li>
+</ol>
+<h1 id="word2vec">二.word2vec</h1>
+<h2 id="_2">核心思想</h2>
+<p>大语料；每一个词在词典中有唯一对应的向量；每个词都有上下文词；使用词及其上下文词的词向量的相似度进行概率计算；调整词向量，使得概率最大。</p>
+<p>skip-gram：$\mathop{\arg\max}<em n="-k">\limits{V} \sum_j \sum</em>^{k}logP(c_{j+n}|w_j)$</p>
+<p>其中$P(c_{j+n}|w_j)=\frac{exp(v_w^Tu_c)}{\sum_{o\in V} exp(v_w^Tu_o)}$，$v$代表词向量。</p>
+<p>softmax 使用的$U$向量（上下文矩阵）和词向量（词向量矩阵）是不同，这样使得问题更容易优化（求解更方便？），也可以使用同一个向量。</p>
+<h2 id="_3">结构</h2>
+<p>Skip-grams（预测词围绕中心词），Continuous Bag of Words(CBow，预测词在中间)[2]。</p>
+<p><img src="/wiki/static/images/word2vec1.png" alt="word2vec" /></p>
+<p>为什么会有Skip-gram和CBow，而不是采用n-gram?</p>
+<p>​      n-gram只使用前向词，而不使用后向词。词和其前后的词的相关性更大，只用前或者后的词有所欠缺。</p>
+<p>Skip-grams 与CBow对比？</p>
+<h2 id="_4">优化</h2>
+<h3 id="negative-sampling">Negative Sampling</h3>
+<p>思想是什么？</p>
+<p>给定中心词$w$和上下文词$c$，随机选择的其他词都是负样本。每个词出现的频率不同，需要做处理；随机的词不能是$c$。</p>
+<h3 id="hierarchical-softmax">hierarchical softmax</h3>
+<p>构建一个树来做决策，每个节点有一个向量变量用来判断是往左还是右子树走。</p>
+<p>词向量和每个节点向量分别做内积，计算sigmoid值。可以发现，HS方法的下上文矩阵不是对应于具体的词。</p>
+<h2 id="_5">优缺点</h2>
+<p>1.能很好地应用到其他的nlp 任务，且效果不错。</p>
+<p>2.不仅仅捕获词相似度信息，也能学习到更复杂的模式。而VSM主要是用以捕获词的相似度。</p>
+<p>3.但没有充分利用统计信息。VSM模型利用了，这也导致VSM由于词频问带来的词之间重要性的不均衡问题。</p>
+<p><code>word2vec 为什么有效</code>？</p>
+<h1 id="glove">三 Glove</h1>
+<p>$g_i$表示损失函数的一阶导数，$h_i$表示损失函数的二阶导数。$G_L、H_L、G_R、H_R$表示中间计算量。</p>
+<h1 id="_6">参考文献</h1>
+<ol>
+<li>T.Mikolov,Distributed Representations of Words and Phrases and their Compositionality。负采样paper</li>
+<li>T.Mikolov,Exploiting Similarities among Languages for Machine Translation,2013。</li>
+</ol>
+</div>
+<div id="income">
+    <img src="/wiki/static/images/galaxy.jpg" alt="星空" style="max-width:300px;" />
+
+    <ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-6300557868920774"
+     data-ad-slot="6882414849"></ins>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2019-03-18 17:20 </span></div>
+
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: location.pathname,
+  title: 'word represent',
+  owner: 'RbingChen',
+  repo: 'wiki',
+  oauth: {
+    client_id: '8d8c2034c8f3db5fd412',
+    client_secret: 'b5dabd27e8c79eb5136fba7730d78f403ea54991',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2019 Cimon.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        
+
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?df74779713027375e7b79302fb72d7b0";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+
+        <script src="/wiki/tipuesearch_content.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch_set.js"></script>
+        <script src="/wiki/static/plugin/tipuesearch/tipuesearch.min.js"></script>
+    </body>
+</html>
