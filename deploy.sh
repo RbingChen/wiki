@@ -15,7 +15,7 @@ then
 else
     git add . --all
     git commit -am "$1"
-    git pull -depth=1 origin master
+    git pull --depth=1 origin master
     git push origin master
 
     simiki g
@@ -25,7 +25,7 @@ else
     cp ../src/*/*.html src/
     git add . --all
     git commit -am "$1"
-    git pull -depth=1 origin gh-pages
+    git pull --depth=1 origin gh-pages
     git push origin gh-pages
     cd ..
 fi
